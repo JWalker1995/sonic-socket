@@ -1,0 +1,108 @@
+syntax = "proto3";
+
+option cc_enable_arenas = true;
+
+package sonic_socket;
+
+import "google/protobuf/descriptor.proto";
+
+extend google.protobuf.MessageOptions
+{
+    repeated string alias = 53142;
+}
+
+
+message Empty
+{
+}
+
+message InitialPacket
+{
+    option (sonic_socket.alias) = "AliasOne";
+    option (sonic_socket.alias) = "AliasTwo";
+    option (sonic_socket.alias) = "AliasThree";
+
+    uint32 version = 1;
+}
+
+message BaseMessage
+{
+    uint32 message_id = 1;
+
+    uint32 last_received = 2;
+    bytes received = 3;
+
+    fixed64 model_update = 4;
+
+    uint32 inbox_id = 5;
+    repeated bytes data = 6;
+
+    bool has_more = 7;
+}
+
+
+message ConnectionInit
+{
+}
+
+message ModuleConnectionRequest
+{
+    uint32 module_id = 1;
+    repeated ModuleSpaceCoordinate coords = 3;
+}
+
+message MailboxInit
+{
+    //repeated string keys_string = 1;
+    //repeated uint64 keys_int = 2;
+    repeated OutboxInit boxes = 3;
+}
+
+message OutboxInit
+{
+    repeated string names = 1;
+    uint32 inbox_id = 2;
+}
+
+message ModuleSpaceCoordinate
+{
+    string key = 1;
+    float weight = 2;
+    string string_value = 3;
+    float scalar_value = 4;
+};
+
+message ModuleRegistration
+{
+    uint32 module_id = 1;
+
+    string interface = 2;
+    uint32 version = 3;
+
+    repeated ModuleSpaceCoordinate coords = 4;
+}
+
+message ModuleLookupRequest
+{
+    string interface = 1;
+    uint32 version = 2;
+
+    repeated ModuleSpaceCoordinate coords = 3;
+
+    // If all other things are equal between N modules, this host, then the port, will be the deciding factor.
+    string prefer_host = 4;
+    string prefer_port = 5;
+
+    enum ConnectionDestination
+    {
+        SELF = 0;
+        CLIENT = 1;
+    }
+
+    bytes init_message = 6;
+}
+
+message ModuleLookupResponse
+{
+    string connection = 1;
+}
