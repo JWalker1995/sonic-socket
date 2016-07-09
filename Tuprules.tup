@@ -24,10 +24,11 @@ endif
 
 LDFLAGS += -lBlobPlanet `pkg-config --static --libs glew glfw3 yaml-cpp protobuf`
 
+
+# Create config/*.h files from defines.cfg
+run test -f defines.cfg && awk '/^[^#]/ { print ": |> echo \"#define "$0"\" > %o |> config/"$1".h" }' defines.cfg || true
+
 !protoc = | *.proto |> protoc --cpp_out=. %f |> %B.pb.h %B.pb.cc $(ROOT)/<protobufs>
 !cpp = | *.h config/*.h |> g++ -c %f -o %o $(CFLAGS) $(CFLAGS_%f) |> %B.o $(ROOT)/<objects>
 !archive = | $(ROOT)/<objects> |> ar rvs %o %<objects> |> $(ARCHIVE_TARGET)
 !link = | $(ROOT)/<objects> |> g++ %<objects> -o %o $(LDFLAGS) $(LDFLAGS_%o) |> $(LINK_TARGET)
-
-# Create config/*.h files from defines.config
-run test -f defines.config && awk '/^[^#]/ { print ": |> echo \"#define "$0"\" > %o |> config/"$1".h" }' defines.config || true
