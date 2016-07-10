@@ -10,4 +10,5 @@ cd sonic-socket
 git submodule update --init --recursive
 tup init
 tup
+sudo sh install.sh
 ```

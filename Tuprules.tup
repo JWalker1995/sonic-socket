@@ -2,8 +2,7 @@ ROOT = $(TUP_CWD)
 SRC_PATH = $(ROOT)/src/
 THIRD_PARTH_PATH = $(ROOT)/3rd_party/
 
-ARCHIVE_TARGET = libBlobPlanet.a
-LINK_TARGET = lib_blob_planet
+ARCHIVE_TARGET = $(ROOT)/libSonicSocket.a
 
 CFLAGS += -Wall -Wfatal-errors -Wno-missing-braces -Wno-unused
 CFLAGS += -I$(SRC_PATH) -I$(THIRD_PARTH_PATH)
@@ -29,6 +28,5 @@ LDFLAGS += -lBlobPlanet `pkg-config --static --libs glew glfw3 yaml-cpp protobuf
 run test -f defines.cfg && awk '/^[^#]/ { print ": |> echo \"#define "$0"\" > %o |> config/"$1".h" }' defines.cfg || true
 
 !protoc = | *.proto |> protoc --cpp_out=. %f |> %B.pb.h %B.pb.cc $(ROOT)/<protobufs>
-!cpp = | *.h config/*.h |> g++ -c %f -o %o $(CFLAGS) $(CFLAGS_%f) |> %B.o $(ROOT)/<objects>
+!cpp = | *.h |> g++ -c %f -o %o $(CFLAGS) $(CFLAGS_%f) |> %B.o $(ROOT)/<objects>
 !archive = | $(ROOT)/<objects> |> ar rvs %o %<objects> |> $(ARCHIVE_TARGET)
-!link = | $(ROOT)/<objects> |> g++ %<objects> -o %o $(LDFLAGS) $(LDFLAGS_%o) |> $(LINK_TARGET)
