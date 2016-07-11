@@ -81,14 +81,14 @@ public:
         packet.set_size(data - packet.get_data());
     }
 
-    void generate_packet(Packet &packet)
+    bool generate_packet(Packet &packet)
     {
         // 16 bits: Max decoded remote symbol
         // 16 bits: First encoded symbol id
         // 16 bits: Num encoded symbols
         // 16 bits: Column element - Don't reuse this until the other endpoint has decoded all data points encoded by it.
 
-        if (symbols.empty()) {return;}
+        if (symbols.empty()) {return false;}
 
         char *data_meta = packet.get_data();
 
@@ -149,6 +149,8 @@ public:
         packet.set_size(packet_metadata_size + data_size_chars);
 
         packet_mangle(packet);
+
+        return true;
     }
 
 protected:

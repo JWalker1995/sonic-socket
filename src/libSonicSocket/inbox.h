@@ -28,7 +28,11 @@ public:
     class Actor : public Box::Actor<MailboxType>
     {
     public:
-        void init(MailboxInit &mailbox_init, const MessageRouter::RegisteredInbox &registration)
+        void after_set_dummy_message_router() {}
+        bool recv_outbox_init(const OutboxInit &outbox_init) {(void) outbox_init; return false;}
+        void check_outbox_init() {}
+
+        void register_and_generate_mailbox_init(MailboxInit &mailbox_init, const MessageRouter::RegisteredInbox &registration)
         {
             OutboxInit *outbox_init = mailbox_init.add_boxes();
 
@@ -50,13 +54,10 @@ public:
             }
         }
 
-        void deinit(const MessageRouter::RegisteredInbox &registration)
+        void unregister(const MessageRouter::RegisteredInbox &registration)
         {
             MailboxType::template get_mailbox<SelfType>(this).get_message_router().unregister_inbox(registration);
         }
-
-        bool recv_outbox_init(const OutboxInit &outbox_init) {return false;}
-        void check_outbox_init() {}
 
         static bool parse_message(const MessageType &message, std::string &error_msg)
         {

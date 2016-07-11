@@ -19,10 +19,9 @@ public:
     class Actor : public Box::Actor<MailboxType>
     {
     public:
-        void init(MailboxInit &mailbox_init)
+        void after_set_dummy_message_router()
         {
-            (void) mailbox_init;
-            remote_inbox_id = MailboxType::template get_mailbox<SelfType>(this).get_message_router().alloc_holding_inbox();
+            remote_inbox_id = MailboxType::template get_mailbox<SelfType>(this).get_message_router().register_holding_inbox();
         }
 
         bool recv_outbox_init(const OutboxInit &outbox_init)
@@ -48,6 +47,9 @@ public:
                 MailboxType::template get_mailbox<SelfType>(this).get_message_router().push_log(LogProxy::LogLevel::Warning, msg);
             }
         }
+
+        void register_and_generate_mailbox_init(MailboxInit &mailbox_init) {(void) mailbox_init;}
+        void unregister() {}
 
         bool is_resolved() const
         {

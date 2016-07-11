@@ -29,14 +29,14 @@ public:
     class Actor : public Inbox<_MessageType, parse_callback>::template Actor<MailboxType>
     {
     public:
-        void init(MailboxInit &mailbox_init)
+        void register_and_generate_mailbox_init(MailboxInit &mailbox_init)
         {
-            init(mailbox_init, make_inbox_registration());
+            register_and_generate_mailbox_init(mailbox_init, make_inbox_registration());
         }
 
-        void deinit()
+        void unregister()
         {
-            deinit(make_inbox_registration());
+            unregister(make_inbox_registration());
         }
 
     private:

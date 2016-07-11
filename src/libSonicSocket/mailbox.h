@@ -19,11 +19,12 @@ class MailboxInternal
 {
 public:
     MailboxInternal() {}
-    
-    void init(MailboxInit &mailbox_init) {}
 
-    bool recv_outbox_init(const OutboxInit &outbox_init) {return false;}
+    void after_set_dummy_message_router() {}
+    void register_and_generate_mailbox_init(MailboxInit &mailbox_init) {(void) mailbox_init;}
+    bool recv_outbox_init(const OutboxInit &outbox_init) {(void) outbox_init; return false;}
     void check_outbox_init() {}
+    void unregister() {}
 };
 
 template <typename DerivedType, typename FirstType, typename... OtherTypes>
@@ -40,10 +41,16 @@ public:
     ~MailboxInternal()
     {}
 
-    void init(MailboxInit &mailbox_init)
+    void after_set_dummy_message_router()
     {
-        FirstType::template Actor<DerivedType>::init(mailbox_init);
-        MailboxInternal<DerivedType, OtherTypes...>::init(mailbox_init);
+        FirstType::template Actor<DerivedType>::after_set_dummy_message_router();
+        MailboxInternal<DerivedType, OtherTypes...>::after_set_dummy_message_router();
+    }
+
+    void register_and_generate_mailbox_init(MailboxInit &mailbox_init)
+    {
+        FirstType::template Actor<DerivedType>::register_and_generate_mailbox_init(mailbox_init);
+        MailboxInternal<DerivedType, OtherTypes...>::register_and_generate_mailbox_init(mailbox_init);
     }
 
     bool recv_outbox_init(const OutboxInit &outbox_init)
@@ -58,6 +65,12 @@ public:
     {
         FirstType::template Actor<DerivedType>::check_outbox_init();
         MailboxInternal<DerivedType, OtherTypes...>::check_outbox_init();
+    }
+
+    void unregister()
+    {
+        FirstType::template Actor<DerivedType>::unregister();
+        MailboxInternal<DerivedType, OtherTypes...>::unregister();
     }
 };
 
@@ -80,16 +93,22 @@ public:
     void set_dummy_message_router(MessageRouter *new_message_router)
     {
         message_router = new_message_router;
+        Internal::after_set_dummy_message_router();
     }
 
-    void init(MessageRouter *new_message_router, MailboxInit &mailbox_init)
+    void register_and_generate_mailbox_init(MessageRouter *new_message_router, MailboxInit &mailbox_init)
     {
         message_router = new_message_router;
 
-        Internal::init(mailbox_init);
+        Internal::register_and_generate_mailbox_init(mailbox_init);
     }
 
-    void recv_init(const MailboxInit &mailbox_init)
+    void unregister()
+    {
+        Internal::unregister();
+    }
+
+    void recv_mailbox_init(const MailboxInit &mailbox_init)
     {
         google::protobuf::RepeatedPtrField<OutboxInit>::const_iterator i = mailbox_init.boxes().cbegin();
         while (i != mailbox_init.boxes().cend())

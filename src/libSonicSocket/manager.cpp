@@ -56,6 +56,7 @@ Manager::~Manager()
     polling_thread_run = false;
     socket.close();
     polling_thread.join();
+    workers.pause();
 
     google::protobuf::ShutdownProtobufLibrary();
 }

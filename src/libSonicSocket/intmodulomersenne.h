@@ -6,7 +6,7 @@
 
 #include "gmp.h"
 
-#include "libSonicSocket/config/JWUTIL_CACHELRU_FORGET_POOL_IN_CLASS.h"
+#include "libSonicSocket/config/JWUTIL_CACHELRU_FORGET_POOL_ON_HEAP.h"
 #include "libSonicSocket/jw_util/cachelru.h"
 #include "libSonicSocket/jw_util/fastmath.h"
 #include "libSonicSocket/jw_util/hash.h"
@@ -130,9 +130,6 @@ public:
         // When this method is called again, all previous returned values become invalid.
 
         typedef jw_util::CacheLRU<ThisType, ThisType, 1024, Hasher> CacheType;
-
-        // TODO: Test cache and modular_decrement
-        assert(false);
 
         typename CacheType::Result res;
         if (use_cache)
@@ -317,9 +314,16 @@ private:
 
     static void set_mod(mp_limb_t *arr)
     {
-        arr[0] = static_cast<mp_limb_t>(-modular_decrement);
-        std::fill(arr + 1, arr + size - 1, GMP_NUMB_MASK);
-        arr[size - 1] = head_mask;
+        if (size == 1)
+        {
+            arr[0] = static_cast<mp_limb_t>(-modular_decrement) & head_mask;
+        }
+        else
+        {
+            arr[0] = static_cast<mp_limb_t>(-modular_decrement);
+            std::fill(arr + 1, arr + size - 1, GMP_NUMB_MASK);
+            arr[size - 1] = head_mask;
+        }
     }
 
     static void calc_inverse(ThisType &res, const ThisType &num)

@@ -70,8 +70,6 @@ public:
     {
         static constexpr bool skip_shift = can_skip_shift<bit_offset_starts_zero>();
 
-        assert(dst[1] == 0);
-
         for (unsigned int i = 0; i < size - 1; i++)
         {
             write_bits<GMP_NUMB_BITS, skip_shift>(dst, bit_offset, data[i]);
@@ -211,7 +209,7 @@ private:
         }
 
         mp_limb_t limb = src[0] >> bit_offset;
-        if (bit_offset)
+        if (bit_offset > GMP_LIMB_BITS - advance)
         {
             limb |= src[1] << (GMP_LIMB_BITS - bit_offset);
         }
@@ -228,10 +226,12 @@ private:
                 bit_offset -= GMP_LIMB_BITS;
                 src++;
             }
+
+            static constexpr mp_limb_t mask = (~static_cast<mp_limb_t>(0)) >> (GMP_LIMB_BITS - advance);
+            limb &= mask;
         }
 
-        static constexpr mp_limb_t mask = (~static_cast<mp_limb_t>(0)) >> (GMP_LIMB_BITS - advance);
-        return limb & mask;
+        return limb;
     }
 
     template <unsigned int advance, bool skip_shift>
@@ -247,8 +247,13 @@ private:
             return;
         }
 
+        if (advance != GMP_LIMB_BITS)
+        {
+            assert(limb < static_cast<mp_limb_t>(2) << (advance - 1));
+        }
+
         dst[0] |= limb << bit_offset;
-        if (bit_offset)
+        if (bit_offset > GMP_LIMB_BITS - advance)
         {
             dst[1] |= limb >> (GMP_LIMB_BITS - bit_offset);
         }
@@ -256,7 +261,6 @@ private:
         if (advance == GMP_LIMB_BITS)
         {
             dst++;
-            assert(dst[1] == 0);
         }
         else
         {
@@ -265,7 +269,6 @@ private:
             {
                 bit_offset -= GMP_LIMB_BITS;
                 dst++;
-                assert(dst[1] == 0);
             }
         }
     }

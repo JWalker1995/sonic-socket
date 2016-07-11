@@ -1,7 +1,7 @@
 #ifndef SONICSOCKET_BOX_H
 #define SONICSOCKET_BOX_H
 
-#include "libSonicSocket/messagerouter.h"
+#include "libSonicSocket/base.pb.h"
 
 namespace sonic_socket
 {

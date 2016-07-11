@@ -96,7 +96,9 @@ void MessageRouter::send_message(InboxId inbox_id, const google::protobuf::Messa
 void MessageRouter::send_packet()
 {
     FountainCoder::Packet packet;
-    fountain_coder.generate_packet(packet);
+    bool has_packet = fountain_coder.generate_packet(packet);
+    if (!has_packet) {return;}
+
     manager.send_packet(remote, packet.get_data(), packet.get_size());
 
     last_send = std::chrono::steady_clock::now();

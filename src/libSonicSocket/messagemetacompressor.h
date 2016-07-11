@@ -3,7 +3,7 @@
 
 #include <climits>
 
-#include "libSonicSocket/config/JWUTIL_CACHELRU_FORGET_POOL_IN_CLASS.h"
+#include "libSonicSocket/config/JWUTIL_CACHELRU_FORGET_POOL_ON_HEAP.h"
 #include "libSonicSocket/jw_util/cachelru.h"
 #include "libSonicSocket/jw_util/hash.h"
 
@@ -58,9 +58,6 @@ public:
     {
         assert(encoder.meta.inbox_id < 65536);
         assert(encoder.meta.size < 65536);
-
-        // TODO: Test cache
-        assert(false);
 
         encoder.cache_result = cache.access(encoder.meta);
     }
