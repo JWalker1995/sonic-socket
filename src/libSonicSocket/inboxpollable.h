@@ -6,7 +6,7 @@
 #include "libSonicSocket/inbox.h"
 
 #if SS_INBOXPOLLABLE_USE_READERWRITERQUEUE
-#include "libSonicSocket/readerwriterqueue/readerwriterqueue.h"
+#include "readerwriterqueue/readerwriterqueue.h"
 #else
 #include <mutex>
 #include <queue>
@@ -23,9 +23,10 @@ class InboxPollable : public Inbox<_MessageType, parse_callback>
 {
 public:
     typedef _MessageType MessageType;
+    typedef InboxPollable<_MessageType, parse_callback> SelfType;
 
     template <typename MailboxType>
-    class Actor : public Inbox<_MessageType, parse_callback>::Actor<MailboxType>
+    class Actor : public Inbox<_MessageType, parse_callback>::template Actor<MailboxType>
     {
     public:
         void init(MailboxInit &mailbox_init)
@@ -41,9 +42,7 @@ public:
     private:
         MessageRouter::RegisteredInbox make_inbox_registration()
         {
-            return this->get_mailbox().template generate_inbox_registration<
-                    InboxAsynchronous<_MessageType, ProcessCallbackClass, parse_callback, process_callback>
-            >();
+            return MailboxType::template get_mailbox<SelfType>(this).template generate_inbox_registration<SelfType>();
         }
 
 #ifdef SS_INBOXPOLLABLE_USE_READERWRITERQUEUE

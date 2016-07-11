@@ -16,6 +16,7 @@ class InboxAsynchronous : public Inbox<_MessageType, parse_callback>
 {
 public:
     typedef _MessageType MessageType;
+    typedef InboxAsynchronous<_MessageType, ProcessCallbackClass, parse_callback, process_callback> SelfType;
 
     template <typename MailboxType>
     class Actor : public Inbox<_MessageType, parse_callback>::template Actor<MailboxType>
@@ -46,9 +47,7 @@ public:
 
         MessageRouter::RegisteredInbox make_inbox_registration()
         {
-            return this->get_mailbox().template generate_inbox_registration<
-                    InboxAsynchronous<_MessageType, ProcessCallbackClass, parse_callback, process_callback>
-            >();
+            return MailboxType::template get_mailbox<SelfType>(this).template generate_inbox_registration<SelfType>();
         }
     };
 };

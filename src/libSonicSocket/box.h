@@ -16,9 +16,6 @@ public:
     template <typename MailboxType>
     class Actor
     {
-    protected:
-    	MailboxType &get_mailbox() {return *static_cast<MailboxType *>(this);}
-        MessageRouter &get_message_router() {return *get_mailbox().message_router;}
     };
 };
 

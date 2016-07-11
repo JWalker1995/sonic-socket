@@ -22,6 +22,7 @@ class Inbox : private Box
 {
 public:
     typedef _MessageType MessageType;
+    typedef Inbox<MessageType, parse_callback> SelfType;
 
     template <typename MailboxType>
     class Actor : public Box::Actor<MailboxType>
@@ -32,7 +33,7 @@ public:
             OutboxInit *outbox_init = mailbox_init.add_boxes();
 
             // Register inbox with message router
-            MessageRouter::InboxId inbox_id = this->get_message_router().register_inbox(registration);
+            MessageRouter::InboxId inbox_id = MailboxType::template get_mailbox<SelfType>(this).get_message_router().register_inbox(registration);
             outbox_init->set_inbox_id(inbox_id);
 
             // Add message name (like sonic_socket.InitialPacket)
@@ -51,7 +52,7 @@ public:
 
         void deinit(const MessageRouter::RegisteredInbox &registration)
         {
-            this->get_message_router().unregister_inbox(registration);
+            MailboxType::template get_mailbox<SelfType>(this).get_message_router().unregister_inbox(registration);
         }
 
         bool recv_outbox_init(const OutboxInit &outbox_init) {return false;}

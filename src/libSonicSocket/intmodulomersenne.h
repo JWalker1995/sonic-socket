@@ -6,8 +6,9 @@
 
 #include "gmp.h"
 
-#include "libSonicSocket/jw_util/fastmath.h"
+#include "libSonicSocket/config/JWUTIL_CACHELRU_FORGET_POOL_IN_CLASS.h"
 #include "libSonicSocket/jw_util/cachelru.h"
+#include "libSonicSocket/jw_util/fastmath.h"
 #include "libSonicSocket/jw_util/hash.h"
 
 // Integers n such that 2^n - 1 is prime: (http://oeis.org/A000043)

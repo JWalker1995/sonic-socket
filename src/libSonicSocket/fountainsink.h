@@ -4,6 +4,7 @@
 #include <vector>
 #include <deque>
 
+#include "libSonicSocket/config/JWUTIL_CACHELRU_FORGET_POOL_IN_CLASS.h"
 #include "libSonicSocket/jw_util/cachelru.h"
 
 #include "libSonicSocket/config/SS_FOUNTAININTERFACE_SYMBOL_MODULAR_EXPONENT.h"

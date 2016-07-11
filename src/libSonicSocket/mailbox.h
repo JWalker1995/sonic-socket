@@ -64,8 +64,6 @@ public:
 template <typename... BoxTypes>
 class Mailbox : private MailboxInternal<Mailbox<BoxTypes...>, BoxTypes...>
 {
-    friend class Box::Actor<Mailbox<BoxTypes...>>;
-
 private:
     typedef MailboxInternal<Mailbox<BoxTypes...>, BoxTypes...> Internal;
 
@@ -76,6 +74,7 @@ public:
     ~Mailbox()
     {}
 
+    MessageRouter &get_message_router() {return *message_router;}
     Manager &get_manager() {return message_router->get_manager();}
 
     void set_dummy_message_router(MessageRouter *new_message_router)
@@ -120,8 +119,15 @@ public:
     template <typename BoxType>
     typename BoxType::template Actor<Mailbox<BoxTypes...>> &get_box()
     {
-        MailboxInternal<BoxTypes...> *boxes = static_cast<MailboxInternal<BoxTypes...> *>(this);
-        return *static_cast<typename BoxType::template Actor<Mailbox<BoxTypes...>> *>(boxes);
+        MailboxInternal<Mailbox<BoxTypes...>, BoxTypes...> *boxes = static_cast<MailboxInternal<Mailbox<BoxTypes...>, BoxTypes...> *>(this);
+        typename BoxType::template Actor<Mailbox<BoxTypes...>> *box = static_cast<typename BoxType::template Actor<Mailbox<BoxTypes...>> *>(boxes);
+        return *box;
+    }
+
+    template <typename BoxType>
+    static Mailbox<BoxTypes...> &get_mailbox(typename BoxType::template Actor<Mailbox<BoxTypes...>> *actor)
+    {
+        return *static_cast<Mailbox<BoxTypes...> *>(actor);
     }
 
 protected:
