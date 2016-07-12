@@ -1,6 +1,10 @@
 #ifndef SONICSOCKET_SERVERCONNECTION_H
 #define SONICSOCKET_SERVERCONNECTION_H
 
+#include <vector>
+
+#include "libSonicSocket/jw_util/methodcallback.h"
+
 #include "libSonicSocket/messagerouter.h"
 #include "libSonicSocket/mailbox.h"
 #include "libSonicSocket/inboxasynchronous.h"
@@ -14,30 +18,49 @@ namespace sonic_socket
 class ServerConnection : public MessageRouter
 {
 public:
-    static constexpr InboxId module_registration_inbox_id = 0;
-    static constexpr InboxId module_registration_complete_inbox_id = 1;
-
     ServerConnection(Manager &manager, const Remote &remote)
         : MessageRouter(manager, remote)
     {}
 
     void init_handlers();
 
+    template <typename... BoxTypes>
+    void register_mailbox(Mailbox<BoxTypes...> &mailbox)
+    {
+        pending_mailboxes.push_back(mailbox.make_mailbox_init_receiver());
+        mailbox.set_final_message_router(this);
+    }
+
 private:
-    static bool parse_connection(const ModuleConnectionRequest &message, std::string &error_str)
+    static bool parse_mailbox_init(const MailboxInit &message, std::string &error_str)
     {
         (void) message;
         (void) error_str;
         return true;
     }
 
-    void process_connection(const ModuleConnectionRequest &message)
+    void process_mailbox_init(const MailboxInit &message)
     {
-        (void) message;
+        std::vector<jw_util::MethodCallback<const MailboxInit &, bool &>>::const_iterator i = pending_mailboxes.cbegin();
+        while (i != pending_mailboxes.cend())
+        {
+            bool finished;
+            i->call(message, finished);
+            if (finished)
+            {
+                pending_mailboxes.erase(i);
+                return;
+            }
+            i++;
+        }
+
+        push_log(LogProxy::LogLevel::Warning, "Received MailboxInit that didn't match any un-initialized mailboxes");
     }
 
-    typedef InboxAsynchronous<ModuleConnectionRequest, ServerConnection, &parse_connection, &ServerConnection::process_connection> ConnectionInbox;
-    Mailbox<ConnectionInbox> mailbox;
+    typedef InboxAsynchronous<MailboxInit, ServerConnection, &parse_mailbox_init, &ServerConnection::process_mailbox_init> MailboxInitInbox;
+    Mailbox<MailboxInitInbox> mailbox;
+
+    std::vector<jw_util::MethodCallback<const MailboxInit &, bool &>> pending_mailboxes;
 
     /*
     void callback_init_module(const ModuleConnectionRequest &message);

@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "libSonicSocket/jw_util/methodcallback.h"
+
 #include "libSonicSocket/messagerouter.h"
 #include "libSonicSocket/messageallocator.h"
 #include "libSonicSocket/box.h"
@@ -22,8 +24,8 @@ public:
 
     void after_set_dummy_message_router() {}
     void register_and_generate_mailbox_init(MailboxInit &mailbox_init) {(void) mailbox_init;}
-    bool recv_outbox_init(const OutboxInit &outbox_init) {(void) outbox_init; return false;}
-    void check_outbox_init() {}
+    bool try_mailbox_init(const MailboxInit &mailbox_init) {(void) mailbox_init; return false;}
+    void recv_mailbox_init(const MailboxInit &mailbox_init) {(void) mailbox_init;}
     void unregister() {}
 };
 
@@ -53,18 +55,18 @@ public:
         MailboxInternal<DerivedType, OtherTypes...>::register_and_generate_mailbox_init(mailbox_init);
     }
 
-    bool recv_outbox_init(const OutboxInit &outbox_init)
+    bool try_mailbox_init(const MailboxInit &mailbox_init)
     {
-        bool res = FirstType::template Actor<DerivedType>::recv_outbox_init(outbox_init);
-        if (res) {return true;}
+        bool res = FirstType::template Actor<DerivedType>::try_mailbox_init(mailbox_init);
+        if (!res) {return false;}
 
-        return MailboxInternal<DerivedType, OtherTypes...>::recv_outbox_init(outbox_init);
+        return MailboxInternal<DerivedType, OtherTypes...>::try_mailbox_init(mailbox_init);
     }
 
-    void check_outbox_init()
+    void recv_mailbox_init(const MailboxInit &mailbox_init)
     {
-        FirstType::template Actor<DerivedType>::check_outbox_init();
-        MailboxInternal<DerivedType, OtherTypes...>::check_outbox_init();
+        FirstType::template Actor<DerivedType>::recv_mailbox_init(mailbox_init);
+        MailboxInternal<DerivedType, OtherTypes...>::recv_mailbox_init(mailbox_init);
     }
 
     void unregister()
@@ -92,15 +94,22 @@ public:
 
     void set_dummy_message_router(MessageRouter *new_message_router)
     {
+        assert(!message_router);
         message_router = new_message_router;
+        assert(message_router->is_dummy());
+
         Internal::after_set_dummy_message_router();
     }
 
-    void register_and_generate_mailbox_init(MessageRouter *new_message_router, MailboxInit &mailbox_init)
+    void set_final_message_router(MessageRouter *new_message_router)
     {
+        assert(message_router->is_dummy());
         message_router = new_message_router;
+        assert(!message_router->is_dummy());
 
+        MailboxInit &mailbox_init = message_router->get_message_allocator().alloc_message<MailboxInit>();
         Internal::register_and_generate_mailbox_init(mailbox_init);
+        message_router->send_message(MessageRouter::mailbox_init_inbox_id, mailbox_init);
     }
 
     void unregister()
@@ -108,21 +117,9 @@ public:
         Internal::unregister();
     }
 
-    void recv_mailbox_init(const MailboxInit &mailbox_init)
+    jw_util::MethodCallback<const MailboxInit &, bool &> make_mailbox_init_receiver()
     {
-        google::protobuf::RepeatedPtrField<OutboxInit>::const_iterator i = mailbox_init.boxes().cbegin();
-        while (i != mailbox_init.boxes().cend())
-        {
-            bool res = Internal::recv_outbox_init(*i);
-            if (!res)
-            {
-                const std::string msg = create_missing_outbox_error_msg(*i);
-                message_router->push_log(LogProxy::LogLevel::Warning, msg);
-            }
-            i++;
-        }
-
-        Internal::check_outbox_init();
+        return jw_util::MethodCallback<const MailboxInit &, bool &>::create<Mailbox<BoxTypes...>, &Mailbox<BoxTypes...>::recv_mailbox_init>(this);
     }
 
     template <typename InboxType>
@@ -150,9 +147,10 @@ public:
     }
 
 protected:
-    MessageRouter *message_router;
+    MessageRouter *message_router = 0;
 
 private:
+    /*
     static std::string create_missing_outbox_error_msg(const OutboxInit &outbox_init)
     {
         std::string msg = "No outbox found matching OutboxInit with names=[";
@@ -180,13 +178,23 @@ private:
         msg += MessageType::descriptor->full_name();
         return msg;
     }
+    */
+
+    void recv_mailbox_init(const MailboxInit &mailbox_init, bool &success)
+    {
+        success = Internal::try_mailbox_init(mailbox_init);
+        if (success)
+        {
+            Internal::recv_mailbox_init(mailbox_init);
+        }
+    }
 
     template <typename InboxType>
     static bool parse_func(void *mailbox_ptr, const char *data, unsigned int size, const google::protobuf::Message *&message, MessageAllocator &allocator, std::string &error_msg)
     {
         Mailbox<BoxTypes...> *mailbox = static_cast<Mailbox<BoxTypes...> *>(mailbox_ptr);
 
-        typename InboxType::MessageType* parse = &allocator.alloc_message<typename InboxType::MessageType>();
+        typename InboxType::MessageType *parse = &allocator.alloc_message<typename InboxType::MessageType>();
         bool res;
 
         res = parse->ParseFromArray(data, size);
@@ -211,7 +219,8 @@ private:
     static void process_func(void *mailbox_ptr, const google::protobuf::Message *message)
     {
         Mailbox<BoxTypes...> *mailbox = static_cast<Mailbox<BoxTypes...> *>(mailbox_ptr);
-        mailbox->get_box<InboxType>().process_message(*message);
+        const typename InboxType::MessageType *casted_message = static_cast<const typename InboxType::MessageType *>(message);
+        mailbox->get_box<InboxType>().process_message(*casted_message);
     }
 };
 

@@ -29,8 +29,8 @@ public:
     {
     public:
         void after_set_dummy_message_router() {}
-        bool recv_outbox_init(const OutboxInit &outbox_init) {(void) outbox_init; return false;}
-        void check_outbox_init() {}
+        bool try_mailbox_init(const MailboxInit &mailbox_init) {(void) mailbox_init; return false;}
+        void recv_mailbox_init(const MailboxInit &mailbox_init) {(void) mailbox_init;}
 
         void register_and_generate_mailbox_init(MailboxInit &mailbox_init, const MessageRouter::RegisteredInbox &registration)
         {

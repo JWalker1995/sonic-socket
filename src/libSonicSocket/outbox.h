@@ -24,28 +24,41 @@ public:
             remote_inbox_id = MailboxType::template get_mailbox<SelfType>(this).get_message_router().register_holding_inbox();
         }
 
-        bool recv_outbox_init(const OutboxInit &outbox_init)
+        bool try_mailbox_init(const MailboxInit &mailbox_init)
         {
-            if (is_resolved()) {return false;}
-
-            google::protobuf::RepeatedPtrField<std::string>::const_iterator i;
-            i = std::find(outbox_init.names().cbegin(), outbox_init.names().cend(), MessageType::descriptor->full_name());
-            bool match = i != outbox_init.names().cend();
-            if (match)
+            google::protobuf::RepeatedPtrField<OutboxInit>::const_iterator i = mailbox_init.boxes().cbegin();
+            while (i != mailbox_init.boxes().cend())
             {
-                MailboxType::template get_mailbox<SelfType>(this).get_message_router().release_messages(remote_inbox_id, outbox_init.inbox_id());
-                remote_inbox_id = outbox_init.inbox_id();
+                google::protobuf::RepeatedPtrField<std::string>::const_iterator j;
+                j = std::find(i->names().cbegin(), i->names().cend(), MessageType::descriptor()->full_name());
+                bool match = j != i->names().cend();
+                if (match) {return true;}
+
+                i++;
             }
-            return match;
+
+            return false;
         }
 
-        void check_outbox_init()
+        void recv_mailbox_init(const MailboxInit &mailbox_init)
         {
-            if (!is_resolved())
+            google::protobuf::RepeatedPtrField<OutboxInit>::const_iterator i = mailbox_init.boxes().cbegin();
+            while (i != mailbox_init.boxes().cend())
             {
-                const std::string msg = Mailbox<>::create_uninitialized_outbox_error_msg<MessageType>();
-                MailboxType::template get_mailbox<SelfType>(this).get_message_router().push_log(LogProxy::LogLevel::Warning, msg);
+                google::protobuf::RepeatedPtrField<std::string>::const_iterator j;
+                j = std::find(i->names().cbegin(), i->names().cend(), MessageType::descriptor()->full_name());
+                bool match = j != i->names().cend();
+                if (match)
+                {
+                    MailboxType::template get_mailbox<SelfType>(this).get_message_router().release_messages(remote_inbox_id, i->inbox_id());
+                    remote_inbox_id = i->inbox_id();
+                    return;
+                }
+
+                i++;
             }
+
+            assert(false);
         }
 
         void register_and_generate_mailbox_init(MailboxInit &mailbox_init) {(void) mailbox_init;}

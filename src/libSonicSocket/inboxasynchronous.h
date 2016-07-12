@@ -14,22 +14,25 @@ template <
 >
 class InboxAsynchronous : public Inbox<_MessageType, parse_callback>
 {
+    typedef InboxAsynchronous<_MessageType, ProcessCallbackClass, parse_callback, process_callback> SelfType;
+
 public:
     typedef _MessageType MessageType;
-    typedef InboxAsynchronous<_MessageType, ProcessCallbackClass, parse_callback, process_callback> SelfType;
 
     template <typename MailboxType>
     class Actor : public Inbox<_MessageType, parse_callback>::template Actor<MailboxType>
     {
+        typedef typename Inbox<_MessageType, parse_callback>::template Actor<MailboxType> BaseType;
+
     public:
         void register_and_generate_mailbox_init(MailboxInit &mailbox_init)
         {
-            register_and_generate_mailbox_init(mailbox_init, make_inbox_registration());
+            BaseType::register_and_generate_mailbox_init(mailbox_init, make_inbox_registration());
         }
 
         void unregister()
         {
-            unregister(make_inbox_registration());
+            BaseType::unregister(make_inbox_registration());
         }
 
         void set_class_pointer(ProcessCallbackClass *class_pointer)

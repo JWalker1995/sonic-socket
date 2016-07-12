@@ -101,8 +101,6 @@ public:
 
     void send_packet(const Remote &remote, const char *data, unsigned int size);
 
-    void maintain_server_connections();
-
     void tick();
 
     LogProxy &get_logger() {return logger;}

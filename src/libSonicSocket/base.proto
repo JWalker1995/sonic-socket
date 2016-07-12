@@ -55,7 +55,7 @@ message MailboxInit
 {
     //repeated string keys_string = 1;
     //repeated uint64 keys_int = 2;
-    repeated OutboxInit boxes = 3;
+    repeated OutboxInit boxes = 1;
 }
 
 message OutboxInit

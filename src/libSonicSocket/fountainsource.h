@@ -81,14 +81,12 @@ public:
         packet.set_size(data - packet.get_data());
     }
 
-    bool generate_packet(Packet &packet)
+    void generate_packet(Packet &packet)
     {
         // 16 bits: Max decoded remote symbol
         // 16 bits: First encoded symbol id
         // 16 bits: Num encoded symbols
         // 16 bits: Column element - Don't reuse this until the other endpoint has decoded all data points encoded by it.
-
-        if (symbols.empty()) {return false;}
 
         char *data_meta = packet.get_data();
 
@@ -106,52 +104,59 @@ public:
 
         cauchy_element++;
 
-        SymbolType packet_symbols[symbols_per_packet];
-        unsigned int num_packet_symbols = symbols.size() < symbols_per_packet ? symbols.size() : symbols_per_packet;
-        std::fill_n(packet_symbols, num_packet_symbols, SymbolType(0));
-
-        std::deque<SymbolType>::const_iterator i = symbols.cbegin();
-        unsigned int col = encode_start / symbols_per_packet;
-        unsigned int matrix_id = encode_start % symbols_per_packet;
-        SymbolType::BaseType *inv = SymbolType(cauchy_element + col).inverse();
-
-        while (true)
+        if (symbols.empty())
         {
-            // The cool stuff happens here:
-            packet_symbols[matrix_id] += (*i) * (*inv);
+            packet.set_size(packet_metadata_size);
+        }
+        else
+        {
+            SymbolType packet_symbols[symbols_per_packet];
+            unsigned int num_packet_symbols = symbols.size() < symbols_per_packet ? symbols.size() : symbols_per_packet;
+            std::fill_n(packet_symbols, num_packet_symbols, SymbolType(0));
 
-            i++;
-            if (i == symbols.cend()) {break;}
+            std::deque<SymbolType>::const_iterator i = symbols.cbegin();
+            unsigned int col = encode_start / symbols_per_packet;
+            unsigned int matrix_id = encode_start % symbols_per_packet;
+            SymbolType::BaseType *inv = SymbolType(cauchy_element + col).inverse();
 
-            matrix_id++;
-            if (matrix_id == symbols_per_packet)
+            while (true)
             {
-                matrix_id = 0;
-                col++;
-                inv = SymbolType(cauchy_element + col).inverse();
+                // The cool stuff happens here:
+                packet_symbols[matrix_id] += (*i) * (*inv);
+
+                i++;
+                if (i == symbols.cend()) {break;}
+
+                matrix_id++;
+                if (matrix_id == symbols_per_packet)
+                {
+                    matrix_id = 0;
+                    col++;
+                    inv = SymbolType(cauchy_element + col).inverse();
+                }
             }
+
+            mp_limb_t *data_symbol = get_packet_words(packet);
+            assert(data_meta == reinterpret_cast<const char *>(data_symbol));
+
+            unsigned int data_size_symbols = jw_util::FastMath::div_ceil<unsigned int>(num_packet_symbols * SS_FOUNTAININTERFACE_SYMBOL_MODULAR_EXPONENT, GMP_LIMB_BITS);
+            unsigned int data_size_chars = jw_util::FastMath::div_ceil<unsigned int>(num_packet_symbols * SS_FOUNTAININTERFACE_SYMBOL_MODULAR_EXPONENT, CHAR_BIT);
+
+            std::fill_n(data_symbol, data_size_symbols, 0);
+
+            unsigned int bit_offset = 0;
+            for (unsigned int i = num_packet_symbols; i-- > 0; )
+            {
+                packet_symbols[i].write_to<true>(data_symbol, bit_offset);
+            }
+
+            packet.set_size(packet_metadata_size + data_size_chars);
         }
-
-        mp_limb_t *data_symbol = get_packet_words(packet);
-        assert(data_meta == reinterpret_cast<const char *>(data_symbol));
-
-        unsigned int data_size_symbols = jw_util::FastMath::div_ceil<unsigned int>(num_packet_symbols * SS_FOUNTAININTERFACE_SYMBOL_MODULAR_EXPONENT, GMP_LIMB_BITS);
-        unsigned int data_size_chars = jw_util::FastMath::div_ceil<unsigned int>(num_packet_symbols * SS_FOUNTAININTERFACE_SYMBOL_MODULAR_EXPONENT, CHAR_BIT);
-        
-        std::fill_n(data_symbol, data_size_symbols, 0);
-
-        unsigned int bit_offset = 0;
-        for (unsigned int i = num_packet_symbols; i-- > 0; )
-        {
-            packet_symbols[i].write_to<true>(data_symbol, bit_offset);
-        }
-
-        packet.set_size(packet_metadata_size + data_size_chars);
 
         packet_mangle(packet);
-
-        return true;
     }
+
+    unsigned int num_pending_symbols() const {return symbols.size();}
 
 protected:
     unsigned int encode_start = 0;

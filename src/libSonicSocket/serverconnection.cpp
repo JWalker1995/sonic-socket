@@ -10,14 +10,8 @@ namespace sonic_socket
 
 void ServerConnection::init_handlers()
 {
-    RegisteredInbox registration;
-    InboxId inbox_id;
-
-    registration.ptr = static_cast<void *>(this);
-    registration.parse_ptr = 0;
-    registration.process_ptr = 0;
-    inbox_id = register_inbox(registration);
-    assert(inbox_id == module_registration_inbox_id);
+    InboxId inbox_id = register_inbox(mailbox.generate_inbox_registration<MailboxInitInbox>());
+    assert(inbox_id == mailbox_init_inbox_id);
 
     /*
     {

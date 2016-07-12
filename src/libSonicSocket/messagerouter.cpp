@@ -65,6 +65,8 @@ void MessageRouter::unregister_inbox(InboxId inbox_id)
 
 void MessageRouter::queue_message(InboxId inbox_id, const google::protobuf::Message &message)
 {
+    jw_util::Thread::assert_main_thread();
+
     if (MessageBuffer::is_inbox_id_holding(inbox_id))
     {
         manager.get_message_buffer().hold_message(inbox_id, message);
@@ -82,6 +84,8 @@ void MessageRouter::release_messages(InboxId holding_id, InboxId resolved_id)
 
 void MessageRouter::send_message(InboxId inbox_id, const google::protobuf::Message &message)
 {
+    jw_util::Thread::assert_child_thread();
+
     MessageMetaCompressor::Meta meta;
     meta.inbox_id = inbox_id;
     meta.size = message.ByteSize();
@@ -96,8 +100,7 @@ void MessageRouter::send_message(InboxId inbox_id, const google::protobuf::Messa
 void MessageRouter::send_packet()
 {
     FountainCoder::Packet packet;
-    bool has_packet = fountain_coder.generate_packet(packet);
-    if (!has_packet) {return;}
+    fountain_coder.generate_packet(packet);
 
     manager.send_packet(remote, packet.get_data(), packet.get_size());
 

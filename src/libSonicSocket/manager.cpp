@@ -22,6 +22,8 @@ Manager::Manager(Type type, Remote::Port port)
     assert(!instance);
     instance = this;
 
+    assert(dummy_message_router.is_dummy());
+
     jw_util::Thread::set_main_thread();
 
     GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -41,7 +43,7 @@ Manager::Manager(Type type, Remote::Port port)
     polling_thread = std::thread(&sonic_socket::Manager::thread_poll_socket, this);
 
     workers.set_wakeup_worker(jw_util::MethodCallback<>::create<Manager, &Manager::interval_func>(this));
-    workers.set_wakeup_interval(std::chrono::milliseconds(2000));
+    workers.set_wakeup_interval(std::chrono::milliseconds(250));
 
     workers.start();
 }
@@ -109,6 +111,7 @@ ServerConnection *Manager::find_server_connection(const Remote &remote, bool cre
             assert(insert.second);
 
             ServerConnection &server_connection = insert.first->second;
+            assert(!server_connection.is_dummy());
             server_connection.init_handlers();
             new_connection_signal.call(server_connection);
             return &server_connection;
@@ -121,37 +124,6 @@ ServerConnection *Manager::find_server_connection(const Remote &remote, bool cre
     else
     {
         return &found->second;
-    }
-}
-
-void Manager::maintain_server_connections()
-{
-    std::chrono::steady_clock::time_point remote_threshold;
-    remote_threshold = std::chrono::steady_clock::now();
-    remote_threshold -= std::chrono::seconds(65);
-
-    std::chrono::steady_clock::time_point self_threshold;
-    self_threshold = std::chrono::steady_clock::now();
-    self_threshold -= std::chrono::seconds(30);
-
-    std::unordered_map<Remote, ServerConnection, Remote::Hasher>::iterator i = servers_map.begin();
-    while (i != servers_map.end())
-    {
-        ServerConnection &server_connection = i->second;
-
-        if (server_connection.is_remote_timed_out(remote_threshold))
-        {
-            i = servers_map.erase(i);
-        }
-        else
-        {
-            if (server_connection.is_self_timed_out(self_threshold))
-            {
-                server_connection.send_packet();
-            }
-
-            i++;
-        }
     }
 }
 
@@ -292,11 +264,39 @@ void Manager::worker_func(WorkerRequest request)
 
 void Manager::interval_func()
 {
+    jw_util::Thread::assert_child_thread();
+
+    std::chrono::steady_clock::time_point remote_threshold;
+    remote_threshold = std::chrono::steady_clock::now();
+    remote_threshold -= std::chrono::seconds(65);
+
+    std::chrono::steady_clock::time_point self_ping_threshold;
+    self_ping_threshold = std::chrono::steady_clock::now();
+    self_ping_threshold -= std::chrono::seconds(30);
+
+    std::chrono::steady_clock::time_point self_data_threshold;
+    self_data_threshold = std::chrono::steady_clock::now();
+    self_data_threshold -= std::chrono::milliseconds(5000);
+
     std::unordered_map<Remote, ServerConnection, Remote::Hasher>::iterator i = servers_map.begin();
     while (i != servers_map.end())
     {
-        i->second.send_packet();
-        i++;
+        ServerConnection &server_connection = i->second;
+
+        if (server_connection.is_remote_timed_out(remote_threshold))
+        {
+            i = servers_map.erase(i);
+        }
+        else
+        {
+            std::chrono::steady_clock::time_point self_threshold = server_connection.has_data_to_send() ? self_data_threshold : self_ping_threshold;
+            if (server_connection.is_self_timed_out(self_threshold))
+            {
+                server_connection.send_packet();
+            }
+
+            i++;
+        }
     }
 }
 

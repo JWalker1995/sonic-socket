@@ -25,120 +25,126 @@ public:
     typedef _MessageType MessageType;
     typedef InboxPollable<_MessageType, parse_callback> SelfType;
 
-    template <typename MailboxType>
-    class Actor : public Inbox<_MessageType, parse_callback>::template Actor<MailboxType>
+    class ActorData
     {
+        friend class InboxPollable<MessageType, parse_callback>::Reader;
+
+    protected:
+#ifdef SS_INBOXPOLLABLE_USE_READERWRITERQUEUE
+        moodycamel::ReaderWriterQueue<MessageType> queue;
+#else
+        std::queue<MessageType> queue;
+        std::mutex queue_mutex;
+#endif
+    };
+
+    template <typename MailboxType>
+    class Actor : public Inbox<_MessageType, parse_callback>::template Actor<MailboxType>, public ActorData
+    {
+        typedef typename Inbox<_MessageType, parse_callback>::template Actor<MailboxType> BaseType;
+
     public:
         void register_and_generate_mailbox_init(MailboxInit &mailbox_init)
         {
-            register_and_generate_mailbox_init(mailbox_init, make_inbox_registration());
+            BaseType::register_and_generate_mailbox_init(mailbox_init, make_inbox_registration());
         }
 
         void unregister()
         {
-            unregister(make_inbox_registration());
+            BaseType::unregister(make_inbox_registration());
         }
+
+#ifdef SS_INBOXPOLLABLE_USE_READERWRITERQUEUE
+        void process_message(const MessageType &message)
+        {
+            bool success = ActorData::queue.enqueue(std::move(message));
+            if (!success)
+            {
+                throw std::bad_alloc();
+            }
+        }
+#else
+        void process_message(const MessageType &message)
+        {
+            std::lock_guard<std::mutex> lock(ActorData::queue_mutex);
+            (void) lock;
+            ActorData::queue.push(std::move(message));
+        }
+#endif
 
     private:
         MessageRouter::RegisteredInbox make_inbox_registration()
         {
             return MailboxType::template get_mailbox<SelfType>(this).template generate_inbox_registration<SelfType>();
         }
+    };
 
 #ifdef SS_INBOXPOLLABLE_USE_READERWRITERQUEUE
 
+    class Reader
+    {
     public:
-        class Reader
-        {
-            friend class InboxPollable;
-
-        public:
-            Reader(InboxPollable &inbox)
+        Reader(ActorData &actor)
+            : queue(actor.queue)
 #ifndef NDEBUG
-                : top(0)
+            , top(0)
 #endif
-            {}
+        {}
 
-        private:
-            MessageType *top;
-        };
-
-        bool has_message(Reader &reader)
+        bool has_message()
         {
-            reader.top = queue.peek();
-            return reader.top != 0;
+            top = queue.peek();
+            return top != 0;
         }
 
-        const MessageType &get_message(Reader &reader) const
+        const MessageType &get_message() const
         {
-            assert(reader.top != 0);
-            return *reader.top;
+            assert(top != 0);
+            return *top;
         }
 
-        void pop_message(Reader &reader)
+        void pop_message()
         {
             bool res = queue.pop();
             assert(res);
         }
 
     private:
-        moodycamel::ReaderWriterQueue<MessageType> queue;
-
-        void process_message(const MessageType &message)
-        {
-            bool success = queue.enqueue(std::move(message));
-            if (!success)
-            {
-                throw std::bad_alloc();
-            }
-        }
+        moodycamel::ReaderWriterQueue<MessageType> &queue;
+        MessageType *top;
+    };
 
 #else
 
+    class Reader
+    {
     public:
-        class Reader
+        Reader(ActorData &actor)
+            : queue(actor.queue)
+            , lock(actor.queue_mutex)
+        {}
+
+        bool has_message()
         {
-            friend class InboxPollable;
-
-        public:
-            Reader(InboxPollable &inbox)
-                : lock(inbox.queue_mutex)
-            {}
-
-        private:
-            std::lock_guard<std::mutex> lock;
-        };
-
-        bool has_message(Reader &reader)
-        {
-            (void) reader;
             return !queue.empty();
         }
 
-        const MessageType &get_message(Reader &reader) const
+        const MessageType &get_message() const
         {
-            (void) reader;
             return queue.front();
         }
 
-        void pop_message(Reader &reader)
+        void pop_message()
         {
-            (void) reader;
             queue.pop();
         }
 
     private:
-        std::mutex queue_mutex;
-        std::queue<MessageType> queue;
-
-        void process_message(const MessageType &message)
-        {
-            std::lock_guard<std::mutex> lock(queue_mutex);
-            (void) lock;
-            queue.push(std::move(message));
-        }
-#endif
+        std::queue<MessageType> &queue;
+        std::lock_guard<std::mutex> lock;
     };
+
+#endif
 };
 
 }

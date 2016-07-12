@@ -35,6 +35,10 @@ public:
         }
     };
 
+    static constexpr InboxId mailbox_init_inbox_id = 0;
+    static constexpr InboxId module_registration_inbox_id = 1;
+    static constexpr InboxId module_registration_complete_inbox_id = 2;
+
     MessageRouter(Manager &manager);
     MessageRouter(Manager &manager, const Remote &remote);
 
@@ -58,6 +62,8 @@ public:
 
     void push_log(LogProxy::LogLevel level, const std::string &str);
 
+    bool has_data_to_send() const {return fountain_coder.num_pending_symbols();}
+
     bool is_remote_timed_out(std::chrono::steady_clock::time_point threshold) const
     {
         return last_recv < threshold;
@@ -66,6 +72,8 @@ public:
     {
         return last_send < threshold;
     }
+
+    bool is_dummy() const {return !remote.is_resolved();}
 
 private:
     Manager &manager;
