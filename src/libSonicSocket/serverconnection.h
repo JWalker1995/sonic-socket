@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "libSonicSocket/jw_util/methodcallback.h"
+#include "libSonicSocket/jw_util/thread.h"
 
 #include "libSonicSocket/messagerouter.h"
 #include "libSonicSocket/mailbox.h"
@@ -27,6 +28,8 @@ public:
     template <typename... BoxTypes>
     void register_mailbox(Mailbox<BoxTypes...> &mailbox)
     {
+        jw_util::Thread::assert_child_thread();
+
         pending_mailboxes.push_back(mailbox.make_mailbox_init_receiver());
         mailbox.set_final_message_router(this);
     }

@@ -33,7 +33,7 @@ void Remote::resolve(const std::string &host, Port port)
         }
     }
 
-    if (found_addr)
+    if (found_addr != NULL)
     {
         assert(found_addr->ai_family == found_addr->ai_addr->sa_family);
 

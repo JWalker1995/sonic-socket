@@ -34,7 +34,6 @@ void MessageEncoder::send_message(FountainCoder &coder)
     for (unsigned int i = 0; i < send_symbols; i++)
     {
         FountainBase::SymbolType &symbol = coder.alloc_symbol();
-        symbol = FountainBase::SymbolType(0);
         symbol.read_from<true>(data, bit_offset);
 
         bool ambig_low = symbol.is_ambig_low();

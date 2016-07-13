@@ -87,8 +87,8 @@ private:
     std::vector<RegisteredInbox> inboxes;
     std::vector<InboxId> free_inboxes;
 
-    std::chrono::steady_clock::time_point last_recv = std::chrono::steady_clock::time_point::min();
-    std::chrono::steady_clock::time_point last_send = std::chrono::steady_clock::time_point::min();
+    std::chrono::steady_clock::time_point last_recv = std::chrono::steady_clock::now();
+    std::chrono::steady_clock::time_point last_send = std::chrono::steady_clock::now();
 };
 
 }

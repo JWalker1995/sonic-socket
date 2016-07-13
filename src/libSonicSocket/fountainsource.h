@@ -4,6 +4,9 @@
 #include <deque>
 #include <algorithm>
 
+// TODO: remove
+#include <iostream>
+
 #include "libSonicSocket/config/SS_FOUNTAININTERFACE_SYMBOL_MODULAR_EXPONENT.h"
 #include "libSonicSocket/config/SS_FOUNTAININTERFACE_SYMBOL_MODULAR_DECREMENT.h"
 #include "libSonicSocket/config/SS_MAX_PACKET_SIZE.h"
@@ -136,19 +139,23 @@ public:
                 }
             }
 
-            mp_limb_t *data_symbol = get_packet_words(packet);
-            assert(data_meta == reinterpret_cast<const char *>(data_symbol));
+            mp_limb_t *data_words = get_packet_words(packet);
+            assert(data_meta == reinterpret_cast<const char *>(data_words));
 
             unsigned int data_size_symbols = jw_util::FastMath::div_ceil<unsigned int>(num_packet_symbols * SS_FOUNTAININTERFACE_SYMBOL_MODULAR_EXPONENT, GMP_LIMB_BITS);
             unsigned int data_size_chars = jw_util::FastMath::div_ceil<unsigned int>(num_packet_symbols * SS_FOUNTAININTERFACE_SYMBOL_MODULAR_EXPONENT, CHAR_BIT);
 
-            std::fill_n(data_symbol, data_size_symbols, 0);
+            std::fill_n(data_words, data_size_symbols, 0);
+
+            std::cout << "Send: ";
 
             unsigned int bit_offset = 0;
             for (unsigned int i = num_packet_symbols; i-- > 0; )
             {
-                packet_symbols[i].write_to<true>(data_symbol, bit_offset);
+                std::cout << "0x" << packet_symbols[encode_start + i].to_string<16>() << " ";
+                packet_symbols[encode_start + i].write_to<true>(data_words, bit_offset);
             }
+            std::cout << std::endl;
 
             packet.set_size(packet_metadata_size + data_size_chars);
         }

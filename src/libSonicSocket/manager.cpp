@@ -55,8 +55,8 @@ Manager::~Manager()
 
     jw_util::Thread::assert_main_thread();
 
-    polling_thread_run = false;
     socket.close();
+    polling_thread_run = false;
     polling_thread.join();
     workers.pause();
 
@@ -95,6 +95,7 @@ void Manager::send_packet(const Remote &remote, const char *data, unsigned int s
 {
     jw_util::Thread::assert_child_thread();
 
+    std::cout << "Sending packet to " << remote.to_string() << " of size " << size << " bytes..." << std::endl;
     socket.send(remote, data, size);
 }
 
@@ -285,7 +286,7 @@ void Manager::interval_func()
 
         if (server_connection.is_remote_timed_out(remote_threshold))
         {
-            i = servers_map.erase(i);
+            // i = servers_map.erase(i);
         }
         else
         {

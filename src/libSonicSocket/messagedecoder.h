@@ -29,7 +29,7 @@ public:
     std::string get_error_string() const;
 
 private:
-    enum class RecvState {Init, Meta, Message, Pending, ErrorPaddingNonzero, ErrorUnresolvableAmbiguity, ErrorInvalidAmbiguitySymbol};
+    enum class RecvState {Init, Meta, Message, Pending, ErrorInvalidMeta, ErrorPaddingNonzero, ErrorUnresolvableAmbiguity, ErrorInvalidAmbiguitySymbol};
 
     MessageMetaCompressor recv_meta_compressor;
 

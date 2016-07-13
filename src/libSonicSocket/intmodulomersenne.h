@@ -186,8 +186,19 @@ public:
         mp_limb_t tmp[size];
         std::copy(data, data + size, tmp);
 
+        unsigned int s = size;
+        while (s > 0 && tmp[s - 1] == 0)
+        {
+            s--;
+        }
+
+        if (s == 0)
+        {
+            return "0";
+        }
+
         unsigned char str[max_digits];
-        unsigned int end = mpn_get_str(str, base, tmp, size);
+        unsigned int end = mpn_get_str(str, base, tmp, s);
 
         unsigned int start = 0;
         while (start < end && str[start] == 0)
@@ -197,16 +208,21 @@ public:
 
         unsigned int digits = end - start;
 
-        if (digits == 0)
-        {
-            return "0";
-        }
+        assert(digits > 0);
 
         std::string res;
         res.resize(digits);
         for (unsigned int i = 0; i < digits; i++)
         {
-            res[i] = '0' + str[start + i];
+            unsigned char d = str[start + i];
+            if (d < 10)
+            {
+                res[i] = '0' + d;
+            }
+            else
+            {
+                res[i] = 'A' + (d - 10);
+            }
         }
 
         return res;
@@ -285,18 +301,13 @@ private:
         mul_res[size - 1] >>= GMP_NUMB_BITS - head_bits;
         assert((mul_res[size * 2 - 1] & ~head_mask) == 0);
 
-        mp_limb_t carry2;
         if (modular_decrement != 1)
         {
-            carry2 = mpn_mul_1(mul_res + size, mul_res + size, size, modular_decrement);
-        }
-        else
-        {
-            carry2 = 0;
+            mp_limb_t carry2 = mpn_mul_1(mul_res + size, mul_res + size, size, modular_decrement);
+            assert(carry2 == 0);
         }
 
         carry = mpn_add_n(res.data, mul_res, mul_res + size, size);
-        assert(carry == 0);
 
         if (head_bits != GMP_NUMB_BITS)
         {

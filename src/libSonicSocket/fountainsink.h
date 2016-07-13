@@ -4,6 +4,9 @@
 #include <vector>
 #include <deque>
 
+// TODO: remove
+#include <iostream>
+
 #include "libSonicSocket/config/JWUTIL_CACHELRU_FORGET_POOL_ON_HEAP.h"
 #include "libSonicSocket/jw_util/cachelru.h"
 
@@ -127,8 +130,8 @@ public:
             return false;
         }
 
-        const mp_limb_t *data_symbol = get_packet_words(packet);
-        assert(data_meta == reinterpret_cast<const char *>(data_symbol));
+        const mp_limb_t *data_words = get_packet_words(packet);
+        assert(data_meta == reinterpret_cast<const char *>(data_words));
         unsigned int bit_offset = 0;
 
         unsigned int matrix_split_1 = symbol_start % symbols_per_packet;
@@ -136,7 +139,9 @@ public:
         unsigned int col_start = symbol_start / symbols_per_packet;
         unsigned int col_count = symbol_count / symbols_per_packet;
 
-        for (unsigned int i = num_packet_symbols; i-- > 0; )
+        std::cout << "Recv: ";
+
+        for (unsigned int i = symbol_end; i-- > symbol_start; )
         {
             bool col_start_inc = i < matrix_split_1;
 
@@ -150,7 +155,9 @@ public:
             row.cauchy_element = cauchy_element;
             row.col_start = col_start + col_start_inc;
             row.col_end = row.col_start + col_count + col_count_inc;
-            row.sum.template read_from<true>(data_symbol, bit_offset);
+            row.sum.template read_from<true>(data_words, bit_offset);
+
+            std::cout << "0x" << row.sum.template to_string<16>() << " ";
 
             unsigned int subtract_id = row.col_start * symbols_per_packet + i;
             while (subtract_id < decode_end)
@@ -185,17 +192,20 @@ public:
                     return false;
                 }
             }
-
-            cur_mat.add_row(row);
-
-            unsigned int cur_mat_cols = cur_mat.max_col_end - cur_mat.min_col_start;
-            assert(cur_mat_cols >= cur_mat.rows.size());
-            if (cur_mat_cols == cur_mat.rows.size())
+            else
             {
-                decode_matrix(i, cur_mat);
-                cur_mat.reset_rows();
+                cur_mat.add_row(row);
+
+                unsigned int cur_mat_cols = cur_mat.max_col_end - cur_mat.min_col_start;
+                assert(cur_mat_cols >= cur_mat.rows.size());
+                if (cur_mat_cols == cur_mat.rows.size())
+                {
+                    decode_matrix(i, cur_mat);
+                    cur_mat.reset_rows();
+                }
             }
         }
+        std::cout << std::endl;
 
         use_symbols(symbol_start);
 
@@ -253,16 +263,16 @@ private:
         };
         std::vector<Row> rows;
 
-        unsigned int min_col_start = 0;
-        unsigned int max_col_end = static_cast<unsigned int>(-1);
+        unsigned int min_col_start = static_cast<unsigned int>(-1);
+        unsigned int max_col_end = 0;
 
         std::size_t rows_hash = 0;
 
         void reset_rows()
         {
             rows.clear();
-            min_col_start = 0;
-            max_col_end = static_cast<unsigned int>(-1);
+            min_col_start = static_cast<unsigned int>(-1);
+            max_col_end = 0;
             rows_hash = 0;
         }
 
@@ -324,16 +334,13 @@ private:
 
         typename MatrixInverseCacheType::Result inverse = matrix_inverse_cache.access(generator);
 
-        // TODO: Test cache
-        assert(false);
-
         if (!inverse.is_valid())
         {
             calc_matrix_inverse(*inverse.get_value(), generator);
         }
 
         unsigned int size = generator.rows.size();
-        unsigned int decoded_resize_to = generator.max_col_end * symbols_per_packet + chunk - decoded_offset;
+        unsigned int decoded_resize_to = (generator.max_col_end - 1) * symbols_per_packet + chunk - decoded_offset;
         if (decoded.size() <= decoded_resize_to)
         {
             decoded.resize(decoded_resize_to + 1);
@@ -344,7 +351,7 @@ private:
         SymbolType *data = inverse.get_value()->data();
         for (unsigned int i = 0; i < size; i++)
         {
-            SymbolType sum = 0;
+            SymbolType sum(0);
 
             typename std::vector<typename MatrixGenerator::Row>::const_iterator j = generator.rows.cbegin();
             while (j != generator.rows.cend())

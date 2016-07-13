@@ -1,7 +1,5 @@
 #include "messagebuffer.h"
 
-#include "libSonicSocket/manager.h"
-
 namespace sonic_socket
 {
 
@@ -20,17 +18,16 @@ void MessageBuffer::hold_message(MessageRouter::InboxId inbox_id, const google::
 
 void MessageBuffer::release_messages(MessageRouter &message_router, MessageRouter::InboxId holding_id, MessageRouter::InboxId resolved_id)
 {
+    jw_util::Thread::assert_child_thread();
     assert(is_inbox_id_holding(holding_id));
     assert(!is_inbox_id_holding(resolved_id));
-
-    Manager &manager = message_router.get_manager();
 
     std::deque<HeldMessage>::const_iterator i = held_messages.cbegin();
     while (i != held_messages.cend())
     {
         if (i->holding_inbox_id == holding_id)
         {
-            manager.queue_message(message_router, resolved_id, *i->message);
+            message_router.send_message(resolved_id, *i->message);
             i = held_messages.erase(i);
         }
         else

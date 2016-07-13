@@ -89,10 +89,8 @@ public:
     {
         return *data == static_cast<char>(cache_size) ? 5 : 1;
     }
-    Meta decode(const char *data)
+    bool decode(Meta &res, const char *data)
     {
-        Meta res;
-
         if (*data == static_cast<char>(cache_size))
         {
             data++;
@@ -104,19 +102,16 @@ public:
             res.size = 0;
             res.size |= *data++ >> 0;
             res.size |= *data++ >> 8;
-
-            return res;
         }
         else
         {
-            // TODO: Test cache
-            assert(false);
-
-            res = cache.lookup_bucket(*data++);
+            unsigned int id = static_cast<unsigned char>(*data++);
+            if (!cache.is_bucket_id_valid(id)) {return false;}
+            res = cache.lookup_bucket(id);
         }
 
         cache.access(res);
-        return res;
+        return true;
     }
 
     static constexpr unsigned int max_encode_length = 5;

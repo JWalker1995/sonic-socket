@@ -10,6 +10,7 @@ namespace sonic_socket
 
 void ServerConnection::init_handlers()
 {
+    mailbox.get_box<MailboxInitInbox>().set_class_pointer(this);
     InboxId inbox_id = register_inbox(mailbox.generate_inbox_registration<MailboxInitInbox>());
     assert(inbox_id == mailbox_init_inbox_id);
 

@@ -125,13 +125,6 @@ void MessageRouter::receive_packet(FountainCoder::Packet &packet)
 
     while (message_decoder.extract_message(decode))
     {
-        if (message_decoder.has_error())
-        {
-            std::string error_msg = "Could not decode symbols into message: " + message_decoder.get_error_string();
-            fountain_coder.report_decode_error(decode, error_msg);
-            return;
-        }
-
         assert(message_decoder.has_message());
 
         InboxId inbox_id = message_decoder.get_message_meta().inbox_id;
@@ -164,6 +157,13 @@ void MessageRouter::receive_packet(FountainCoder::Packet &packet)
         }
 
         parsed_messages.push_back(message);
+    }
+
+    if (message_decoder.has_error())
+    {
+        std::string error_msg = "Could not decode symbols into message: " + message_decoder.get_error_string();
+        fountain_coder.report_decode_error(decode, error_msg);
+        return;
     }
 
     std::vector<ParsedMessage>::const_iterator i = parsed_messages.cbegin();
