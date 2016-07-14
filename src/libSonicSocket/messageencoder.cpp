@@ -31,6 +31,15 @@ void MessageEncoder::send_message(FountainCoder &coder)
     const mp_limb_t *data = send_buffer.begin();
     unsigned int bit_offset = 0;
 
+    /*
+    std::cout << "Send: ";
+    for (const unsigned char *i = reinterpret_cast<unsigned char *>(send_buffer.begin()); i < reinterpret_cast<unsigned char *>(send_buffer.end()); i++)
+    {
+        std::cout << static_cast<unsigned int>(*i) << " ";
+    }
+    std::cout << std::endl;
+    */
+
     for (unsigned int i = 0; i < send_symbols; i++)
     {
         FountainBase::SymbolType &symbol = coder.alloc_symbol();
@@ -40,6 +49,9 @@ void MessageEncoder::send_message(FountainCoder &coder)
         bool ambig_high = symbol.is_ambig_high();
         if (ambig_low || ambig_high)
         {
+            // TODO: Make sure works
+            assert(false);
+
             assert(ambig_low ^ ambig_high);
 
             FountainBase::SymbolType &next_symbol = coder.alloc_symbol();

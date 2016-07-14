@@ -29,13 +29,15 @@ Manager::Manager(Type type, Remote::Port port)
     GOOGLE_PROTOBUF_VERIFY_VERSION;
     google::protobuf::SetLogHandler(&log_handler);
 
+    FountainBase::static_init(logger);
+
     try
     {
         socket.open(port);
     }
     catch (const std::exception &ex)
     {
-        logger.push_log(LogProxy::LogLevel::Fatal, ex.what());
+        logger.push_event(LogProxy::LogLevel::Fatal, ex.what());
         return;
     }
 
@@ -159,7 +161,7 @@ void Manager::thread_poll_socket()
         }
         catch (const UdpSocket::PollException &ex)
         {
-            logger.push_log(LogProxy::LogLevel::Info, ex.what());
+            logger.push_event(LogProxy::LogLevel::Warning, ex.what());
         }
     }
 }
@@ -210,7 +212,7 @@ void Manager::resolve_server(const char *server_data, unsigned int server_size)
     }
     catch (const std::exception &ex)
     {
-        logger.push_log(LogProxy::LogLevel::Error, ex.what());
+        logger.push_event(LogProxy::LogLevel::Error, ex.what());
         return;
     }
 
@@ -243,7 +245,7 @@ void Manager::worker_func(WorkerRequest request)
         ServerConnection *server_connection = find_server_connection(decode_packet_data.remote, type == Type::Server);
         if (!server_connection)
         {
-            logger.push_log(LogProxy::LogLevel::Info, "Received message from unknown remote " + decode_packet_data.remote.to_string());
+            logger.push_event(LogProxy::LogLevel::Notice, "Received message from unknown remote " + decode_packet_data.remote.to_string());
             return;
         }
 
@@ -343,7 +345,7 @@ void Manager::init_module_connection(ServerConnection &server_connection, const 
 
     if (message.module_id() >= loaded_modules.size())
     {
-        logger.push_log(LogProxy::LogLevel::Warning, "Received message from " + server_connection.get_remote().to_string() + " with invalid module_id " + std::to_string(message.module_id()));
+        logger.push_event(LogProxy::LogLevel::Warning, "Received message from " + server_connection.get_remote().to_string() + " with invalid module_id " + std::to_string(message.module_id()));
         return;
     }
 
@@ -534,7 +536,7 @@ void Manager::log_handler(google::protobuf::LogLevel protobuf_level, const char 
     LogProxy::LogLevel log_level;
     switch (protobuf_level)
     {
-        case google::protobuf::LOGLEVEL_INFO: log_level = LogProxy::LogLevel::Info; break;
+        case google::protobuf::LOGLEVEL_INFO: log_level = LogProxy::LogLevel::Notice; break;
         case google::protobuf::LOGLEVEL_WARNING: log_level = LogProxy::LogLevel::Warning; break;
         case google::protobuf::LOGLEVEL_ERROR: log_level = LogProxy::LogLevel::Error; break;
         case google::protobuf::LOGLEVEL_FATAL: log_level = LogProxy::LogLevel::Fatal; break;
@@ -544,7 +546,7 @@ void Manager::log_handler(google::protobuf::LogLevel protobuf_level, const char 
     std::string log_message("Protobuf log from file \"" + std::string(filename) + "\" on line " + std::to_string(line) + ": \"" + protobuf_message + "\"");
 
     assert(instance);
-    instance->logger.push_log(log_level, log_message);
+    instance->logger.push_event(log_level, log_message);
 }
 
 }

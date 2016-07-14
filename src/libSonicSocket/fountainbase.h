@@ -9,6 +9,7 @@
 #include "libSonicSocket/eigen.h"
 #include "libSonicSocket/intmodulomersennestorage.h"
 #include "libSonicSocket/packetmangler.h"
+#include "libSonicSocket/logproxy.h"
 
 namespace sonic_socket
 {
@@ -56,6 +57,14 @@ public:
 
         unsigned int size;
     };
+
+    static void static_init(LogProxy &logger)
+    {
+        if (!jw_util::FastMath::is_pow2(symbols_per_packet))
+        {
+            logger.push_event(LogProxy::LogLevel::Debug, "FountainBase::symbols_per_packet = " + std::to_string(symbols_per_packet) + " is not a power of two");
+        }
+    }
 
 protected:
     static mp_limb_t *get_packet_words(Packet &packet)

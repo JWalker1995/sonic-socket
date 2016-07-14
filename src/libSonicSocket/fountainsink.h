@@ -139,17 +139,21 @@ public:
         unsigned int col_start = symbol_start / symbols_per_packet;
         unsigned int col_count = symbol_count / symbols_per_packet;
 
-        std::cout << "Recv: ";
+        //std::cout << "Recv: ";
 
-        for (unsigned int i = symbol_end; i-- > symbol_start; )
+        unsigned int chunk = matrix_split_2;
+        for (unsigned int i = 0; i < num_packet_symbols; i++)
         {
-            bool col_start_inc = i < matrix_split_1;
+            if (chunk == 0) {chunk = symbols_per_packet;}
+            chunk--;
+
+            bool col_start_inc = chunk < matrix_split_1;
 
             // If matrix_split_1 < matrix_split_2: 0 [ms1] 1 [ms2] 0
             // If matrix_split_1 > matrix_split_2: 1 [ms1] 0 [ms2] 1
-            bool col_count_inc = (matrix_split_1 <= i) ^ (i < matrix_split_2) ^ (matrix_split_1 < matrix_split_2);
+            bool col_count_inc = (matrix_split_1 <= chunk) ^ (chunk < matrix_split_2) ^ (matrix_split_1 < matrix_split_2);
 
-            MatrixGenerator &cur_mat = chunks[i];
+            MatrixGenerator &cur_mat = chunks[chunk];
 
             typename MatrixGenerator::Row row;
             row.cauchy_element = cauchy_element;
@@ -157,9 +161,9 @@ public:
             row.col_end = row.col_start + col_count + col_count_inc;
             row.sum.template read_from<true>(data_words, bit_offset);
 
-            std::cout << "0x" << row.sum.template to_string<16>() << " ";
+            //std::cout << "0x" << row.sum.template to_string<16>() << " ";
 
-            unsigned int subtract_id = row.col_start * symbols_per_packet + i;
+            unsigned int subtract_id = row.col_start * symbols_per_packet + chunk;
             while (subtract_id < decode_end)
             {
                 assert(subtract_id >= symbol_start);
@@ -179,10 +183,10 @@ public:
             {
                 if (row.sum != 0)
                 {
-                    revert_packet(i + 1, num_packet_symbols, decode_end);
+                    revert_packet(chunk + 1, num_packet_symbols, decode_end);
 
                     std::string error_msg = "Packet symbols contradict previous packets (";
-                        error_msg += "i=" + std::to_string(i);
+                        error_msg += "i=" + std::to_string(chunk);
                         error_msg += ", row.cauchy_element=" + std::to_string(row.cauchy_element);
                         error_msg += ", row.col_start=" + std::to_string(row.col_start);
                         error_msg += ", row.col_end=" + std::to_string(row.col_end);
@@ -200,12 +204,12 @@ public:
                 assert(cur_mat_cols >= cur_mat.rows.size());
                 if (cur_mat_cols == cur_mat.rows.size())
                 {
-                    decode_matrix(i, cur_mat);
+                    decode_matrix(chunk, cur_mat);
                     cur_mat.reset_rows();
                 }
             }
         }
-        std::cout << std::endl;
+        //std::cout << std::endl;
 
         use_symbols(symbol_start);
 
@@ -432,11 +436,12 @@ private:
                 // The min_col_start/max_col_start and rows_hash are going to be incorrect,
                 //   so reset them and re-insert all rows.
                 // This isn't the fastest way to do this, but hopefully this function won't be called that often.
-                std::vector<typename MatrixGenerator::Row> rows = std::move(chunk.rows);
+                std::vector<typename MatrixGenerator::Row> prev_rows;
+                chunk.rows.swap(prev_rows);
                 chunk.reset_rows();
 
-                typename std::vector<typename MatrixGenerator::Row>::const_iterator j = rows.cbegin();
-                while (j != rows.cend())
+                typename std::vector<typename MatrixGenerator::Row>::const_iterator j = prev_rows.cbegin();
+                while (j != prev_rows.cend())
                 {
                     chunk.add_row(*j);
                     j++;
@@ -472,12 +477,12 @@ private:
     {
         LogProxy &logger = static_cast<Derived *>(this)->get_logger();
 
-        logger.push_log(LogProxy::LogLevel::Warning, error_msg);
+        logger.push_event(LogProxy::LogLevel::Warning, error_msg);
 
         error_accumulator += 1.0f;
         if (error_accumulator > 4.0f)
         {
-            logger.push_log(LogProxy::LogLevel::Fatal, "Seeing an awful lot of network errors...");
+            logger.push_event(LogProxy::LogLevel::Fatal, "Seeing an awful lot of network errors...");
         }
     }
 

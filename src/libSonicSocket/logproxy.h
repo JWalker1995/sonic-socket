@@ -16,10 +16,39 @@ namespace sonic_socket
 class LogProxy
 {
 public:
-    enum class LogLevel {Info, Warning, Error, Fatal};
+    enum class LogLevel {Debug, Notice, Warning, Error, Fatal};
 
-    void push_log(LogLevel level, const std::string &str)
+    static constexpr bool is_tracking_level(LogLevel level)
     {
+#ifndef NDEBUG
+        (void) level;
+        return true;
+#else
+        return level != Debug;
+#endif
+    }
+
+    static std::string get_level_str(LogLevel level)
+    {
+        switch (level)
+        {
+        case LogLevel::Debug:
+            return "DEBUG";
+        case LogLevel::Notice:
+            return "NOTICE";
+        case LogLevel::Warning:
+            return "WARNING";
+        case LogLevel::Error:
+            return "ERROR";
+        case LogLevel::Fatal:
+            return "FATAL";
+        }
+    }
+
+    void push_event(LogLevel level, const std::string &str)
+    {
+        if (!is_tracking_level(level)) {return;}
+
         std::lock_guard<std::mutex> lock(pending_logs_mutex);
         (void) lock;
         pending_logs.emplace_back(level, str);
@@ -32,7 +61,7 @@ public:
             std::unique_lock<std::mutex> lock(pending_logs_mutex, std::try_to_lock);
             if (lock.owns_lock())
             {
-                emit_logs();
+                emit_events();
             }
             else
             {
@@ -41,29 +70,29 @@ public:
         }
         else
         {
-            log_event.call(LogLevel::Warning, "Could not acquire log mutex after " + std::to_string(last_log_event) + " tries, blocking on lock...");
+            event_signal.call(LogLevel::Warning, "Could not acquire log mutex after " + std::to_string(last_log_event) + " tries, blocking on lock...");
 
             std::lock_guard<std::mutex> lock(pending_logs_mutex);
             (void) lock;
-            emit_logs();
+            emit_events();
         }
     }
 
-    jw_util::Signal<LogLevel, const std::string &> log_event;
+    jw_util::Signal<LogLevel, const std::string &> event_signal;
 
 private:
     unsigned int last_log_event = 0;
     std::mutex pending_logs_mutex;
     std::vector<std::pair<LogLevel, std::string>> pending_logs;
 
-    void emit_logs()
+    void emit_events()
     {
         jw_util::Thread::assert_main_thread();
 
         std::vector<std::pair<LogLevel, std::string>>::const_iterator i = pending_logs.cbegin();
         while (i != pending_logs.cend())
         {
-            log_event.call(i->first, i->second);
+            event_signal.call(i->first, i->second);
             i++;
         }
 

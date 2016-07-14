@@ -75,6 +75,15 @@ bool MessageDecoder::extract_message(FountainCoder::DecodedPacket &decode)
                 bool success = recv_meta_compressor.decode(recv_meta, data);
                 if (!success)
                 {
+                    /*
+                    std::cout << "Recv invalid: ";
+                    for (const unsigned char *i = reinterpret_cast<unsigned char *>(recv_buffer.begin()); i < reinterpret_cast<unsigned char *>(recv_buffer.end()); i++)
+                    {
+                        std::cout << static_cast<unsigned int>(*i) << " ";
+                    }
+                    std::cout << std::endl;
+                    */
+
                     recv_state = RecvState::ErrorInvalidMeta;
                     return false;
                 }
@@ -93,6 +102,15 @@ bool MessageDecoder::extract_message(FountainCoder::DecodedPacket &decode)
             if (length >= recv_expecting)
             {
                 recv_state = RecvState::Pending;
+
+                /*
+                std::cout << "Recv: ";
+                for (const unsigned char *i = reinterpret_cast<unsigned char *>(recv_buffer.begin()); i < reinterpret_cast<unsigned char *>(recv_buffer.end()); i++)
+                {
+                    std::cout << static_cast<unsigned int>(*i) << " ";
+                }
+                std::cout << std::endl;
+                */
 
                 for (unsigned int i = recv_expecting; i <= length; i++)
                 {

@@ -1,6 +1,8 @@
 #ifndef FOUNTAINCODER_H
 #define FOUNTAINCODER_H
 
+#include "libSonicSocket/jw_util/fastmath.h"
+
 #include "libSonicSocket/fountainsource.h"
 #include "libSonicSocket/fountainsink.h"
 #include "libSonicSocket/logproxy.h"

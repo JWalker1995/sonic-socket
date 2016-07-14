@@ -362,10 +362,10 @@ private:
                 res.data[i] = x[i] ^ GMP_NUMB_MASK;
             }
 
-            res.data[0] -= modular_decrement - 1;
-
             assert((x[size - 1] & ~head_mask) == 0);
             res.data[size - 1] = x[size - 1] ^ head_mask;
+
+            res.data[0] -= modular_decrement - 1;
         }
         else
         {

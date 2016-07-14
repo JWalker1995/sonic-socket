@@ -98,9 +98,11 @@ public:
 
         *data_meta++ = (encode_start >> 0) & 0xFF;
         *data_meta++ = (encode_start >> 8) & 0xFF;
+        needs_encode_start_update = false;
 
-        *data_meta++ = (symbols.size() >> 0) & 0xFF;
-        *data_meta++ = (symbols.size() >> 8) & 0xFF;
+        unsigned int encode_count = symbols.size();
+        *data_meta++ = (encode_count >> 0) & 0xFF;
+        *data_meta++ = (encode_count >> 8) & 0xFF;
 
         *data_meta++ = (cauchy_element >> 0) & 0xFF;
         *data_meta++ = (cauchy_element >> 8) & 0xFF;
@@ -114,18 +116,21 @@ public:
         else
         {
             SymbolType packet_symbols[symbols_per_packet];
-            unsigned int num_packet_symbols = symbols.size() < symbols_per_packet ? symbols.size() : symbols_per_packet;
-            std::fill_n(packet_symbols, num_packet_symbols, SymbolType(0));
+            unsigned int num_packet_symbols = encode_count < symbols_per_packet ? encode_count : symbols_per_packet;
 
             std::deque<SymbolType>::const_iterator i = symbols.cbegin();
             unsigned int col = encode_start / symbols_per_packet;
             unsigned int matrix_id = encode_start % symbols_per_packet;
             SymbolType::BaseType *inv = SymbolType(cauchy_element + col).inverse();
 
+            std::fill_n(packet_symbols + matrix_id, num_packet_symbols, SymbolType(0));
+
             while (true)
             {
                 // The cool stuff happens here:
                 packet_symbols[matrix_id] += (*i) * (*inv);
+
+                //std::cout << "matrix " << matrix_id << " += " << (*i).to_string() << " * " << (*inv).to_string() << " -> " << packet_symbols[matrix_id].to_string() << std::endl;
 
                 i++;
                 if (i == symbols.cend()) {break;}
@@ -147,15 +152,19 @@ public:
 
             std::fill_n(data_words, data_size_symbols, 0);
 
-            std::cout << "Send: ";
+            //std::cout << "Send: ";
 
+            unsigned int chunk = (encode_start + encode_count) % symbols_per_packet;
             unsigned int bit_offset = 0;
-            for (unsigned int i = num_packet_symbols; i-- > 0; )
+            for (unsigned int i = 0; i < num_packet_symbols; i++)
             {
-                std::cout << "0x" << packet_symbols[encode_start + i].to_string<16>() << " ";
-                packet_symbols[encode_start + i].write_to<true>(data_words, bit_offset);
+                if (chunk == 0) {chunk = symbols_per_packet;}
+                chunk--;
+
+                //std::cout << "0x" << packet_symbols[chunk].to_string<16>() << " ";
+                packet_symbols[chunk].write_to<true>(data_words, bit_offset);
             }
-            std::cout << std::endl;
+            //std::cout << std::endl;
 
             packet.set_size(packet_metadata_size + data_size_chars);
         }
@@ -163,11 +172,12 @@ public:
         packet_mangle(packet);
     }
 
-    unsigned int num_pending_symbols() const {return symbols.size();}
+    bool has_data_to_send() const {return symbols.size() || needs_encode_start_update;}
 
 protected:
     unsigned int encode_start = 0;
     unsigned int cauchy_element = 0;
+    bool needs_encode_start_update = false;
 
 private:
     std::deque<SymbolType> symbols;
@@ -175,9 +185,14 @@ private:
     void update_encode_start(unsigned int new_encode_start)
     {
         unsigned int erase = new_encode_start - encode_start;
-        encode_start = new_encode_start;
 
-        symbols.erase(symbols.begin(), symbols.begin() + erase);
+        if (erase)
+        {
+            encode_start = new_encode_start;
+            symbols.erase(symbols.begin(), symbols.begin() + erase);
+
+            needs_encode_start_update = true;
+        }
     }
 };
 

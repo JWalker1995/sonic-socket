@@ -65,7 +65,7 @@ public:
 
         if (!module)
         {
-            logger.push_log(LogProxy::LogLevel::Error, "Could not find any registered modules matching lookup:\n" + lookup.to_string());
+            logger.push_event(LogProxy::LogLevel::Error, "Could not find any registered modules matching lookup:\n" + lookup.to_string());
             return 0.0f;
         }
 
@@ -188,24 +188,24 @@ private:
 
             if (missing_key)
             {
-                logger.push_log(LogProxy::LogLevel::Warning, "ModuleSpaceCoordinate::key is empty");
+                logger.push_event(LogProxy::LogLevel::Warning, "ModuleSpaceCoordinate::key is empty");
             }
 
             if (missing_weight)
             {
                 // LogLevel::Info because could happen if weight == 0
-                logger.push_log(LogProxy::LogLevel::Info, "ModuleSpaceCoordinate::weight is zero");
+                logger.push_event(LogProxy::LogLevel::Info, "ModuleSpaceCoordinate::weight is zero");
             }
 
             if (missing_string_value && missing_scalar_value)
             {
                 // LogLevel::Info because could happen if scalar_value == 0
-                logger.push_log(LogProxy::LogLevel::Info, "ModuleSpaceCoordinate::string_value is empty and ModuleSpaceCoordinate::scalar_value is zero");
+                logger.push_event(LogProxy::LogLevel::Info, "ModuleSpaceCoordinate::string_value is empty and ModuleSpaceCoordinate::scalar_value is zero");
             }
 
             if (!missing_string_value && !missing_scalar_value)
             {
-                logger.push_log(LogProxy::LogLevel::Warning, "ModuleSpaceCoordinate::string_value and ModuleSpaceCoordinate::scalar_value are both set");
+                logger.push_event(LogProxy::LogLevel::Warning, "ModuleSpaceCoordinate::string_value and ModuleSpaceCoordinate::scalar_value are both set");
             }
 
             i++;

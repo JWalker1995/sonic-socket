@@ -60,9 +60,9 @@ public:
     void send_packet();
     void receive_packet(FountainCoder::Packet &packet);
 
-    void push_log(LogProxy::LogLevel level, const std::string &str);
+    void push_log_event(LogProxy::LogLevel level, const std::string &str);
 
-    bool has_data_to_send() const {return fountain_coder.num_pending_symbols();}
+    bool has_data_to_send() const {return fountain_coder.has_data_to_send();}
 
     bool is_remote_timed_out(std::chrono::steady_clock::time_point threshold) const
     {

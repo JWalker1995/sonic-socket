@@ -57,7 +57,7 @@ private:
             i++;
         }
 
-        push_log(LogProxy::LogLevel::Warning, "Received MailboxInit that didn't match any un-initialized mailboxes");
+        push_log_event(LogProxy::LogLevel::Warning, "Received MailboxInit that didn't match any un-initialized mailboxes");
     }
 
     typedef InboxAsynchronous<MailboxInit, ServerConnection, &parse_mailbox_init, &ServerConnection::process_mailbox_init> MailboxInitInbox;

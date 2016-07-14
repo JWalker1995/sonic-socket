@@ -176,9 +176,9 @@ void MessageRouter::receive_packet(FountainCoder::Packet &packet)
     last_recv = std::chrono::steady_clock::now();
 }
 
-void MessageRouter::push_log(LogProxy::LogLevel level, const std::__cxx11::string &str)
+void MessageRouter::push_log_event(LogProxy::LogLevel level, const std::__cxx11::string &str)
 {
-    manager.get_logger().push_log(level, str);
+    manager.get_logger().push_event(level, str);
 }
 
 }
