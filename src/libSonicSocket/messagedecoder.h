@@ -42,7 +42,7 @@ private:
     unsigned int recv_expecting;
 
     MessageMetaCompressor::Meta recv_meta;
-    const char *recv_data;
+    const unsigned char *recv_data;
 };
 
 }

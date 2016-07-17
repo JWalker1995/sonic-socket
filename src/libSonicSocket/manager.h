@@ -99,7 +99,7 @@ public:
 
     void queue_message(MessageRouter &message_router, MessageRouter::InboxId inbox_id, const google::protobuf::Message &message);
 
-    void send_packet(const Remote &remote, const char *data, unsigned int size);
+    void send_packet(const Remote &remote, const unsigned char *data, unsigned int size);
 
     void tick();
 

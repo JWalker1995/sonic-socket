@@ -40,9 +40,9 @@ public:
             }
         }
 
-        char *get_data()
+        unsigned char *get_data()
         {
-            return reinterpret_cast<char *>(words) + data_offset;
+            return reinterpret_cast<unsigned char *>(words) + data_offset;
         }
 
         unsigned int get_size() const {return size;}

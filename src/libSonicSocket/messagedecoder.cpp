@@ -59,7 +59,7 @@ bool MessageDecoder::extract_message(FountainCoder::DecodedPacket &decode)
         symbol.write_to<true>(recv_ptr, recv_bit_offset);
         decode.next_symbol();
 
-        const char *data = reinterpret_cast<const char *>(recv_buffer.begin());
+        const unsigned char *data = reinterpret_cast<const unsigned char *>(recv_buffer.begin());
         unsigned int length = (recv_ptr - recv_buffer.begin()) * sizeof(mp_limb_t) + (recv_bit_offset / CHAR_BIT);
 
         switch (recv_state)
@@ -170,7 +170,7 @@ MessageMetaCompressor::Meta MessageDecoder::get_message_meta() const
 const char *MessageDecoder::get_message_data() const
 {
     assert(has_message());
-    return recv_data;
+    return reinterpret_cast<const char *>(recv_data);
 }
 
 std::string MessageDecoder::get_error_string() const

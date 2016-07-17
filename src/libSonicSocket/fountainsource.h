@@ -39,7 +39,7 @@ public:
 
         mp_limb_t tmp[jw_util::FastMath::div_ceil<unsigned int>(magic_length, sizeof(mp_limb_t))];
 
-        char *data = packet.get_data();
+        unsigned char *data = packet.get_data();
 
         // Write magic phrase
         std::copy_n(magic, magic_length, data);
@@ -91,10 +91,10 @@ public:
         // 16 bits: Num encoded symbols
         // 16 bits: Column element - Don't reuse this until the other endpoint has decoded all data points encoded by it.
 
-        char *data_meta = packet.get_data();
+        unsigned char *data_meta = packet.get_data();
 
-        *data_meta++ = (static_cast<Derived*>(this)->get_decode_end() >> 0) & 0xFF;
-        *data_meta++ = (static_cast<Derived*>(this)->get_decode_end() >> 8) & 0xFF;
+        *data_meta++ = (static_cast<Derived*>(this)->get_decoded_count() >> 0) & 0xFF;
+        *data_meta++ = (static_cast<Derived*>(this)->get_decoded_count() >> 8) & 0xFF;
 
         *data_meta++ = (encode_start >> 0) & 0xFF;
         *data_meta++ = (encode_start >> 8) & 0xFF;
@@ -121,14 +121,20 @@ public:
             std::deque<SymbolType>::const_iterator i = symbols.cbegin();
             unsigned int col = encode_start / symbols_per_packet;
             unsigned int matrix_id = encode_start % symbols_per_packet;
+            unsigned int count = 0;
             SymbolType::BaseType *inv = SymbolType(cauchy_element + col).inverse();
-
-            std::fill_n(packet_symbols + matrix_id, num_packet_symbols, SymbolType(0));
 
             while (true)
             {
                 // The cool stuff happens here:
-                packet_symbols[matrix_id] += (*i) * (*inv);
+                if (count < symbols_per_packet)
+                {
+                    packet_symbols[matrix_id] = (*i) * (*inv);
+                }
+                else
+                {
+                    packet_symbols[matrix_id] += (*i) * (*inv);
+                }
 
                 //std::cout << "matrix " << matrix_id << " += " << (*i).to_string() << " * " << (*inv).to_string() << " -> " << packet_symbols[matrix_id].to_string() << std::endl;
 
@@ -136,6 +142,7 @@ public:
                 if (i == symbols.cend()) {break;}
 
                 matrix_id++;
+                count++;
                 if (matrix_id == symbols_per_packet)
                 {
                     matrix_id = 0;
@@ -145,7 +152,7 @@ public:
             }
 
             mp_limb_t *data_words = get_packet_words(packet);
-            assert(data_meta == reinterpret_cast<const char *>(data_words));
+            assert(data_meta == reinterpret_cast<const unsigned char *>(data_words));
 
             unsigned int data_size_symbols = jw_util::FastMath::div_ceil<unsigned int>(num_packet_symbols * SS_FOUNTAININTERFACE_SYMBOL_MODULAR_EXPONENT, GMP_LIMB_BITS);
             unsigned int data_size_chars = jw_util::FastMath::div_ceil<unsigned int>(num_packet_symbols * SS_FOUNTAININTERFACE_SYMBOL_MODULAR_EXPONENT, CHAR_BIT);
@@ -153,7 +160,6 @@ public:
             std::fill_n(data_words, data_size_symbols, 0);
 
             //std::cout << "Send: ";
-
             unsigned int chunk = (encode_start + encode_count) % symbols_per_packet;
             unsigned int bit_offset = 0;
             for (unsigned int i = 0; i < num_packet_symbols; i++)

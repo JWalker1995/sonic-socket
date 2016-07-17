@@ -24,7 +24,7 @@ public:
         (void) level;
         return true;
 #else
-        return level != Debug;
+        return level != LogLevel::Debug;
 #endif
     }
 

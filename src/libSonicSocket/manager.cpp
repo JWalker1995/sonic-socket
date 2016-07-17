@@ -93,12 +93,12 @@ void Manager::queue_message(MessageRouter &message_router, MessageRouter::InboxI
     workers.push(WorkerEncodeRequest(&message_router, inbox_id, &message));
 }
 
-void Manager::send_packet(const Remote &remote, const char *data, unsigned int size)
+void Manager::send_packet(const Remote &remote, const unsigned char *data, unsigned int size)
 {
     jw_util::Thread::assert_child_thread();
 
     std::cout << "Sending packet to " << remote.to_string() << " of size " << size << " bytes..." << std::endl;
-    socket.send(remote, data, size);
+    socket.send(remote, reinterpret_cast<const char *>(data), size);
 }
 
 ServerConnection *Manager::find_server_connection(const Remote &remote, bool create)
@@ -148,11 +148,14 @@ void Manager::thread_poll_socket()
     {
         try
         {
-            socket.poll(packet_data->remote, packet_data->packet.get_data(), packet_data->packet.get_mutable_size(), SS_MAX_PACKET_SIZE);
+            char *data = reinterpret_cast<char *>(packet_data->packet.get_data());
+            socket.poll(packet_data->remote, data, packet_data->packet.get_mutable_size(), SS_MAX_PACKET_SIZE);
 
             if (packet_data->packet.get_size())
             {
                 // TODO: check UDP checksum
+
+                std::cout << "Received packet from " << packet_data->remote.to_string() << " of size " << packet_data->packet.get_size() << " bytes..." << std::endl;
 
                 workers.push(WorkerDecodeRequest(packet_data));
 

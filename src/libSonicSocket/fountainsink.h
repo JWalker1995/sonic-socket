@@ -11,6 +11,7 @@
 #include "libSonicSocket/jw_util/cachelru.h"
 
 #include "libSonicSocket/config/SS_FOUNTAININTERFACE_SYMBOL_MODULAR_EXPONENT.h"
+#include "libSonicSocket/config/SS_FOUNTAINSINK_DECODED_SYMBOLS_FORGET_THRESHOLD.h"
 
 #include "libSonicSocket/fountainbase.h"
 #include "libSonicSocket/logproxy.h"
@@ -51,7 +52,7 @@ public:
 
     private:
         unsigned int num_packet_symbols;
-        unsigned int prev_decode_end;
+        unsigned int prev_decoded_size;
 
         std::deque<SymbolType>::iterator decode_i;
         std::deque<SymbolType>::iterator decode_end;
@@ -73,23 +74,23 @@ public:
 
         packet_demangle(packet);
 
-        const char *data_meta = packet.get_data();
+        const unsigned char *data_meta = packet.get_data();
 
         unsigned int new_encode_start = 0;
-        new_encode_start |= *data_meta++ >> 0;
-        new_encode_start |= *data_meta++ >> 8;
+        new_encode_start |= *data_meta++ << 0;
+        new_encode_start |= *data_meta++ << 8;
 
         unsigned int symbol_start = 0;
-        symbol_start |= *data_meta++ >> 0;
-        symbol_start |= *data_meta++ >> 8;
+        symbol_start |= *data_meta++ << 0;
+        symbol_start |= *data_meta++ << 8;
 
         unsigned int symbol_count = 0;
-        symbol_count |= *data_meta++ >> 0;
-        symbol_count |= *data_meta++ >> 8;
+        symbol_count |= *data_meta++ << 0;
+        symbol_count |= *data_meta++ << 8;
 
         unsigned int cauchy_element = 0;
-        cauchy_element |= *data_meta++ >> 0;
-        cauchy_element |= *data_meta++ >> 8;
+        cauchy_element |= *data_meta++ << 0;
+        cauchy_element |= *data_meta++ << 8;
         cauchy_element++;
 
         static_cast<Derived*>(this)->update_encode_start(new_encode_start);
@@ -119,25 +120,25 @@ public:
             return false;
         }
 
-        unsigned int decode_end = get_decode_end();
-        if (symbol_start > decode_end)
+        unsigned int orig_decoded_size = decoded.size();
+        if (symbol_start > decoded_offset + orig_decoded_size)
         {
             std::string error_msg = "Packet doesn't include some un-decoded symbols (";
                 error_msg += "symbol_start=" + std::to_string(symbol_start);
-                error_msg += ", decode_end=" + std::to_string(decode_end);
+                error_msg += ", decode_end=" + std::to_string(decoded_offset + orig_decoded_size);
             error_msg += ")";
             register_decode_error(error_msg);
             return false;
         }
 
         const mp_limb_t *data_words = get_packet_words(packet);
-        assert(data_meta == reinterpret_cast<const char *>(data_words));
+        assert(data_meta == reinterpret_cast<const unsigned char *>(data_words));
         unsigned int bit_offset = 0;
 
         unsigned int matrix_split_1 = symbol_start % symbols_per_packet;
         unsigned int matrix_split_2 = symbol_end % symbols_per_packet;
         unsigned int col_start = symbol_start / symbols_per_packet;
-        unsigned int col_count = symbol_count / symbols_per_packet;
+        unsigned int col_end = symbol_end / symbols_per_packet;
 
         //std::cout << "Recv: ";
 
@@ -148,32 +149,25 @@ public:
             chunk--;
 
             bool col_start_inc = chunk < matrix_split_1;
-
-            // If matrix_split_1 < matrix_split_2: 0 [ms1] 1 [ms2] 0
-            // If matrix_split_1 > matrix_split_2: 1 [ms1] 0 [ms2] 1
-            bool col_count_inc = (matrix_split_1 <= chunk) ^ (chunk < matrix_split_2) ^ (matrix_split_1 < matrix_split_2);
+            bool col_end_inc = chunk < matrix_split_2;
 
             MatrixGenerator &cur_mat = chunks[chunk];
 
             typename MatrixGenerator::Row row;
             row.cauchy_element = cauchy_element;
             row.col_start = col_start + col_start_inc;
-            row.col_end = row.col_start + col_count + col_count_inc;
+            row.col_end = col_end + col_end_inc;
             row.sum.template read_from<true>(data_words, bit_offset);
 
             //std::cout << "0x" << row.sum.template to_string<16>() << " ";
 
-            unsigned int subtract_id = row.col_start * symbols_per_packet + chunk;
-            while (subtract_id < decode_end)
+            unsigned int subtract_id = row.col_start * symbols_per_packet + chunk - decoded_offset;
+            while (subtract_id < orig_decoded_size)
             {
-                assert(subtract_id >= symbol_start);
-                assert(subtract_id < symbol_end);
+                assert(subtract_id + decoded_offset >= symbol_start);
+                assert(subtract_id + decoded_offset < symbol_end);
 
-                assert(subtract_id >= decoded_offset);
-                assert(subtract_id < decode_end);
-
-                SymbolType::BaseType *inverse = SymbolType(row.cauchy_element + row.col_start).inverse();
-                row.sum -= decoded[subtract_id - decoded_offset] * (*inverse);
+                row.sum -= decoded[subtract_id] / (row.cauchy_element + row.col_start);
 
                 row.col_start++;
                 subtract_id += symbols_per_packet;
@@ -183,7 +177,7 @@ public:
             {
                 if (row.sum != 0)
                 {
-                    revert_packet(chunk + 1, num_packet_symbols, decode_end);
+                    revert_packet(chunk + 1, num_packet_symbols, orig_decoded_size);
 
                     std::string error_msg = "Packet symbols contradict previous packets (";
                         error_msg += "i=" + std::to_string(chunk);
@@ -211,37 +205,51 @@ public:
         }
         //std::cout << std::endl;
 
-        use_symbols(symbol_start);
+        /*
+        std::cout << std::endl;
+        std::cout << "Rows: ";
+        for (unsigned int i = 0; i < symbols_per_packet; i++)
+        {
+            std::cout << chunks[i].rows.size();
+        }
+        std::cout << std::endl;
+
+        std::cout << "Cols: ";
+        for (unsigned int i = 0; i < symbols_per_packet; i++)
+        {
+            std::cout << chunks[i].max_col_end - chunks[i].min_col_start;
+        }
+        std::cout << std::endl;
+        std::cout << std::endl;
+        */
 
         register_decode_success();
 
-        decoded_packet.num_packet_symbols = num_packet_symbols;
-        decoded_packet.prev_decode_end = decode_end;
-        decoded_packet.decode_i = decoded.begin() + decode_end;
-        decoded_packet.decode_end = decoded.end();
-        return true;
-    }
+        signed int shift = orig_decoded_size - symbols_per_packet * 2;
+        if (shift >= SS_FOUNTAINSINK_DECODED_SYMBOLS_FORGET_THRESHOLD)
+        {
+            decoded.erase(decoded.begin(), decoded.begin() + shift);
+            decoded_offset += shift;
+        }
 
-    bool has_symbol() const
-    {
-        return decoded_read_pos < decoded.size();
-    }
-
-    const SymbolType &get_symbol() const
-    {
-        assert(has_symbol());
-        return decoded[decoded_read_pos];
-    }
-
-    void next_symbol()
-    {
-        assert(has_symbol());
-        decoded_read_pos++;
+        assert(decoded.size() >= orig_decoded_size);
+        if (decoded.size() != orig_decoded_size)
+        {
+            decoded_packet.num_packet_symbols = num_packet_symbols;
+            decoded_packet.prev_decoded_size = orig_decoded_size;
+            decoded_packet.decode_i = decoded.begin() + orig_decoded_size;
+            decoded_packet.decode_end = decoded.end();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     void report_decode_error(const DecodedPacket &decoded_packet, const std::string &error_msg)
     {
-        revert_packet(0, decoded_packet.num_packet_symbols, decoded_packet.prev_decode_end);
+        revert_packet(0, decoded_packet.num_packet_symbols, decoded_packet.prev_decoded_size);
         register_decode_error(error_msg);
     }
 
@@ -316,18 +324,14 @@ private:
     MatrixGenerator chunks[symbols_per_packet];
 
     unsigned int decoded_offset = 0;
-    unsigned int decoded_read_pos = 0;
     std::deque<SymbolType> decoded;
-
-    unsigned int decoded_use_begin = 0;
-    unsigned int decoded_use_count = 0;
 
     typedef jw_util::CacheLRU<MatrixGenerator, SymbolMatrixType, 1024, typename MatrixGenerator::Hasher> MatrixInverseCacheType;
     MatrixInverseCacheType matrix_inverse_cache;
 
     float error_accumulator = 0.0f;
 
-    unsigned int get_decode_end() const
+    unsigned int get_decoded_count() const
     {
         return decoded_offset + decoded.size();
     }
@@ -419,7 +423,7 @@ private:
         assert(i == res.data() + size * size);
     }
 
-    void revert_packet(unsigned int chunk_begin, unsigned int chunk_end, unsigned int prev_decode_end)
+    void revert_packet(unsigned int chunk_begin, unsigned int chunk_end, unsigned int prev_decoded_size)
     {
         for (unsigned int i = chunk_begin; i != chunk_end; i++)
         {
@@ -449,28 +453,8 @@ private:
             }
         }
 
-        // Remove decoded messages
-        assert(prev_decode_end >= decoded_offset);
-        decoded.resize(prev_decode_end - decoded_offset);
-    }
-
-    void use_symbols(unsigned int begin)
-    {
-        if (begin < decoded_use_begin) {decoded_use_begin = begin;}
-
-        decoded_use_count++;
-        if (decoded_use_count == 4)
-        {
-            assert(decoded_use_begin <= decoded_read_pos);
-            assert(decoded_use_begin <= decoded.size());
-
-            decoded_offset += decoded_use_begin;
-            decoded_read_pos -= decoded_use_begin;
-            decoded.erase(decoded.begin(), decoded.begin() + decoded_use_begin);
-
-            decoded_use_begin = decoded_read_pos;
-            decoded_use_count = 0;
-        }
+        // Remove incorrectly decoded symbols
+        decoded.resize(prev_decoded_size);
     }
 
     void register_decode_error(const std::string &error_msg)

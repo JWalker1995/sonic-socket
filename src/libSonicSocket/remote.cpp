@@ -55,7 +55,8 @@ std::string Remote::to_string() const
 {
     char str[INET_ADDRSTRLEN];
     inet_ntop(AF_INET, &addr.sin_addr, str, INET_ADDRSTRLEN);
-    return std::string(str);
+    unsigned int port = ntohs(addr.sin_port);
+    return std::string(str) + ":" + std::to_string(port);
 }
 
 }

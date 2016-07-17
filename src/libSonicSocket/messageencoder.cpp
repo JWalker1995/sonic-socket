@@ -20,10 +20,10 @@ char *MessageEncoder::alloc_message(MessageMetaCompressor::Meta meta)
     send_buffer.resize(limbs);
     std::fill(send_buffer.begin(), send_buffer.end(), static_cast<mp_limb_t>(0));
 
-    char *data = reinterpret_cast<char *>(send_buffer.begin());
+    unsigned char *data = reinterpret_cast<unsigned char *>(send_buffer.begin());
     send_meta_compressor.encoder_write_to(encoder, data);
 
-    return data + meta_length;
+    return reinterpret_cast<char *>(data + meta_length);
 }
 
 void MessageEncoder::send_message(FountainCoder &coder)

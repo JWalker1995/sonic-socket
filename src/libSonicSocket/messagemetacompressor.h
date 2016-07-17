@@ -65,7 +65,7 @@ public:
     {
         return encoder.cache_result.is_valid() ? 1 : 5;
     }
-    void encoder_write_to(const MetaEncoder &encoder, char *data) const
+    void encoder_write_to(const MetaEncoder &encoder, unsigned char *data) const
     {
         if (encoder.cache_result.is_valid())
         {
@@ -85,13 +85,13 @@ public:
         }
     }
 
-    unsigned int decoder_get_length(const char *data) const
+    unsigned int decoder_get_length(const unsigned char *data) const
     {
-        return *data == static_cast<char>(cache_size) ? 5 : 1;
+        return *data == static_cast<unsigned char>(cache_size) ? 5 : 1;
     }
-    bool decode(Meta &res, const char *data)
+    bool decode(Meta &res, const unsigned char *data)
     {
-        if (*data == static_cast<char>(cache_size))
+        if (*data == static_cast<unsigned char>(cache_size))
         {
             data++;
 
@@ -105,7 +105,8 @@ public:
         }
         else
         {
-            unsigned int id = static_cast<unsigned char>(*data++);
+            unsigned int id = *data++;
+            assert(id < cache_size);
             if (!cache.is_bucket_id_valid(id)) {return false;}
             res = cache.lookup_bucket(id);
         }
