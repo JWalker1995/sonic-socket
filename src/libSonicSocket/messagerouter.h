@@ -60,7 +60,8 @@ public:
     void send_packet();
     void receive_packet(FountainCoder::Packet &packet);
 
-    void push_log_event(LogProxy::LogLevel level, const std::string &str);
+    template <LogProxy::LogLevel level>
+    void push_log_event(const std::string &str);
 
     bool has_data_to_send() const {return fountain_coder.has_data_to_send();}
 

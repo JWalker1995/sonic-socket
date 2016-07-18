@@ -62,7 +62,7 @@ public:
     {
         if (!jw_util::FastMath::is_pow2(symbols_per_packet))
         {
-            logger.push_event(LogProxy::LogLevel::Debug, "FountainBase::symbols_per_packet = " + std::to_string(symbols_per_packet) + " is not a power of two");
+            logger.push_event<LogProxy::LogLevel::Debug>("FountainBase::symbols_per_packet = ", std::to_string(symbols_per_packet), " is not a power of two");
         }
     }
 

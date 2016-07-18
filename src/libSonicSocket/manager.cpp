@@ -1,8 +1,5 @@
 #include "manager.h"
 
-// TODO: remove iostream include
-#include <iostream>
-
 #include "libSonicSocket/config/SS_MAX_PACKET_SIZE.h"
 #include "libSonicSocket/config/SS_DEFAULT_PORT.h"
 
@@ -37,7 +34,7 @@ Manager::Manager(Type type, Remote::Port port)
     }
     catch (const std::exception &ex)
     {
-        logger.push_event(LogProxy::LogLevel::Fatal, ex.what());
+        logger.push_event<LogProxy::LogLevel::Fatal>(ex.what());
         return;
     }
 
@@ -97,8 +94,20 @@ void Manager::send_packet(const Remote &remote, const unsigned char *data, unsig
 {
     jw_util::Thread::assert_child_thread();
 
-    std::cout << "Sending packet to " << remote.to_string() << " of size " << size << " bytes..." << std::endl;
-    socket.send(remote, reinterpret_cast<const char *>(data), size);
+    logger.push_event<LogProxy::LogLevel::Debug>("Sending packet to ", remote, " of size ", size, " bytes...");
+
+    try
+    {
+        socket.send(remote, reinterpret_cast<const char *>(data), size);
+    }
+    catch (const UdpSocket::SendException &ex)
+    {
+        logger.push_event<LogProxy::LogLevel::Warning>(ex.what());
+    }
+    catch (const UdpSocket::DropException &ex)
+    {
+        logger.push_event<LogProxy::LogLevel::Notice>(ex.what());
+    }
 }
 
 ServerConnection *Manager::find_server_connection(const Remote &remote, bool create)
@@ -155,7 +164,7 @@ void Manager::thread_poll_socket()
             {
                 // TODO: check UDP checksum
 
-                std::cout << "Received packet from " << packet_data->remote.to_string() << " of size " << packet_data->packet.get_size() << " bytes..." << std::endl;
+                logger.push_event<LogProxy::LogLevel::Debug>("Received packet from ", packet_data->remote, " of size ", packet_data->packet.get_size(), " bytes...");
 
                 workers.push(WorkerDecodeRequest(packet_data));
 
@@ -164,7 +173,7 @@ void Manager::thread_poll_socket()
         }
         catch (const UdpSocket::PollException &ex)
         {
-            logger.push_event(LogProxy::LogLevel::Warning, ex.what());
+            logger.push_event<LogProxy::LogLevel::Warning>(ex.what());
         }
     }
 }
@@ -215,7 +224,7 @@ void Manager::resolve_server(const char *server_data, unsigned int server_size)
     }
     catch (const std::exception &ex)
     {
-        logger.push_event(LogProxy::LogLevel::Error, ex.what());
+        logger.push_event<LogProxy::LogLevel::Error>(ex.what());
         return;
     }
 
@@ -248,7 +257,7 @@ void Manager::worker_func(WorkerRequest request)
         ServerConnection *server_connection = find_server_connection(decode_packet_data.remote, type == Type::Server);
         if (!server_connection)
         {
-            logger.push_event(LogProxy::LogLevel::Notice, "Received message from unknown remote " + decode_packet_data.remote.to_string());
+            logger.push_event<LogProxy::LogLevel::Notice>("Received message from unknown remote ", decode_packet_data.remote);
             return;
         }
 
@@ -536,20 +545,16 @@ float Manager::lookup_module_score(const google::protobuf::RepeatedPtrField<Modu
 
 void Manager::log_handler(google::protobuf::LogLevel protobuf_level, const char *filename, int line, const std::string &protobuf_message)
 {
-    LogProxy::LogLevel log_level;
+    assert(instance);
+
     switch (protobuf_level)
     {
-        case google::protobuf::LOGLEVEL_INFO: log_level = LogProxy::LogLevel::Notice; break;
-        case google::protobuf::LOGLEVEL_WARNING: log_level = LogProxy::LogLevel::Warning; break;
-        case google::protobuf::LOGLEVEL_ERROR: log_level = LogProxy::LogLevel::Error; break;
-        case google::protobuf::LOGLEVEL_FATAL: log_level = LogProxy::LogLevel::Fatal; break;
-        default: log_level = LogProxy::LogLevel::Fatal; assert(false);
+        case google::protobuf::LOGLEVEL_INFO: instance->logger.push_event<LogProxy::LogLevel::Notice>("Protobuf log from file \"", filename, "\" on line ", line, ": \"", protobuf_message, "\""); break;
+        case google::protobuf::LOGLEVEL_WARNING: instance->logger.push_event<LogProxy::LogLevel::Warning>("Protobuf log from file \"", filename, "\" on line ", line, ": \"", protobuf_message, "\""); break;
+        case google::protobuf::LOGLEVEL_ERROR: instance->logger.push_event<LogProxy::LogLevel::Error>("Protobuf log from file \"", filename, "\" on line ", line, ": \"", protobuf_message, "\""); break;
+        case google::protobuf::LOGLEVEL_FATAL: instance->logger.push_event<LogProxy::LogLevel::Fatal>("Protobuf log from file \"", filename, "\" on line ", line, ": \"", protobuf_message, "\""); break;
+        default: assert(false);
     }
-
-    std::string log_message("Protobuf log from file \"" + std::string(filename) + "\" on line " + std::to_string(line) + ": \"" + protobuf_message + "\"");
-
-    assert(instance);
-    instance->logger.push_event(log_level, log_message);
 }
 
 }

@@ -10,11 +10,22 @@
 #include <string.h>
 #include <assert.h>
 
+#if SS_UDPSOCKET_DROP_ENABLE
+// Include <chrono> in case SS_UDPSOCKET_DROP_SEED is std::chrono::system_clock::now().time_since_epoch().count()
+#include <chrono>
+#include <limits>
+#include "libSonicSocket/config/SS_UDPSOCKET_DROP_PROBABILITY.h"
+#include "libSonicSocket/config/SS_UDPSOCKET_DROP_SEED.h"
+#endif
+
 namespace sonic_socket
 {
 
 UdpSocket::UdpSocket()
     : file_desc(-1)
+#ifdef SS_UDPSOCKET_DROP_ENABLE
+    , drop_gen(SS_UDPSOCKET_DROP_SEED)
+#endif
 {
 }
 
@@ -49,9 +60,16 @@ void UdpSocket::close()
     file_desc = -1;
 }
 
-void UdpSocket::send(const Remote &remote, const char *data, unsigned int data_len) const
+void UdpSocket::send(const Remote &remote, const char *data, unsigned int data_len)
 {
     if (file_desc < 0) {return;}
+
+#ifdef SS_UDPSOCKET_DROP_ENABLE
+    if (std::generate_canonical<float, std::numeric_limits<float>::digits>(drop_gen) < static_cast<float>(SS_UDPSOCKET_DROP_PROBABILITY))
+    {
+        throw DropException();
+    }
+#endif
 
     ssize_t res = sendto(file_desc, data, data_len, MSG_DONTWAIT, reinterpret_cast<const struct sockaddr*>(&remote.addr), remote.addr_len);
     if (res < 0)

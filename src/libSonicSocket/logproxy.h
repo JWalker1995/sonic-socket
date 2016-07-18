@@ -13,12 +13,17 @@
 namespace sonic_socket
 {
 
+using std::to_string;
+inline std::string to_string(const char *str) {return str;}
+inline std::string to_string(const std::string &str) {return str;}
+
 class LogProxy
 {
 public:
     enum class LogLevel {Debug, Notice, Warning, Error, Fatal};
 
-    static constexpr bool is_tracking_level(LogLevel level)
+    template <LogLevel level>
+    static constexpr bool is_tracking_level()
     {
 #ifndef NDEBUG
         (void) level;
@@ -28,7 +33,20 @@ public:
 #endif
     }
 
-    static std::string get_level_str(LogLevel level)
+    template <LogLevel level, typename... ArgTypes>
+    void push_event(const ArgTypes & ... args)
+    {
+        if (!is_tracking_level<level>()) {return;}
+
+        std::string str;
+        concat_str(str, get_level_str(level), ": ", args...);
+
+        std::lock_guard<std::mutex> lock(pending_logs_mutex);
+        (void) lock;
+        pending_logs.emplace_back(level, std::move(str));
+    }
+
+    static constexpr const char *get_level_str(LogLevel level)
     {
         switch (level)
         {
@@ -42,16 +60,10 @@ public:
             return "ERROR";
         case LogLevel::Fatal:
             return "FATAL";
+        default:
+            assert(false);
+            return "";
         }
-    }
-
-    void push_event(LogLevel level, const std::string &str)
-    {
-        if (!is_tracking_level(level)) {return;}
-
-        std::lock_guard<std::mutex> lock(pending_logs_mutex);
-        (void) lock;
-        pending_logs.emplace_back(level, str);
     }
 
     void tick()
@@ -99,6 +111,15 @@ private:
         pending_logs.clear();
         last_log_event = 0;
     }
+
+    template <typename FirstArgType, typename... ArgTypes>
+    static void concat_str(std::string &str, const FirstArgType &first_arg, const ArgTypes & ... args)
+    {
+        str += to_string(first_arg);
+        concat_str(str, args...);
+    }
+
+    static void concat_str(std::string &str) {}
 };
 
 }

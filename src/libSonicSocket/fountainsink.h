@@ -461,12 +461,12 @@ private:
     {
         LogProxy &logger = static_cast<Derived *>(this)->get_logger();
 
-        logger.push_event(LogProxy::LogLevel::Warning, error_msg);
+        logger.push_event<LogProxy::LogLevel::Warning>(error_msg);
 
         error_accumulator += 1.0f;
         if (error_accumulator > 4.0f)
         {
-            logger.push_event(LogProxy::LogLevel::Fatal, "Seeing an awful lot of network errors...");
+            logger.push_event<LogProxy::LogLevel::Fatal>("Seeing an awful lot of network errors...");
         }
     }
 

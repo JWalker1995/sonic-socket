@@ -73,6 +73,11 @@ private:
     socklen_t addr_len = 0;
 };
 
+inline std::string to_string(const Remote &remote)
+{
+    return remote.to_string();
+}
+
 }
 
 #endif // SONICSOCKET_REMOTE_H

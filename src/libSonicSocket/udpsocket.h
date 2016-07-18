@@ -4,6 +4,15 @@
 #include <exception>
 #include <netinet/in.h>
 
+#include "libSonicSocket/config/SS_UDPSOCKET_DROP_ENABLE.h"
+#ifdef NDEBUG
+#undef SS_UDPSOCKET_DROP_ENABLE
+#endif
+
+#if SS_UDPSOCKET_DROP_ENABLE
+#include <random>
+#endif
+
 #include "libSonicSocket/remote.h"
 
 #define UDPSERVER_MESSAGE_MAX_SIZE 512
@@ -19,7 +28,7 @@ public:
     void open(Remote::Port port);
     void close();
 
-    void send(const Remote &remote, const char *data, unsigned int data_len) const;
+    void send(const Remote &remote, const char *data, unsigned int data_len);
     void poll(Remote &remote, char *data, unsigned int &data_len, unsigned int max_len) const;
 
     void test()
@@ -84,6 +93,21 @@ public:
         std::string str;
     };
 
+    class DropException : public std::exception
+    {
+        friend class UdpSocket;
+
+    public:
+        virtual const char *what() const noexcept
+        {
+            return "Dropped packet (to disable dropping, set SS_UDPSOCKET_DROP_ENABLE to 0)";
+        }
+
+    private:
+        DropException()
+        {}
+    };
+
     class PollException : public std::exception
     {
         friend class UdpSocket;
@@ -104,6 +128,10 @@ public:
 
 private:
     int file_desc;
+
+#ifdef SS_UDPSOCKET_DROP_ENABLE
+    std::default_random_engine drop_gen;
+#endif
 };
 
 }
