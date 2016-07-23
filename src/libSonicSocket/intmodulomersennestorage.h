@@ -48,6 +48,10 @@ public:
         : BaseType(val)
     {}
 
+    IntModuloMersenneStorage(const std::string &str)
+        : BaseType(str)
+    {}
+
     IntModuloMersenneStorage(const BaseType &other)
         : BaseType(other)
     {}

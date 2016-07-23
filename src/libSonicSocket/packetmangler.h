@@ -1,8 +1,11 @@
-#ifndef PACKETMANGLER_H
-#define PACKETMANGLER_H
+#ifndef SONICSOCKET_PACKETMANGLER_H
+#define SONICSOCKET_PACKETMANGLER_H
 
 #include <assert.h>
 #include <limits.h>
+
+namespace sonic_socket
+{
 
 template <typename DataType>
 class PacketMangler
@@ -168,4 +171,6 @@ private:
     }
 };
 
-#endif // PACKETMANGLER_H
+}
+
+#endif // SONICSOCKET_PACKETMANGLER_H

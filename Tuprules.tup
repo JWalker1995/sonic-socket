@@ -1,11 +1,13 @@
 ROOT = $(TUP_CWD)
+DEFINES_CONFIG_FILE = $(ROOT)/defines.cfg
 SRC_PATH = $(ROOT)/src/
 THIRD_PARTH_PATH = $(ROOT)/3rd_party/
 
 ARCHIVE_TARGET = $(ROOT)/libSonicSocket.a
+TEST_TARGET = $(ROOT)/test
 
 CFLAGS += -Wall -Wfatal-errors -Wno-missing-braces -Wno-unused
-CFLAGS += -I$(SRC_PATH) -I$(THIRD_PARTH_PATH)
+CFLAGS += -Iinclude/ -I$(SRC_PATH) -I$(THIRD_PARTH_PATH)
 CFLAGS += `pkg-config --cflags glew glfw3 yaml-cpp protobuf`
 
 ifeq (@(BUILD_TYPE),debug)
@@ -21,12 +23,10 @@ else
 	CFLAGS += -std=c++14
 endif
 
-LDFLAGS += -lBlobPlanet `pkg-config --static --libs glew glfw3 yaml-cpp protobuf`
+LDFLAGS += -lgmp `pkg-config --static --libs yaml-cpp protobuf`
 
-
-# Create config/*.h files from defines.cfg
-run test -f defines.cfg && awk '/^[^#]/ { print ": |> echo \"#define "$0"\" > %o |> config/"$1".h" }' defines.cfg || true
 
 !protoc = | *.proto |> protoc --cpp_out=. %f |> %B.pb.h %B.pb.cc $(ROOT)/<protobufs>
-!cpp = | *.h |> g++ -c %f -o %o $(CFLAGS) $(CFLAGS_%f) |> %B.o $(ROOT)/<objects>
-!archive = | $(ROOT)/<objects> |> ar rvs %o %<objects> |> $(ARCHIVE_TARGET)
+!cpp = | *.h |> g++ -c %f -o %o $(CFLAGS) $(CFLAGS_%f) |>
+!archive = |> ar rvs %o |>
+!link = | $(ARCHIVE_TARGET) |> g++ $(LDFLAGS) $(LDFLAGS_%o) -o %o $(CFLAGS) $(CFLAGS_%o) $(ARCHIVE_TARGET) |>

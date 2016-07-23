@@ -4,3 +4,6 @@
 [submodule "src/libSonicSocket/jw_util"]
 	path = src/libSonicSocket/jw_util
 	url = https://github.com/JWalker1995/cpp-util.git
+[submodule "3rd_party/catch"]
+	path = 3rd_party/catch
+	url = https://github.com/philsquared/Catch.git

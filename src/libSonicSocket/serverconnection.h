@@ -31,15 +31,27 @@ public:
         jw_util::Thread::assert_child_thread();
 
         pending_mailboxes.push_back(mailbox.make_mailbox_init_receiver());
-        mailbox.set_final_message_router(this);
+
+        MailboxInit &mailbox_init = get_message_allocator().alloc_message<MailboxInit>();
+        mailbox_init.set_signature(signature);
+        mailbox.set_final_message_router(this, mailbox_init);
+        send_message(MessageRouter::mailbox_init_inbox_id, mailbox_init);
     }
 
 private:
+    static constexpr auto signature = "spatula pickle peach bear";
+
     static bool parse_mailbox_init(const MailboxInit &message, std::string &error_str)
     {
-        (void) message;
-        (void) error_str;
-        return true;
+        if (message.signature() != signature)
+        {
+            error_str = "Incorrect message signature";
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
     void process_mailbox_init(const MailboxInit &message)

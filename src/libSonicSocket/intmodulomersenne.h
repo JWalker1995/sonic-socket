@@ -62,6 +62,11 @@ public:
         std::fill(data + 1, data + size, 0);
     }
 
+    IntModuloMersenne(const std::string &str)
+    {
+        from_string<10>(str);
+    }
+
     IntModuloMersenne(const ThisType &other)
     {
         operator=(other);
@@ -226,6 +231,44 @@ public:
         }
 
         return res;
+    }
+
+    template <unsigned int base = 10>
+    void from_string(const std::string &str)
+    {
+        if (str.empty())
+        {
+            std::fill_n(data, size, 0);
+        }
+
+        unsigned char *bytes = new unsigned char[str.size()];
+        for (unsigned int i = 0; i < str.size(); i++)
+        {
+            if (str[i] >= '0' && str[i] <= '9')
+            {
+                bytes[i] = str[i] - '0';
+            }
+            else if (str[i] >= 'A' && str[i] <= 'Z')
+            {
+                bytes[i] = str[i] - 'A' + 10;
+            }
+            else
+            {
+                assert(false);
+            }
+
+            assert(bytes[i] < base);
+        }
+
+        mp_limb_t dst[size + 1];
+        unsigned int words = mpn_set_str(dst, bytes, str.size(), base);
+        assert(words <= size);
+
+        std::copy_n(dst, words, data);
+        for (unsigned int i = words; i < size; i++)
+        {
+            data[i] = 0;
+        }
     }
 
     template <typename DataType>

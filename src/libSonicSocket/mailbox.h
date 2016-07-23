@@ -101,15 +101,13 @@ public:
         Internal::after_set_dummy_message_router();
     }
 
-    void set_final_message_router(MessageRouter *new_message_router)
+    void set_final_message_router(MessageRouter *new_message_router, MailboxInit &mailbox_init)
     {
         assert(message_router->is_dummy());
         message_router = new_message_router;
         assert(!message_router->is_dummy());
 
-        MailboxInit &mailbox_init = message_router->get_message_allocator().alloc_message<MailboxInit>();
         Internal::register_and_generate_mailbox_init(mailbox_init);
-        message_router->send_message(MessageRouter::mailbox_init_inbox_id, mailbox_init);
     }
 
     void unregister()
