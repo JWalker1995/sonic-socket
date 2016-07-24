@@ -5,7 +5,8 @@ set -e
 cd "$(dirname "$0")"
 
 mkdir -p /usr/local/lib/
-mkdir -p /usr/local/include/
+mkdir -p /usr/local/include/libSonicSocket/
+mkdir -p /usr/local/include/readerwriterqueue/
 
 rm -r /usr/local/include/libSonicSocket/
 rm -r /usr/local/include/readerwriterqueue/

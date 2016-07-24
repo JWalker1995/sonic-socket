@@ -10,8 +10,9 @@
 #include "libSonicSocket/config/JWUTIL_CACHELRU_FORGET_POOL_ON_HEAP.h"
 #include "libSonicSocket/jw_util/cachelru.h"
 
-#include "libSonicSocket/config/SS_FOUNTAININTERFACE_SYMBOL_MODULAR_EXPONENT.h"
+#include "libSonicSocket/config/SS_FOUNTAINCODER_SYMBOL_MODULAR_EXPONENT.h"
 #include "libSonicSocket/config/SS_FOUNTAINSINK_DECODED_SYMBOLS_FORGET_THRESHOLD.h"
+#include "libSonicSocket/config/SS_FOUNTAINSINK_MATRIX_INVERSE_CACHE_SIZE.h"
 
 #include "libSonicSocket/fountainbase.h"
 #include "libSonicSocket/logproxy.h"
@@ -99,7 +100,7 @@ public:
 
         unsigned int num_packet_symbols = symbol_count < symbols_per_packet ? symbol_count : symbols_per_packet;
 
-        unsigned int expected_size = packet_metadata_size + jw_util::FastMath::div_ceil<unsigned int>(num_packet_symbols * SS_FOUNTAININTERFACE_SYMBOL_MODULAR_EXPONENT, CHAR_BIT);
+        unsigned int expected_size = packet_metadata_size + jw_util::FastMath::div_ceil<unsigned int>(num_packet_symbols * SS_FOUNTAINCODER_SYMBOL_MODULAR_EXPONENT, CHAR_BIT);
         if (packet.get_size() != expected_size)
         {
             std::string error_msg = "Invalid packet size (";
@@ -326,7 +327,7 @@ private:
     unsigned int decoded_offset = 0;
     std::deque<SymbolType> decoded;
 
-    typedef jw_util::CacheLRU<MatrixGenerator, SymbolMatrixType, 1024, typename MatrixGenerator::Hasher> MatrixInverseCacheType;
+    typedef jw_util::CacheLRU<MatrixGenerator, SymbolMatrixType, SS_FOUNTAINSINK_MATRIX_INVERSE_CACHE_SIZE, typename MatrixGenerator::Hasher> MatrixInverseCacheType;
     MatrixInverseCacheType matrix_inverse_cache;
 
     float error_accumulator = 0.0f;

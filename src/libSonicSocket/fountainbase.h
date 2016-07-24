@@ -1,8 +1,8 @@
 #ifndef FOUNTAINBASE_H
 #define FOUNTAINBASE_H
 
-#include "libSonicSocket/config/SS_FOUNTAININTERFACE_SYMBOL_MODULAR_EXPONENT.h"
-#include "libSonicSocket/config/SS_FOUNTAININTERFACE_SYMBOL_MODULAR_DECREMENT.h"
+#include "libSonicSocket/config/SS_FOUNTAINCODER_SYMBOL_MODULAR_EXPONENT.h"
+#include "libSonicSocket/config/SS_FOUNTAINCODER_SYMBOL_MODULAR_DECREMENT.h"
 #include "libSonicSocket/config/SS_MAX_PACKET_SIZE.h"
 #include "libSonicSocket/config/SS_MANGLE_PASSES.h"
 
@@ -17,14 +17,14 @@ namespace sonic_socket
 class FountainBase
 {
 public:
-    typedef IntModuloMersenneStorage<SS_FOUNTAININTERFACE_SYMBOL_MODULAR_EXPONENT, SS_FOUNTAININTERFACE_SYMBOL_MODULAR_DECREMENT> SymbolType;
+    typedef IntModuloMersenneStorage<SS_FOUNTAINCODER_SYMBOL_MODULAR_EXPONENT, SS_FOUNTAINCODER_SYMBOL_MODULAR_DECREMENT> SymbolType;
 
 protected:
     typedef Eigen::Matrix<SymbolType, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> SymbolMatrixType;
     typedef Eigen::Matrix<SymbolType, Eigen::Dynamic, 1> SymbolVectorType;
 
     static constexpr unsigned int packet_metadata_size = 8;
-    static constexpr unsigned int symbols_per_packet = (SS_MAX_PACKET_SIZE - packet_metadata_size) * CHAR_BIT / SS_FOUNTAININTERFACE_SYMBOL_MODULAR_EXPONENT;
+    static constexpr unsigned int symbols_per_packet = (SS_MAX_PACKET_SIZE - packet_metadata_size) * CHAR_BIT / SS_FOUNTAINCODER_SYMBOL_MODULAR_EXPONENT;
 
 public:
     class Packet

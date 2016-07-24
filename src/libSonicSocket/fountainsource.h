@@ -7,8 +7,8 @@
 // TODO: remove
 #include <iostream>
 
-#include "libSonicSocket/config/SS_FOUNTAININTERFACE_SYMBOL_MODULAR_EXPONENT.h"
-#include "libSonicSocket/config/SS_FOUNTAININTERFACE_SYMBOL_MODULAR_DECREMENT.h"
+#include "libSonicSocket/config/SS_FOUNTAINCODER_SYMBOL_MODULAR_EXPONENT.h"
+#include "libSonicSocket/config/SS_FOUNTAINCODER_SYMBOL_MODULAR_DECREMENT.h"
 #include "libSonicSocket/config/SS_MAX_PACKET_SIZE.h"
 #include "libSonicSocket/config/SS_MANGLE_PASSES.h"
 
@@ -62,12 +62,12 @@ public:
         *data++ = (SS_MANGLE_PASSES >> 8) & 0xFF;
 
         // Write symbol modular exponent
-        *data++ = (SS_FOUNTAININTERFACE_SYMBOL_MODULAR_EXPONENT >> 0) & 0xFF;
-        *data++ = (SS_FOUNTAININTERFACE_SYMBOL_MODULAR_EXPONENT >> 8) & 0xFF;
+        *data++ = (SS_FOUNTAINCODER_SYMBOL_MODULAR_EXPONENT >> 0) & 0xFF;
+        *data++ = (SS_FOUNTAINCODER_SYMBOL_MODULAR_EXPONENT >> 8) & 0xFF;
 
         // Write symbol modular decrement
-        *data++ = (SS_FOUNTAININTERFACE_SYMBOL_MODULAR_DECREMENT >> 0) & 0xFF;
-        *data++ = (SS_FOUNTAININTERFACE_SYMBOL_MODULAR_DECREMENT >> 8) & 0xFF;
+        *data++ = (SS_FOUNTAINCODER_SYMBOL_MODULAR_DECREMENT >> 0) & 0xFF;
+        *data++ = (SS_FOUNTAINCODER_SYMBOL_MODULAR_DECREMENT >> 8) & 0xFF;
 
         // Write mangled data sample
         std::copy_n(magic, magic_length, reinterpret_cast<char *>(tmp));
@@ -154,8 +154,8 @@ public:
             mp_limb_t *data_words = get_packet_words(packet);
             assert(data_meta == reinterpret_cast<const unsigned char *>(data_words));
 
-            unsigned int data_size_symbols = jw_util::FastMath::div_ceil<unsigned int>(num_packet_symbols * SS_FOUNTAININTERFACE_SYMBOL_MODULAR_EXPONENT, GMP_LIMB_BITS);
-            unsigned int data_size_chars = jw_util::FastMath::div_ceil<unsigned int>(num_packet_symbols * SS_FOUNTAININTERFACE_SYMBOL_MODULAR_EXPONENT, CHAR_BIT);
+            unsigned int data_size_symbols = jw_util::FastMath::div_ceil<unsigned int>(num_packet_symbols * SS_FOUNTAINCODER_SYMBOL_MODULAR_EXPONENT, GMP_LIMB_BITS);
+            unsigned int data_size_chars = jw_util::FastMath::div_ceil<unsigned int>(num_packet_symbols * SS_FOUNTAINCODER_SYMBOL_MODULAR_EXPONENT, CHAR_BIT);
 
             std::fill_n(data_words, data_size_symbols, 0);
 

@@ -11,6 +11,8 @@
 #include "libSonicSocket/jw_util/fastmath.h"
 #include "libSonicSocket/jw_util/hash.h"
 
+#include "libSonicSocket/config/SS_INTMODULOMERSENNE_INVERSE_CACHE_SIZE.h"
+
 // Integers n such that 2^n - 1 is prime: (http://oeis.org/A000043)
 // unsigned int mersenne_primes[] = {2, 3, 5, 7, 13, 17, 19, 31, 61, 89, 107, 127, 521, 607, 1279, 2203, 2281, 3217, 4253, 4423, 9689, 9941, 11213, 19937, 21701, 23209, 44497, 86243, 110503, 132049, 216091, 756839, 859433, 1257787, 1398269, 2976221, 3021377, 6972593, 13466917, 20996011, 24036583, 25964951, 30402457, 32582657};
 // Actually, don't even need mersenne primes, just primes close to a power of 2:
@@ -137,7 +139,7 @@ public:
         // This method returns a pointer to a temporary element.
         // When this method is called again, all previous returned values become invalid.
 
-        typedef jw_util::CacheLRU<ThisType, ThisType, 1024, Hasher> CacheType;
+        typedef jw_util::CacheLRU<ThisType, ThisType, SS_INTMODULOMERSENNE_INVERSE_CACHE_SIZE, Hasher> CacheType;
 
         typename CacheType::Result res;
         if (use_cache)
