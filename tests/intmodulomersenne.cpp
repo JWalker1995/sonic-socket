@@ -2,3 +2,6103 @@
 
 #include "catch/single_include/catch.hpp"
 #include "libSonicSocket/intmodulomersenne.h"
+
+TEST_CASE("66852832412689659908486661410631199421257038439208001562647 _ 11014098288796619477570408015969802952415564460293017092043 (mod 2^196 - 15 == 100433627766186892221372630771322662657637687111424552206321)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<196, 15> Field;
+
+    Field a("66852832412689659908486661410631199421257038439208001562647");
+    Field b("11014098288796619477570408015969802952415564460293017092043");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("77866930701486279386057069426601002373672602899501018654690"));
+    REQUIRE(a - b == Field("55838734123893040430916253394661396468841473978914984470604"));
+    REQUIRE(b - a == Field("44594893642293851790456377376661266188796213132509567735717"));
+    REQUIRE(a * b == Field("1578408035225667656870804871884049569013373965804334535488"));
+    REQUIRE(a / b == Field("78407094474487937022532742699177372978667481102808735222684"));
+
+    Field mut("69638163365399310227152909632698187500738840116671378053564");
+    mut += Field("12426890300904162432682978454027254751410873060370949836212");
+    REQUIRE(mut == Field("82065053666303472659835888086725442252149713177042327889776"));
+    mut -= Field("19778638393822161751894356492449392162834640983464988534670");
+    REQUIRE(mut == Field("62286415272481310907941531594276050089315072193577339355106"));
+    mut *= Field("17523425573846355395063522920135154524510277824902017861215");
+    REQUIRE(mut == Field("90468033130925244538447968763749316108321904099462970086058"));
+    mut /= Field("23557810448788585979861086463460780868510675300016089665767");
+    REQUIRE(mut == Field("9130099391984472053556244944340517777210087225289360014319"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("89638546010336791885044526457437087241893073011051766539440"));
+
+    REQUIRE(a.to_string() == "66852832412689659908486661410631199421257038439208001562647");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("11014098288796619477570408015969802952415564460293017092043");
+    Field max("66852832412689659908486661410631199421257038439208001562647");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("36357331094425752837498 _ 26922384980908536695027 (mod 2^75 - 97 == 37778931862957161709471)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<75, 97> Field;
+
+    Field a("36357331094425752837498");
+    Field b("26922384980908536695027");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("25500784212377127823054"));
+    REQUIRE(a - b == Field("9434946113517216142471"));
+    REQUIRE(b - a == Field("28343985749439945567000"));
+    REQUIRE(a * b == Field("13586012721294891427360"));
+    REQUIRE(a / b == Field("27219544910161014810240"));
+
+    Field mut("19918512844211585361428");
+    mut += Field("12962194013184416528663");
+    REQUIRE(mut == Field("32880706857396001890091"));
+    mut -= Field("3293301887010869657844");
+    REQUIRE(mut == Field("29587404970385132232247"));
+    mut *= Field("5811881251237637927144");
+    REQUIRE(mut == Field("23387957069098143937918"));
+    mut /= Field("28704130784684107177852");
+    REQUIRE(mut == Field("14222381778832335659101"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("29930570326979755729881"));
+
+    REQUIRE(a.to_string() == "36357331094425752837498");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("26922384980908536695027");
+    Field max("36357331094425752837498");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("550941706997866175 _ 1113983371608403589 (mod 2^60 - 93 == 1152921504606846883)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<60, 93> Field;
+
+    Field a("550941706997866175");
+    Field b("1113983371608403589");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("512003573999422881"));
+    REQUIRE(a - b == Field("589879839996309469"));
+    REQUIRE(b - a == Field("563041664610537414"));
+    REQUIRE(a * b == Field("1056495924066421469"));
+    REQUIRE(a / b == Field("478882628782863462"));
+
+    Field mut("948808274917223487");
+    mut += Field("289426605323313475");
+    REQUIRE(mut == Field("85313375633690079"));
+    mut -= Field("1053046347667797262");
+    REQUIRE(mut == Field("185188532572739700"));
+    mut *= Field("188461676062230607");
+    REQUIRE(mut == Field("346269245300177242"));
+    mut /= Field("1021058686084225502");
+    REQUIRE(mut == Field("228069798506976677"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("875124977743400306"));
+
+    REQUIRE(a.to_string() == "550941706997866175");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("0550941706997866175");
+    Field max("1113983371608403589");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("359814910883535313765 _ 207028952301210588710 (mod 2^69 - 19 == 590295810358705651693)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<69, 19> Field;
+
+    Field a("359814910883535313765");
+    Field b("207028952301210588710");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("566843863184745902475"));
+    REQUIRE(a - b == Field("152785958582324725055"));
+    REQUIRE(b - a == Field("437509851776380926638"));
+    REQUIRE(a * b == Field("493118646033738099196"));
+    REQUIRE(a / b == Field("245737364217979057326"));
+
+    Field mut("231265093955535825809");
+    mut += Field("231629996756227563459");
+    REQUIRE(mut == Field("462895090711763389268"));
+    mut -= Field("144713880437739553082");
+    REQUIRE(mut == Field("318181210274023836186"));
+    mut *= Field("32167836765448761449");
+    REQUIRE(mut == Field("54405946285206747935"));
+    mut /= Field("475220005226108237767");
+    REQUIRE(mut == Field("61384044883698922024"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("122771860963403404888"));
+
+    REQUIRE(a.to_string() == "359814910883535313765");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("207028952301210588710");
+    Field max("359814910883535313765");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("17910852 _ 30733141 (mod 2^25 - 39 == 33554393)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<25, 39> Field;
+
+    Field a("17910852");
+    Field b("30733141");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("15089600"));
+    REQUIRE(a - b == Field("20732104"));
+    REQUIRE(b - a == Field("12822289"));
+    REQUIRE(a * b == Field("9785288"));
+    REQUIRE(a / b == Field("21647673"));
+
+    Field mut("15271867");
+    mut += Field("9079624");
+    REQUIRE(mut == Field("24351491"));
+    mut -= Field("17462822");
+    REQUIRE(mut == Field("6888669"));
+    mut *= Field("31332791");
+    REQUIRE(mut == Field("9384418"));
+    mut /= Field("1688621");
+    REQUIRE(mut == Field("2538213"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("18762872"));
+
+    REQUIRE(a.to_string() == "17910852");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("17910852");
+    Field max("30733141");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("272311642675 _ 1252157176232 (mod 2^41 - 21 == 2199023255531)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<41, 21> Field;
+
+    Field a("272311642675");
+    Field b("1252157176232");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("1524468818907"));
+    REQUIRE(a - b == Field("1219177721974"));
+    REQUIRE(b - a == Field("979845533557"));
+    REQUIRE(a * b == Field("580346808726"));
+    REQUIRE(a / b == Field("1670265131521"));
+
+    Field mut("2026395360767");
+    mut += Field("371712426628");
+    REQUIRE(mut == Field("199084531864"));
+    mut -= Field("960285460489");
+    REQUIRE(mut == Field("1437822326906"));
+    mut *= Field("1523234762037");
+    REQUIRE(mut == Field("280788135573"));
+    mut /= Field("334135368286");
+    REQUIRE(mut == Field("513511514347"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("1556852673366"));
+
+    REQUIRE(a.to_string() == "272311642675");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("0272311642675");
+    Field max("1252157176232");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("48413576822484415302035480895770527549749602865 _ 249070595006920141387808758561165021764943596007 (mod 2^158 - 15 == 365375409332725729550921208179070754913983135729)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<158, 15> Field;
+
+    Field a("48413576822484415302035480895770527549749602865");
+    Field b("249070595006920141387808758561165021764943596007");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("297484171829404556689844239456935549314693198872"));
+    REQUIRE(a - b == Field("164718391148290003465147930513676260698789142587"));
+    REQUIRE(b - a == Field("200657018184435726085773277665394494215193993142"));
+    REQUIRE(a * b == Field("118072764507129616096284540566834004145597660086"));
+    REQUIRE(a / b == Field("106169916465456467704986852786478617059820688005"));
+
+    Field mut("64221921438245324295496983199696688001096975897");
+    mut += Field("328661005736137720817283777978298414569283931927");
+    REQUIRE(mut == Field("27507517841657315561859552998924347656397772095"));
+    mut -= Field("4387138489368823836614200580516353407000573201");
+    REQUIRE(mut == Field("23120379352288491725245352418407994249397198894"));
+    mut *= Field("10472054233006493874324203574883309225762239859");
+    REQUIRE(mut == Field("236152036245076299610043362958098510738988546336"));
+    mut /= Field("161528106176622425276690613491239037898893780425");
+    REQUIRE(mut == Field("201017640425598790583630590443299597634754429674"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("166811165964778211614824473533927256061534771714"));
+
+    REQUIRE(a.to_string() == "48413576822484415302035480895770527549749602865");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("048413576822484415302035480895770527549749602865");
+    Field max("249070595006920141387808758561165021764943596007");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("26846531754686457662454786871172558712766954955315 _ 44747097538758306844775564528322907046982047661969 (mod 2^166 - 5 == 93536104789177786765035829293842113257979682750459)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<166, 5> Field;
+
+    Field a("26846531754686457662454786871172558712766954955315");
+    Field b("44747097538758306844775564528322907046982047661969");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("71593629293444764507230351399495465759749002617284"));
+    REQUIRE(a - b == Field("75635539005105937582715051636691764923764590043805"));
+    REQUIRE(b - a == Field("17900565784071849182320777657150348334215092706654"));
+    REQUIRE(a * b == Field("24794450485021558901390854446287975912610493924421"));
+    REQUIRE(a / b == Field("81322501189588027305631599685277161628494009190296"));
+
+    Field mut("8897952388247716644985236667165404199345900272267");
+    mut += Field("38519179799562971001352254687014023279068451746338");
+    REQUIRE(mut == Field("47417132187810687646337491354179427478414352018605"));
+    mut -= Field("33876142604655864617023128650398842579067190130919");
+    REQUIRE(mut == Field("13540989583154823029314362703780584899347161887686"));
+    mut *= Field("41306233798728852989735739943515038541711366876322");
+    REQUIRE(mut == Field("51119528752863267484644902535142674180970659191633"));
+    mut /= Field("42848960390976342626295348574104978024615050179663");
+    REQUIRE(mut == Field("6349145150762065033116012346926905378114059979729"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("25285077206574886589822508917761647395801321452682"));
+
+    REQUIRE(a.to_string() == "26846531754686457662454786871172558712766954955315");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("26846531754686457662454786871172558712766954955315");
+    Field max("44747097538758306844775564528322907046982047661969");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("221374661404043906092359530 _ 111905242365985110879977784 (mod 2^88 - 299 == 309485009821345068724780757)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<88, 299> Field;
+
+    Field a("221374661404043906092359530");
+    Field b("111905242365985110879977784");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("23794893948683948247556557"));
+    REQUIRE(a - b == Field("109469419038058795212381746"));
+    REQUIRE(b - a == Field("200015590783286273512399011"));
+    REQUIRE(a * b == Field("2643194962330443238969007"));
+    REQUIRE(a / b == Field("128472499119162984613995884"));
+
+    Field mut("71401958197887751980854498");
+    mut += Field("144205791894543070434474673");
+    REQUIRE(mut == Field("215607750092430822415329171"));
+    mut -= Field("294742788116504267369188813");
+    REQUIRE(mut == Field("230349971797271623770921115"));
+    mut *= Field("47848768326103299303984158");
+    REQUIRE(mut == Field("167498178977156408034596650"));
+    mut /= Field("8080941305602470167920657");
+    REQUIRE(mut == Field("230558814219892121472271509"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("171577187015814090936015525"));
+
+    REQUIRE(a.to_string() == "221374661404043906092359530");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("111905242365985110879977784");
+    Field max("221374661404043906092359530");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("770111512 _ 516248967 (mod 2^32 - 5 == 4294967291)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<32, 5> Field;
+
+    Field a("770111512");
+    Field b("516248967");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("1286360479"));
+    REQUIRE(a - b == Field("253862545"));
+    REQUIRE(b - a == Field("4041104746"));
+    REQUIRE(a * b == Field("3141209185"));
+    REQUIRE(a / b == Field("1911932839"));
+
+    Field mut("3268763593");
+    mut += Field("1934056304");
+    REQUIRE(mut == Field("907852606"));
+    mut -= Field("352407445");
+    REQUIRE(mut == Field("555445161"));
+    mut *= Field("486297879");
+    REQUIRE(mut == Field("799099764"));
+    mut /= Field("3930684303");
+    REQUIRE(mut == Field("2159787065"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("3623787772"));
+
+    REQUIRE(a.to_string() == "770111512");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("516248967");
+    Field max("770111512");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("851647225865461561175926248473524322994579426456265078 _ 554712857426848648918637155643056557255304608924385149 (mod 2^180 - 47 == 1532495540865888858358347027150309183618739122183602129)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<180, 47> Field;
+
+    Field a("851647225865461561175926248473524322994579426456265078");
+    Field b("554712857426848648918637155643056557255304608924385149");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("1406360083292310210094563404116580880249884035380650227"));
+    REQUIRE(a - b == Field("296934368438612912257289092830467765739274817531879929"));
+    REQUIRE(b - a == Field("1235561172427275946101057934319841417879464304651722200"));
+    REQUIRE(a * b == Field("900340422148013443224328777424537356933928909197832224"));
+    REQUIRE(a / b == Field("361184390257073782673748400608473495729316860221324234"));
+
+    Field mut("811351390590347160718206786895323411263052013309909325");
+    mut += Field("1520708090862049119617114816235234793508783304807090661");
+    REQUIRE(mut == Field("799563940586507421976974575980249021153096195933397857"));
+    mut -= Field("1371435506489048140710648965528424750123284173604608433");
+    REQUIRE(mut == Field("960623974963348139624672637602133454648551144512391553"));
+    mut *= Field("740430506711120896254652870147023594153227676411867031");
+    REQUIRE(mut == Field("543963757169014857616892031571619613268148173755816190"));
+    mut /= Field("1177408619375284553153530398022789919401552083906675153");
+    REQUIRE(mut == Field("765371320761440790387455222643904248923634913418919405"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("554077251580394446686215332154365104826489769602757189"));
+
+    REQUIRE(a.to_string() == "851647225865461561175926248473524322994579426456265078");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("554712857426848648918637155643056557255304608924385149");
+    Field max("851647225865461561175926248473524322994579426456265078");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("19105421588857753379195802940936242658 _ 125010025514021529156016804075734559437 (mod 2^127 - 1 == 170141183460469231731687303715884105727)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<127, 1> Field;
+
+    Field a("19105421588857753379195802940936242658");
+    Field b("125010025514021529156016804075734559437");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("144115447102879282535212607016670802095"));
+    REQUIRE(a - b == Field("64236579535305455954866302581085788948"));
+    REQUIRE(b - a == Field("105904603925163775776821001134798316779"));
+    REQUIRE(a * b == Field("135835189792235794567786922201715401802"));
+    REQUIRE(a / b == Field("8737287907014667302936987323560350472"));
+
+    Field mut("81180549307884014603323839868214653632");
+    mut += Field("85606561080320137666820051662644950940");
+    REQUIRE(mut == Field("166787110388204152270143891530859604572"));
+    mut -= Field("152985364733055276777411173874720032173");
+    REQUIRE(mut == Field("13801745655148875492732717656139572399"));
+    mut *= Field("158767668630670259952480044248093817881");
+    REQUIRE(mut == Field("112199298738630489220769069790911123202"));
+    mut /= Field("162650592658076873276039842179429638704");
+    REQUIRE(mut == Field("47714920378562969322894087436720072973"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("64159464131350659921671536323086770508"));
+
+    REQUIRE(a.to_string() == "19105421588857753379195802940936242658");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("019105421588857753379195802940936242658");
+    Field max("125010025514021529156016804075734559437");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("83488355018272765704908800421076530894411450560192 _ 20137085130157206972699921050483252165008110110142 (mod 2^167 - 135 == 187072209578355573530071658587684226515959365500793)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<167, 135> Field;
+
+    Field a("83488355018272765704908800421076530894411450560192");
+    Field b("20137085130157206972699921050483252165008110110142");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("103625440148429972677608721471559783059419560670334"));
+    REQUIRE(a - b == Field("63351269888115558732208879370593278729403340450050"));
+    REQUIRE(b - a == Field("123720939690240014797862779217090947786556025050743"));
+    REQUIRE(a * b == Field("120641957252108956008747461653730641225381613887434"));
+    REQUIRE(a / b == Field("113844510487074829099618748787691848854196152154686"));
+
+    Field mut("111495578819873968490726765958048146359889942172531");
+    mut += Field("108727739320335587923323990220838865754536519766267");
+    REQUIRE(mut == Field("33151108561853982883979097591202785598467096438005"));
+    mut -= Field("13197775915674930752685901989533547371529789970565");
+    REQUIRE(mut == Field("19953332646179052131293195601669238226937306467440"));
+    mut *= Field("138656542420827148987399539903680979615295025274717");
+    REQUIRE(mut == Field("61622520059707883282975224272697840927804713833288"));
+    mut /= Field("88770663056251965862810183394451531765107540510821");
+    REQUIRE(mut == Field("27531332631406416464430885954599935477813185771046"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("155264233542376914646849623470705468595945533157134"));
+
+    REQUIRE(a.to_string() == "83488355018272765704908800421076530894411450560192");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("20137085130157206972699921050483252165008110110142");
+    Field max("83488355018272765704908800421076530894411450560192");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("2591828736066070335 _ 1649158170038517188 (mod 2^62 - 57 == 4611686018427387847)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<62, 57> Field;
+
+    Field a("2591828736066070335");
+    Field b("1649158170038517188");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("4240986906104587523"));
+    REQUIRE(a - b == Field("942670566027553147"));
+    REQUIRE(b - a == Field("3669015452399834700"));
+    REQUIRE(a * b == Field("2572955769798806381"));
+    REQUIRE(a / b == Field("1408091231383361890"));
+
+    Field mut("1552044963521475934");
+    mut += Field("2206566663856363683");
+    REQUIRE(mut == Field("3758611627377839617"));
+    mut -= Field("4036007951365263414");
+    REQUIRE(mut == Field("4334289694439964050"));
+    mut *= Field("3961020883239265609");
+    REQUIRE(mut == Field("114886427489614898"));
+    mut /= Field("2721665429987104340");
+    REQUIRE(mut == Field("1072717879209437557"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("2645528873737799282"));
+
+    REQUIRE(a.to_string() == "2591828736066070335");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("1649158170038517188");
+    Field max("2591828736066070335");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("323851248256976066780629167694370975822319863601 _ 947761352994417506514702903653190126599898118459 (mod 2^160 - 47 == 1461501637330902918203684832716283019655932542929)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<160, 47> Field;
+
+    Field a("323851248256976066780629167694370975822319863601");
+    Field b("947761352994417506514702903653190126599898118459");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("1271612601251393573295332071347561102422217982060"));
+    REQUIRE(a - b == Field("837591532593461478469611096757463868878354288071"));
+    REQUIRE(b - a == Field("623910104737441439734073735958819150777578254858"));
+    REQUIRE(a * b == Field("1358594195030516614301128719337182110584938169305"));
+    REQUIRE(a / b == Field("398621414850788799758581692066810449593062851171"));
+
+    Field mut("369938437272710840208509060099629896842581558048");
+    mut += Field("861591382810532252779952908388288263217825746019");
+    REQUIRE(mut == Field("1231529820083243092988461968487918160060407304067"));
+    mut -= Field("578145392969508947821953978832235536781677323338");
+    REQUIRE(mut == Field("653384427113734145166507989655682623278729980729"));
+    mut *= Field("74035625579675776222937652440749260952545764401");
+    REQUIRE(mut == Field("737690978440978716883059244251377081141283585593"));
+    mut /= Field("1170394031972177874140951958489012252887409095960");
+    REQUIRE(mut == Field("84346461652550931951040638203034578271609491134"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("701511902571348800137114030606295865721547173319"));
+
+    REQUIRE(a.to_string() == "323851248256976066780629167694370975822319863601");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("323851248256976066780629167694370975822319863601");
+    Field max("947761352994417506514702903653190126599898118459");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("4655997612453583372372929805575 _ 2377099115029371314681226811887 (mod 2^102 - 33 == 5070602400912917605986812821471)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<102, 33> Field;
+
+    Field a("4655997612453583372372929805575");
+    Field b("2377099115029371314681226811887");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("1962494326570037081067343795991"));
+    REQUIRE(a - b == Field("2278898497424212057691702993688"));
+    REQUIRE(b - a == Field("2791703903488705548295109827783"));
+    REQUIRE(a * b == Field("3041059799773748384802029565079"));
+    REQUIRE(a / b == Field("3217987955591016926140689880739"));
+
+    Field mut("3427685290395488462323059291481");
+    mut += Field("1034667029887258666765749880362");
+    REQUIRE(mut == Field("4462352320282747129088809171843"));
+    mut -= Field("3314686376660320949116005814617");
+    REQUIRE(mut == Field("1147665943622426179972803357226"));
+    mut *= Field("2058583445836109609478817722326");
+    REQUIRE(mut == Field("2067944866048753615972369140144"));
+    mut /= Field("4761770860075072067498056623462");
+    REQUIRE(mut == Field("4234559229241545168688712515829"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("866331599485246559017769633267"));
+
+    REQUIRE(a.to_string() == "4655997612453583372372929805575");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("2377099115029371314681226811887");
+    Field max("4655997612453583372372929805575");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("1666435544750170699068195089442694 _ 3931748196374953018284116804242111 (mod 2^114 - 11 == 20769187434139310514121985316880373)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<114, 11> Field;
+
+    Field a("1666435544750170699068195089442694");
+    Field b("3931748196374953018284116804242111");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("5598183741125123717352311893684805"));
+    REQUIRE(a - b == Field("18503874782514528194906063602080956"));
+    REQUIRE(b - a == Field("2265312651624782319215921714799417"));
+    REQUIRE(a * b == Field("16604976891096356848032997994964061"));
+    REQUIRE(a / b == Field("13381301126756656914346244400107792"));
+
+    Field mut("11027741502280172145723135531952551");
+    mut += Field("14406831864415232097440725318027623");
+    REQUIRE(mut == Field("4665385932556093729041875533099801"));
+    mut -= Field("19370559588149674764164842504573618");
+    REQUIRE(mut == Field("6064013778545729478999018345406556"));
+    mut *= Field("4425555573834620004074988794926043");
+    REQUIRE(mut == Field("10333848354638526359872802975560536"));
+    mut /= Field("2384007407992894841665680349764468");
+    REQUIRE(mut == Field("15032881764282043357363184016798816"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("3907431433498643764222351251452087"));
+
+    REQUIRE(a.to_string() == "1666435544750170699068195089442694");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("1666435544750170699068195089442694");
+    Field max("3931748196374953018284116804242111");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("81 _ 23 (mod 2^7 - 1 == 127)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<7, 1> Field;
+
+    Field a("81");
+    Field b("23");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("104"));
+    REQUIRE(a - b == Field("58"));
+    REQUIRE(b - a == Field("69"));
+    REQUIRE(a * b == Field("85"));
+    REQUIRE(a / b == Field("125"));
+
+    Field mut("70");
+    mut += Field("117");
+    REQUIRE(mut == Field("60"));
+    mut -= Field("117");
+    REQUIRE(mut == Field("70"));
+    mut *= Field("39");
+    REQUIRE(mut == Field("63"));
+    mut /= Field("109");
+    REQUIRE(mut == Field("60"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("69"));
+
+    REQUIRE(a.to_string() == "81");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("23");
+    Field max("81");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("60204 _ 64159 (mod 2^16 - 15 == 65521)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<16, 15> Field;
+
+    Field a("60204");
+    Field b("64159");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("58842"));
+    REQUIRE(a - b == Field("61566"));
+    REQUIRE(b - a == Field("3955"));
+    REQUIRE(a * b == Field("34444"));
+    REQUIRE(a / b == Field("46138"));
+
+    Field mut("32590");
+    mut += Field("11159");
+    REQUIRE(mut == Field("43749"));
+    mut -= Field("20909");
+    REQUIRE(mut == Field("22840"));
+    mut *= Field("63220");
+    REQUIRE(mut == Field("58523"));
+    mut /= Field("18659");
+    REQUIRE(mut == Field("29591"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("26445"));
+
+    REQUIRE(a.to_string() == "60204");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("60204");
+    Field max("64159");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("121571083499946746971558519924125563024823383553 _ 144286011785132416271358044608283751271320160871 (mod 2^157 - 19 == 182687704666362864775460604089535377456991567853)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<157, 19> Field;
+
+    Field a("121571083499946746971558519924125563024823383553");
+    Field b("144286011785132416271358044608283751271320160871");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("83169390618716298467455960442873936839151976571"));
+    REQUIRE(a - b == Field("159972776381177195475661079405377189210494790535"));
+    REQUIRE(b - a == Field("22714928285185669299799524684158188246496777318"));
+    REQUIRE(a * b == Field("179460553317561971034522878905819867844608635455"));
+    REQUIRE(a / b == Field("137224700409486986556839897008528353701083618121"));
+
+    Field mut("175475210869983233581715365266135782626412855534");
+    mut += Field("95383495135105335804114566788843676504212577278");
+    REQUIRE(mut == Field("88171001338725704610369327965444081673633864959"));
+    mut -= Field("172481657335888134671550874823890413935347278712");
+    REQUIRE(mut == Field("98377048669200434714279057231089045195278154100"));
+    mut *= Field("106932434642906068797073955605705906390879615962");
+    REQUIRE(mut == Field("58432057511016399266006585951533318045002637339"));
+    mut /= Field("75527081552966860157335102974025069042173482762");
+    REQUIRE(mut == Field("4468141990986034498470659298530351498376066587"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("129178240792215244847727634498557924731539201404"));
+
+    REQUIRE(a.to_string() == "121571083499946746971558519924125563024823383553");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("121571083499946746971558519924125563024823383553");
+    Field max("144286011785132416271358044608283751271320160871");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("4405108124 _ 14408050208 (mod 2^34 - 41 == 17179869143)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<34, 41> Field;
+
+    Field a("4405108124");
+    Field b("14408050208");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("1633289189"));
+    REQUIRE(a - b == Field("7176927059"));
+    REQUIRE(b - a == Field("10002942084"));
+    REQUIRE(a * b == Field("9876025914"));
+    REQUIRE(a / b == Field("4585780444"));
+
+    Field mut("3757622440");
+    mut += Field("2761752911");
+    REQUIRE(mut == Field("6519375351"));
+    mut -= Field("3943383755");
+    REQUIRE(mut == Field("2575991596"));
+    mut *= Field("5506581087");
+    REQUIRE(mut == Field("10234486247"));
+    mut /= Field("1675098095");
+    REQUIRE(mut == Field("10940232510"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("15552050988"));
+
+    REQUIRE(a.to_string() == "4405108124");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("04405108124");
+    Field max("14408050208");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("4710096358339843657234441234280496446104106 _ 4177190333412360343887793707172775970090812 (mod 2^142 - 111 == 5575186299632655785383929568162090376494993)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<142, 111> Field;
+
+    Field a("4710096358339843657234441234280496446104106");
+    Field b("4177190333412360343887793707172775970090812");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("3312100392119548215738305373291182039699925"));
+    REQUIRE(a - b == Field("532906024927483313346647527107720476013294"));
+    REQUIRE(b - a == Field("5042280274705172472037282041054369900481699"));
+    REQUIRE(a * b == Field("2387648855204865155009076584626811174486340"));
+    REQUIRE(a / b == Field("1698084985747384862239614826007021093606273"));
+
+    Field mut("3688296132926783937054752792864146131019766");
+    mut += Field("1354965320961818128737608689428166035450364");
+    REQUIRE(mut == Field("5043261453888602065792361482292312166470130"));
+    mut -= Field("1691812072784750449412863783549965817425004");
+    REQUIRE(mut == Field("3351449381103851616379497698742346349045126"));
+    mut *= Field("2895597822213470882554402046241225925236584");
+    REQUIRE(mut == Field("5144927128976704899227248697732954308331919"));
+    mut /= Field("40341035361389019046274079006983088702369");
+    REQUIRE(mut == Field("30684931641897679304191702837753588951219"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("4879581626530491747241198318319632386049101"));
+
+    REQUIRE(a.to_string() == "4710096358339843657234441234280496446104106");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("4177190333412360343887793707172775970090812");
+    Field max("4710096358339843657234441234280496446104106");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("4324662 _ 4585829 (mod 2^23 - 15 == 8388593)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<23, 15> Field;
+
+    Field a("4324662");
+    Field b("4585829");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("521898"));
+    REQUIRE(a - b == Field("8127426"));
+    REQUIRE(b - a == Field("261167"));
+    REQUIRE(a * b == Field("8227465"));
+    REQUIRE(a / b == Field("5391104"));
+
+    Field mut("1274452");
+    mut += Field("3546480");
+    REQUIRE(mut == Field("4820932"));
+    mut -= Field("76975");
+    REQUIRE(mut == Field("4743957"));
+    mut *= Field("2604108");
+    REQUIRE(mut == Field("4515965"));
+    mut /= Field("8033309");
+    REQUIRE(mut == Field("7638059"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("4546257"));
+
+    REQUIRE(a.to_string() == "4324662");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("4324662");
+    Field max("4585829");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("1937994872001852531099976863061195549988283781 _ 3664985324109148060400556229596561290488328474 (mod 2^152 - 17 == 5708990770823839524233143877797980545530986479)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<152, 17> Field;
+
+    Field a("1937994872001852531099976863061195549988283781");
+    Field b("3664985324109148060400556229596561290488328474");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("5602980196111000591500533092657756840476612255"));
+    REQUIRE(a - b == Field("3982000318716543994932564511262614805030941786"));
+    REQUIRE(b - a == Field("1726990452107295529300579366535365740500044693"));
+    REQUIRE(a * b == Field("4583957934329649313061954642539127450468004192"));
+    REQUIRE(a / b == Field("132007630491930989342577880792724439163093634"));
+
+    Field mut("232041371937292339864955424372922077659563443");
+    mut += Field("619948374807390850069913320863652469262872804");
+    REQUIRE(mut == Field("851989746744683189934868745236574546922436247"));
+    mut -= Field("1252535006627635745764289072246800899123612925");
+    REQUIRE(mut == Field("5308445510940886968403723550787754193329809801"));
+    mut *= Field("1023621421510796582187775730731839758611880864");
+    REQUIRE(mut == Field("793358849085137256043332541017709355218073540"));
+    mut /= Field("3086973318157186659257155041013817985758404481");
+    REQUIRE(mut == Field("475908981991176947735357900306120374127261776"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("3371820203164130230248011142002654093818574891"));
+
+    REQUIRE(a.to_string() == "1937994872001852531099976863061195549988283781");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("1937994872001852531099976863061195549988283781");
+    Field max("3664985324109148060400556229596561290488328474");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("331423612945380929704274985098308642647216538140867 _ 190683094964583832609369090194537007175982465753197 (mod 2^168 - 257 == 374144419156711147060143317175368453031918731001599)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<168, 257> Field;
+
+    Field a("331423612945380929704274985098308642647216538140867");
+    Field b("190683094964583832609369090194537007175982465753197");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("147962288753253615253500758117477196791280272892465"));
+    REQUIRE(a - b == Field("140740517980797097094905894903771635471234072387670"));
+    REQUIRE(b - a == Field("233403901175914049965237422271596817560684658613929"));
+    REQUIRE(a * b == Field("115114820443592199973745689995898361903562943251507"));
+    REQUIRE(a / b == Field("47598888060312237678612740217110352913257673832319"));
+
+    Field mut("236870301315881609163154598257606392777638289802556");
+    mut += Field("241355148865362340998647741650845865876538717096913");
+    REQUIRE(mut == Field("104081031024532803101659022733083805622258275897870"));
+    mut -= Field("291385164145554755834847220403633525562636415779094");
+    REQUIRE(mut == Field("186840286035689194326955119504818733091540591120375"));
+    mut *= Field("360178658854455426530775215661519801603627197016312");
+    REQUIRE(mut == Field("254777078389638570955991617202019118565405921404638"));
+    mut /= Field("21393762922210078712752972271416492518869639388327");
+    REQUIRE(mut == Field("255567818998419867552353475815286749422075216995226"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("120593197018642647707906486474712126751216691045028"));
+
+    REQUIRE(a.to_string() == "331423612945380929704274985098308642647216538140867");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("190683094964583832609369090194537007175982465753197");
+    Field max("331423612945380929704274985098308642647216538140867");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("5377987721517606844391700982312790331478938 _ 15347396118853312171083033224282056403083451 (mod 2^144 - 83 == 22300745198530623141535718272648361505980333)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<144, 83> Field;
+
+    Field a("5377987721517606844391700982312790331478938");
+    Field b("15347396118853312171083033224282056403083451");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("20725383840370919015474734206594846734562389"));
+    REQUIRE(a - b == Field("12331336801194917814844386030679095434375820"));
+    REQUIRE(b - a == Field("9969408397335705326691332241969266071604513"));
+    REQUIRE(a * b == Field("17788841388496682986195000860660797564708683"));
+    REQUIRE(a / b == Field("12539933611975690273091742218774131363148296"));
+
+    Field mut("11156280708812201719660575121934781940076329");
+    mut += Field("6810755550032087726922896289860286519218140");
+    REQUIRE(mut == Field("17967036258844289446583471411795068459294469"));
+    mut -= Field("16092514675721997174545544358708510778028384");
+    REQUIRE(mut == Field("1874521583122292272037927053086557681266085"));
+    mut *= Field("17692843048342228363876381774467286506531899");
+    REQUIRE(mut == Field("3142186701555453428652398469805414337850306"));
+    mut /= Field("8905063529646343481983912659598511250920772");
+    REQUIRE(mut == Field("17822408239555833749705500054023838073390544"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("2787432597568141426229671072785524031658342"));
+
+    REQUIRE(a.to_string() == "5377987721517606844391700982312790331478938");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("05377987721517606844391700982312790331478938");
+    Field max("15347396118853312171083033224282056403083451");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("10509909932732273334837226 _ 5006835029295870852022911 (mod 2^84 - 35 == 19342813113834066795298781)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<84, 35> Field;
+
+    Field a("10509909932732273334837226");
+    Field b("5006835029295870852022911");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("15516744962028144186860137"));
+    REQUIRE(a - b == Field("5503074903436402482814315"));
+    REQUIRE(b - a == Field("13839738210397664312484466"));
+    REQUIRE(a * b == Field("4697129260827306066981038"));
+    REQUIRE(a / b == Field("8403941190578760458387024"));
+
+    Field mut("11620522128432641281083335");
+    mut += Field("10815126501652384594493812");
+    REQUIRE(mut == Field("3092835516250959080278366"));
+    mut -= Field("12406527452867315468213022");
+    REQUIRE(mut == Field("10029121177217710407364125"));
+    mut *= Field("12817350192383830852358651");
+    REQUIRE(mut == Field("6695058989087323256693237"));
+    mut /= Field("4034900172976261533857328");
+    REQUIRE(mut == Field("14491130014330637257238824"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("12535523760425732925259886"));
+
+    REQUIRE(a.to_string() == "10509909932732273334837226");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("05006835029295870852022911");
+    Field max("10509909932732273334837226");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("16198923842566587846846366701451117914121211012763 _ 35652582003638456794176310773859752332227016904160 (mod 2^165 - 25 == 46768052394588893382517914646921056628989841375207)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<165, 25> Field;
+
+    Field a("16198923842566587846846366701451117914121211012763");
+    Field b("35652582003638456794176310773859752332227016904160");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("5083453451616151258504762828389813617358386541716"));
+    REQUIRE(a - b == Field("27314394233517024435187970574512422210884035483810"));
+    REQUIRE(b - a == Field("19453658161071868947329944072408634418105805891397"));
+    REQUIRE(a * b == Field("650541897374599697365915163078025877725719121407"));
+    REQUIRE(a / b == Field("34707120128550475607805911900147328706321044593962"));
+
+    Field mut("31185113269644598704303315297768397924794718966319");
+    mut += Field("32229503946742931307860702419818463823161738472268");
+    REQUIRE(mut == Field("16646564821798636629646103070665805118966616063380"));
+    mut -= Field("22317008265728517276283292309995722071532987704061");
+    REQUIRE(mut == Field("41097608950659012735880725407591139676423469734526"));
+    mut *= Field("44440422809565405818642146040761466105775243633662");
+    REQUIRE(mut == Field("2869568834575406278937529277703823443240733873918"));
+    mut /= Field("45190492235153489888610186520135284139586644394107");
+    REQUIRE(mut == Field("12906376463117445142673139649067973435852114384828"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("44014258293512271257789987949596395355479737745222"));
+
+    REQUIRE(a.to_string() == "16198923842566587846846366701451117914121211012763");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("16198923842566587846846366701451117914121211012763");
+    Field max("35652582003638456794176310773859752332227016904160");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("32733 _ 268 (mod 2^15 - 19 == 32749)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<15, 19> Field;
+
+    Field a("32733");
+    Field b("268");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("252"));
+    REQUIRE(a - b == Field("32465"));
+    REQUIRE(b - a == Field("284"));
+    REQUIRE(a * b == Field("28461"));
+    REQUIRE(a / b == Field("18574"));
+
+    Field mut("6582");
+    mut += Field("31787");
+    REQUIRE(mut == Field("5620"));
+    mut -= Field("21251");
+    REQUIRE(mut == Field("17118"));
+    mut *= Field("9098");
+    REQUIRE(mut == Field("18069"));
+    mut /= Field("3299");
+    REQUIRE(mut == Field("29558"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("10234"));
+
+    REQUIRE(a.to_string() == "32733");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("00268");
+    Field max("32733");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("15066788110766627170703222187 _ 126971787112588375600648324855 (mod 2^97 - 141 == 158456325028528675187087900531)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<97, 141> Field;
+
+    Field a("15066788110766627170703222187");
+    Field b("126971787112588375600648324855");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("142038575223355002771351547042"));
+    REQUIRE(a - b == Field("46551326026706926757142797863"));
+    REQUIRE(b - a == Field("111904999001821748429945102668"));
+    REQUIRE(a * b == Field("52086326417624654907060147988"));
+    REQUIRE(a / b == Field("103706803022028693669121467344"));
+
+    Field mut("12454423750805619127374436849");
+    mut += Field("25714602928887852486130782202");
+    REQUIRE(mut == Field("38169026679693471613505219051"));
+    mut -= Field("61897716108558982454268242227");
+    REQUIRE(mut == Field("134727635599663164346324877355"));
+    mut *= Field("144944062748302624698529521114");
+    REQUIRE(mut == Field("53923562080323958523729749610"));
+    mut /= Field("62544842260111048714716923477");
+    REQUIRE(mut == Field("56940038017863300277752937633"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("97338773816820052864198333470"));
+
+    REQUIRE(a.to_string() == "15066788110766627170703222187");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("015066788110766627170703222187");
+    Field max("126971787112588375600648324855");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("536412992082503846299495258570828619110045735 _ 482440151815688219422063296747023564070600203 (mod 2^149 - 31 == 713623846352979940529142984724747568191373281)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<149, 31> Field;
+
+    Field a("536412992082503846299495258570828619110045735");
+    Field b("482440151815688219422063296747023564070600203");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("305229297545212125192415570593104614989272657"));
+    REQUIRE(a - b == Field("53972840266815626877431961823805055039445532"));
+    REQUIRE(b - a == Field("659651006086164313651711022900942513151927749"));
+    REQUIRE(a * b == Field("29260160613034966505732303607187537174592929"));
+    REQUIRE(a / b == Field("499889792249962834443886867467683078490088185"));
+
+    Field mut("566546807508166510784755217355658278565789004");
+    mut += Field("684308532975341126603104428743070285916507475");
+    REQUIRE(mut == Field("537231494130527696858716661373980996290923198"));
+    mut -= Field("323145895620956666645714491752683789874845282");
+    REQUIRE(mut == Field("214085598509571030213002169621297206416077916"));
+    mut *= Field("570033168535325733778430084767682498140884785");
+    REQUIRE(mut == Field("534282339539571704145764173530676225272473893"));
+    mut /= Field("328992134779427569755413942151542009947541286");
+    REQUIRE(mut == Field("206361727701109797481558153777664530998699193"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("635594904098546639430007850366146496289043303"));
+
+    REQUIRE(a.to_string() == "536412992082503846299495258570828619110045735");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("482440151815688219422063296747023564070600203");
+    Field max("536412992082503846299495258570828619110045735");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("76 _ 53 (mod 2^7 - 1 == 127)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<7, 1> Field;
+
+    Field a("76");
+    Field b("53");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("2"));
+    REQUIRE(a - b == Field("23"));
+    REQUIRE(b - a == Field("104"));
+    REQUIRE(a * b == Field("91"));
+    REQUIRE(a / b == Field("23"));
+
+    Field mut("50");
+    mut += Field("49");
+    REQUIRE(mut == Field("99"));
+    mut -= Field("82");
+    REQUIRE(mut == Field("17"));
+    mut *= Field("81");
+    REQUIRE(mut == Field("107"));
+    mut /= Field("90");
+    REQUIRE(mut == Field("28"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("122"));
+
+    REQUIRE(a.to_string() == "76");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("53");
+    Field max("76");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("9641376171278683959 _ 7294493297135932550 (mod 2^64 - 59 == 18446744073709551557)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<64, 59> Field;
+
+    Field a("9641376171278683959");
+    Field b("7294493297135932550");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("16935869468414616509"));
+    REQUIRE(a - b == Field("2346882874142751409"));
+    REQUIRE(b - a == Field("16099861199566800148"));
+    REQUIRE(a * b == Field("15839524832779971"));
+    REQUIRE(a / b == Field("4162935437374081750"));
+
+    Field mut("12392340268309950537");
+    mut += Field("12797458133086801969");
+    REQUIRE(mut == Field("6743054327687200949"));
+    mut -= Field("11974755894370770434");
+    REQUIRE(mut == Field("13215042507025982072"));
+    mut *= Field("10991605701023890033");
+    REQUIRE(mut == Field("11515261541085137972"));
+    mut /= Field("17028866354682892269");
+    REQUIRE(mut == Field("3469624339466945393"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("11386749962030597671"));
+
+    REQUIRE(a.to_string() == "9641376171278683959");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("7294493297135932550");
+    Field max("9641376171278683959");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("779457673742860633684926103719271126712783117834848459941 _ 1014292514317674334980274785348523702663880456964962052814 (mod 2^191 - 19 == 3138550867693340381917894711603833208051177722232017256429)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<191, 19> Field;
+
+    Field a("779457673742860633684926103719271126712783117834848459941");
+    Field b("1014292514317674334980274785348523702663880456964962052814");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("1793750188060534968665200889067794829376663574799810512755"));
+    REQUIRE(a - b == Field("2903716027118526680622546029974580632100080383101903663556"));
+    REQUIRE(b - a == Field("234834840574813701295348681629252575951097339130113592873"));
+    REQUIRE(a * b == Field("1924837040089365835444451589433945932963723035825430574223"));
+    REQUIRE(a / b == Field("304624508611182140579938769165369995130547824972524577443"));
+
+    Field mut("675307368392368447803501458807699193741509751174251343053");
+    mut += Field("400853598175801990411266648530867574853629260326269283843");
+    REQUIRE(mut == Field("1076160966568170438214768107338566768595139011500520626896"));
+    mut -= Field("686361189434395846293747027016164611105225235333277784539");
+    REQUIRE(mut == Field("389799777133774591921021080322402157489913776167242842357"));
+    mut *= Field("2669669948422351802385381971359476627953903404846510313050");
+    REQUIRE(mut == Field("368455433445286658893241665868799692076584834843043037493"));
+    mut /= Field("651684123880382230964534224780434804388310136994174570904");
+    REQUIRE(mut == Field("797625399217217725587529092004355794638230186253932070616"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("2107712683209172238360999527263961325991749506064334064831"));
+
+    REQUIRE(a.to_string() == "779457673742860633684926103719271126712783117834848459941");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("0779457673742860633684926103719271126712783117834848459941");
+    Field max("1014292514317674334980274785348523702663880456964962052814");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("3142508555251702281648026700126760337794276 _ 3469914254077108355449118720426123456138739 (mod 2^142 - 111 == 5575186299632655785383929568162090376494993)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<142, 111> Field;
+
+    Field a("3142508555251702281648026700126760337794276");
+    Field b("3469914254077108355449118720426123456138739");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("1037236509696154851713215852390793417438022"));
+    REQUIRE(a - b == Field("5247780600807249711582837547862727258150530"));
+    REQUIRE(b - a == Field("327405698825406073801092020299363118344463"));
+    REQUIRE(a * b == Field("3891588938898514244084079658775990492092227"));
+    REQUIRE(a / b == Field("3909858083996129485928869013332216777893196"));
+
+    Field mut("2768972654964975178848549728132642526294685");
+    mut += Field("2570397039465166211192556699764699284065545");
+    REQUIRE(mut == Field("5339369694430141390041106427897341810360230"));
+    mut -= Field("642928553328261221105631828196195276451169");
+    REQUIRE(mut == Field("4696441141101880168935474599701146533909061"));
+    mut *= Field("289689203681499071064872055055790876827794");
+    REQUIRE(mut == Field("863547776682949856537922223893617061853264"));
+    mut /= Field("1532839354586862597397266387911370228369620");
+    REQUIRE(mut == Field("910689923967588464379455254401726647111662"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("303027434495444523892299103157017586607498"));
+
+    REQUIRE(a.to_string() == "3142508555251702281648026700126760337794276");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("3142508555251702281648026700126760337794276");
+    Field max("3469914254077108355449118720426123456138739");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("10615043447096958436 _ 23611472778833374803 (mod 2^65 - 49 == 36893488147419103183)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<65, 49> Field;
+
+    Field a("10615043447096958436");
+    Field b("23611472778833374803");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("34226516225930333239"));
+    REQUIRE(a - b == Field("23897058815682686816"));
+    REQUIRE(b - a == Field("12996429331736416367"));
+    REQUIRE(a * b == Field("33570214232582136033"));
+    REQUIRE(a / b == Field("34573909580516854522"));
+
+    Field mut("20154706418198526740");
+    mut += Field("512031609524289043");
+    REQUIRE(mut == Field("20666738027722815783"));
+    mut -= Field("20273430442081346635");
+    REQUIRE(mut == Field("393307585641469148"));
+    mut *= Field("31837883184867547265");
+    REQUIRE(mut == Field("27080959772971877700"));
+    mut /= Field("18050933828005842320");
+    REQUIRE(mut == Field("7275401754255669773"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("16466644460917055610"));
+
+    REQUIRE(a.to_string() == "10615043447096958436");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("10615043447096958436");
+    Field max("23611472778833374803");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("3862 _ 997 (mod 2^12 - 3 == 4093)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<12, 3> Field;
+
+    Field a("3862");
+    Field b("997");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("766"));
+    REQUIRE(a - b == Field("2865"));
+    REQUIRE(b - a == Field("1228"));
+    REQUIRE(a * b == Field("2994"));
+    REQUIRE(a / b == Field("1646"));
+
+    Field mut("1260");
+    mut += Field("2842");
+    REQUIRE(mut == Field("9"));
+    mut -= Field("2656");
+    REQUIRE(mut == Field("1446"));
+    mut *= Field("3685");
+    REQUIRE(mut == Field("3517"));
+    mut /= Field("2982");
+    REQUIRE(mut == Field("1161"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("3526"));
+
+    REQUIRE(a.to_string() == "3862");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("0997");
+    Field max("3862");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("13917467640024782432 _ 3455789545040457514 (mod 2^64 - 59 == 18446744073709551557)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<64, 59> Field;
+
+    Field a("13917467640024782432");
+    Field b("3455789545040457514");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("17373257185065239946"));
+    REQUIRE(a - b == Field("10461678094984324918"));
+    REQUIRE(b - a == Field("7985065978725226639"));
+    REQUIRE(a * b == Field("4695436927054557777"));
+    REQUIRE(a / b == Field("11101561866665543136"));
+
+    Field mut("8666613851009990999");
+    mut += Field("14524030631548445592");
+    REQUIRE(mut == Field("4743900408848885034"));
+    mut -= Field("4520831016379050215");
+    REQUIRE(mut == Field("223069392469834819"));
+    mut *= Field("5559055836818943056");
+    REQUIRE(mut == Field("12871999881612480950"));
+    mut /= Field("4401843148779284426");
+    REQUIRE(mut == Field("7107106371973277777"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("8777136153393933253"));
+
+    REQUIRE(a.to_string() == "13917467640024782432");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("03455789545040457514");
+    Field max("13917467640024782432");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("81735156716041464423864499764807198405247 _ 99449735210359353343076145486395822033248 (mod 2^137 - 13 == 174224571863520493293247799005065324265459)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<137, 13> Field;
+
+    Field a("81735156716041464423864499764807198405247");
+    Field b("99449735210359353343076145486395822033248");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("6960320062880324473692846246137696173036"));
+    REQUIRE(a - b == Field("156509993369202604374036153283476700637458"));
+    REQUIRE(b - a == Field("17714578494317888919211645721588623628001"));
+    REQUIRE(a * b == Field("80707855336331511836039974620802404601956"));
+    REQUIRE(a / b == Field("28891034095317208635512669479753352638765"));
+
+    Field mut("168726572961135133316945538350102231180254");
+    mut += Field("89413321655617296053005692167101962196891");
+    REQUIRE(mut == Field("83915322753231936076703431512138869111686"));
+    mut -= Field("71763797348458330020248803355882784511009");
+    REQUIRE(mut == Field("12151525404773606056454628156256084600677"));
+    mut *= Field("85025684813143253195143363710401237584753");
+    REQUIRE(mut == Field("77715600629755568384476776059196548082683"));
+    mut /= Field("114848777424846443219970018674409476023807");
+    REQUIRE(mut == Field("74168686001469978828231072467968256612158"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("148873593184038441919742562876015230392138"));
+
+    REQUIRE(a.to_string() == "81735156716041464423864499764807198405247");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("81735156716041464423864499764807198405247");
+    Field max("99449735210359353343076145486395822033248");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("391502984293711869373 _ 2118071667038653466453 (mod 2^71 - 231 == 2361183241434822606617)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<71, 231> Field;
+
+    Field a("391502984293711869373");
+    Field b("2118071667038653466453");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("148391409897542729209"));
+    REQUIRE(a - b == Field("634614558689881009537"));
+    REQUIRE(b - a == Field("1726568682744941597080"));
+    REQUIRE(a * b == Field("1094520197699377255312"));
+    REQUIRE(a / b == Field("360530886002607476438"));
+
+    Field mut("302690359234211019448");
+    mut += Field("1312772458028767941403");
+    REQUIRE(mut == Field("1615462817262978960851"));
+    mut -= Field("1726378495292258344865");
+    REQUIRE(mut == Field("2250267563405543222603"));
+    mut *= Field("823536799000486184552");
+    REQUIRE(mut == Field("168419980804394651470"));
+    mut /= Field("468937998968202725937");
+    REQUIRE(mut == Field("1486284580549612834019"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("1565752805400839234105"));
+
+    REQUIRE(a.to_string() == "391502984293711869373");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("0391502984293711869373");
+    Field max("2118071667038653466453");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("37510294993 _ 54059607998 (mod 2^36 - 5 == 68719476731)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<36, 5> Field;
+
+    Field a("37510294993");
+    Field b("54059607998");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("22850426260"));
+    REQUIRE(a - b == Field("52170163726"));
+    REQUIRE(b - a == Field("16549313005"));
+    REQUIRE(a * b == Field("22410365359"));
+    REQUIRE(a / b == Field("6641297235"));
+
+    Field mut("35702894217");
+    mut += Field("50596297764");
+    REQUIRE(mut == Field("17579715250"));
+    mut -= Field("27416298815");
+    REQUIRE(mut == Field("58882893166"));
+    mut *= Field("51359205883");
+    REQUIRE(mut == Field("34438664361"));
+    mut /= Field("42195063989");
+    REQUIRE(mut == Field("50549067811"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("19859903226"));
+
+    REQUIRE(a.to_string() == "37510294993");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("37510294993");
+    Field max("54059607998");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("17 _ 70 (mod 2^10 - 3 == 1021)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<10, 3> Field;
+
+    Field a("17");
+    Field b("70");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("87"));
+    REQUIRE(a - b == Field("968"));
+    REQUIRE(b - a == Field("53"));
+    REQUIRE(a * b == Field("169"));
+    REQUIRE(a / b == Field("44"));
+
+    Field mut("267");
+    mut += Field("32");
+    REQUIRE(mut == Field("299"));
+    mut -= Field("928");
+    REQUIRE(mut == Field("392"));
+    mut *= Field("902");
+    REQUIRE(mut == Field("318"));
+    mut /= Field("388");
+    REQUIRE(mut == Field("585"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("961"));
+
+    REQUIRE(a.to_string() == "17");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("17");
+    Field max("70");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("212621609564857188770219750817232 _ 321725171581829393525996582209700 (mod 2^108 - 59 == 324518553658426726783156020576197)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<108, 59> Field;
+
+    Field a("212621609564857188770219750817232");
+    Field b("321725171581829393525996582209700");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("209828227488259855513060312450735"));
+    REQUIRE(a - b == Field("215414991641454522027379189183729"));
+    REQUIRE(b - a == Field("109103562016972204755776831392468"));
+    REQUIRE(a * b == Field("277704276162166965132173077015459"));
+    REQUIRE(a / b == Field("117178143586099110399747417685934"));
+
+    Field mut("108854475158503798073708012330994");
+    mut += Field("27964290697388391782228254504347");
+    REQUIRE(mut == Field("136818765855892189855936266835341"));
+    mut -= Field("71524523955960569679313077801427");
+    REQUIRE(mut == Field("65294241899931620176623189033914"));
+    mut *= Field("71596084536397942517475769994022");
+    REQUIRE(mut == Field("3483606200471233229728911897651"));
+    mut /= Field("184172709820650340008955605392866");
+    REQUIRE(mut == Field("36186803296795972341122270567397"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("234767418488394023442994264829316"));
+
+    REQUIRE(a.to_string() == "212621609564857188770219750817232");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("212621609564857188770219750817232");
+    Field max("321725171581829393525996582209700");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("2140818898709944888463195219 _ 2017319436655446628200895469 (mod 2^91 - 45 == 2475880078570760549798248403)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<91, 45> Field;
+
+    Field a("2140818898709944888463195219");
+    Field b("2017319436655446628200895469");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("1682258256794630966865842285"));
+    REQUIRE(a - b == Field("123499462054498260262299750"));
+    REQUIRE(b - a == Field("2352380616516262289535948653"));
+    REQUIRE(a * b == Field("1315410240532548646582057567"));
+    REQUIRE(a / b == Field("1247345828086945837990965379"));
+
+    Field mut("10590958147260410918094370");
+    mut += Field("253579990277055881446927410");
+    REQUIRE(mut == Field("264170948424316292365021780"));
+    mut -= Field("1861745306956699189103195711");
+    REQUIRE(mut == Field("878305720038377653060074472"));
+    mut *= Field("320846629782626421867854951");
+    REQUIRE(mut == Field("1645647415310756976477356939"));
+    mut /= Field("192484618287543893206477389");
+    REQUIRE(mut == Field("418840499192591642148990408"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("1204426468190425288919482388"));
+
+    REQUIRE(a.to_string() == "2140818898709944888463195219");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("2017319436655446628200895469");
+    Field max("2140818898709944888463195219");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("25175891820004173468 _ 1027878641792245405936 (mod 2^70 - 35 == 1180591620717411303389)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<70, 35> Field;
+
+    Field a("25175891820004173468");
+    Field b("1027878641792245405936");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("1053054533612249579404"));
+    REQUIRE(a - b == Field("177888870745170070921"));
+    REQUIRE(b - a == Field("1002702749972241232468"));
+    REQUIRE(a * b == Field("713437948933370618771"));
+    REQUIRE(a / b == Field("909084451794956746131"));
+
+    Field mut("695312870508908219289");
+    mut += Field("716472765374618270959");
+    REQUIRE(mut == Field("231194015166115186859"));
+    mut -= Field("614112077843473577780");
+    REQUIRE(mut == Field("797673558040052912468"));
+    mut *= Field("234501862766389060459");
+    REQUIRE(mut == Field("470009906485830122741"));
+    mut /= Field("830618558306253268640");
+    REQUIRE(mut == Field("688997251282076888492"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("761236309344679136959"));
+
+    REQUIRE(a.to_string() == "25175891820004173468");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("0025175891820004173468");
+    Field max("1027878641792245405936");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("2127831179603764829278 _ 370758729420628207766 (mod 2^71 - 231 == 2361183241434822606617)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<71, 231> Field;
+
+    Field a("2127831179603764829278");
+    Field b("370758729420628207766");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("137406667589570430427"));
+    REQUIRE(a - b == Field("1757072450183136621512"));
+    REQUIRE(b - a == Field("604110791251685985105"));
+    REQUIRE(a * b == Field("1235062159291644362991"));
+    REQUIRE(a / b == Field("369506240985540851119"));
+
+    Field mut("43981800337287652776");
+    mut += Field("569314445541128987924");
+    REQUIRE(mut == Field("613296245878416640700"));
+    mut -= Field("2011797451234415929025");
+    REQUIRE(mut == Field("962682036078823318292"));
+    mut *= Field("1241546895227761170095");
+    REQUIRE(mut == Field("324338685566832608349"));
+    mut /= Field("325230594318578686173");
+    REQUIRE(mut == Field("170186412742397292923"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("1819560124947962594057"));
+
+    REQUIRE(a.to_string() == "2127831179603764829278");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("0370758729420628207766");
+    Field max("2127831179603764829278");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("1160112182563208560007063768788918001 _ 3691297666553145471325103187848896850 (mod 2^122 - 3 == 5316911983139663491615228241121378301)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<122, 3> Field;
+
+    Field a("1160112182563208560007063768788918001");
+    Field b("3691297666553145471325103187848896850");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("4851409849116354031332166956637814851"));
+    REQUIRE(a - b == Field("2785726499149726580297188822061399452"));
+    REQUIRE(b - a == Field("2531185483989936911318039419059978849"));
+    REQUIRE(a * b == Field("2882561826246446334951497790734175530"));
+    REQUIRE(a / b == Field("154821372214786775841386769039664957"));
+
+    Field mut("4950058090991352919528377894092077448");
+    mut += Field("4546922795782236106076168768182300465");
+    REQUIRE(mut == Field("4180068903633925533989318421152999612"));
+    mut -= Field("1034023335990594972288344576104015661");
+    REQUIRE(mut == Field("3146045567643330561700973845048983951"));
+    mut *= Field("1708080953423907399169144634662729740");
+    REQUIRE(mut == Field("2695194659428940690528461565189120952"));
+    mut /= Field("2086644567687592299029189813853283756");
+    REQUIRE(mut == Field("1544571187834260843853443150881345102"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("3920676032730058005545229811121912497"));
+
+    REQUIRE(a.to_string() == "1160112182563208560007063768788918001");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("1160112182563208560007063768788918001");
+    Field max("3691297666553145471325103187848896850");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("2603623695132192260780167636438285 _ 2666744465390117290781107300520392 (mod 2^112 - 75 == 5192296858534827628530496329220021)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<112, 75> Field;
+
+    Field a("2603623695132192260780167636438285");
+    Field b("2666744465390117290781107300520392");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("78071301987481923030778607738656"));
+    REQUIRE(a - b == Field("5129176088276902598529556665137914"));
+    REQUIRE(b - a == Field("63120770257925030000939664082107"));
+    REQUIRE(a * b == Field("304677482432956750172794989522597"));
+    REQUIRE(a / b == Field("3606295068587295326417307264722642"));
+
+    Field mut("3791762206855428425335113869512619");
+    mut += Field("3891884859126043343950860942257961");
+    REQUIRE(mut == Field("2491350207446644140755478482550559"));
+    mut -= Field("653851780199355351432471297862339");
+    REQUIRE(mut == Field("1837498427247288789323007184688220"));
+    mut *= Field("48794088410435058604101393349283");
+    REQUIRE(mut == Field("106522708509991246540530153281607"));
+    mut /= Field("2231366065553350389210472813474746");
+    REQUIRE(mut == Field("773184346137458015779695579879571"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("2352467042308762946210515596392184"));
+
+    REQUIRE(a.to_string() == "2603623695132192260780167636438285");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("2603623695132192260780167636438285");
+    Field max("2666744465390117290781107300520392");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("5047109 _ 5290440 (mod 2^23 - 15 == 8388593)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<23, 15> Field;
+
+    Field a("5047109");
+    Field b("5290440");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("1948956"));
+    REQUIRE(a - b == Field("8145262"));
+    REQUIRE(b - a == Field("243331"));
+    REQUIRE(a * b == Field("7337601"));
+    REQUIRE(a / b == Field("6432180"));
+
+    Field mut("6675340");
+    mut += Field("4497182");
+    REQUIRE(mut == Field("2783929"));
+    mut -= Field("4869514");
+    REQUIRE(mut == Field("6303008"));
+    mut *= Field("3543954");
+    REQUIRE(mut == Field("5543582"));
+    mut /= Field("531545");
+    REQUIRE(mut == Field("2142211"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("4319826"));
+
+    REQUIRE(a.to_string() == "5047109");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("5047109");
+    Field max("5290440");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("1247533526716445485782266925260597631535924 _ 1919890974810995253773798015208745225720079 (mod 2^141 - 9 == 2787593149816327892691964784081045188247543)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<141, 9> Field;
+
+    Field a("1247533526716445485782266925260597631535924");
+    Field b("1919890974810995253773798015208745225720079");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("379831351711112846864100156388297669008460"));
+    REQUIRE(a - b == Field("2115235701721778124700433694132897594063388"));
+    REQUIRE(b - a == Field("672357448094549767991531089948147594184155"));
+    REQUIRE(a * b == Field("1420778301737273742279832937425786930769340"));
+    REQUIRE(a / b == Field("573971373766453633594604421943619919865646"));
+
+    Field mut("1524170286659863078062503603265726058958401");
+    mut += Field("264032240979913980284811069155319629021124");
+    REQUIRE(mut == Field("1788202527639777058347314672421045687979525"));
+    mut -= Field("2628535916458016041365147046112475107426695");
+    REQUIRE(mut == Field("1947259760998088909674132410389615768800373"));
+    mut *= Field("2395358482274474202645949650850723043100072");
+    REQUIRE(mut == Field("1370171074631209966099940851061888892209266"));
+    mut /= Field("941640049466566434998509834982046727565906");
+    REQUIRE(mut == Field("1448133396918924698190704369861895978866053"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("2334115960182790060482388917674947115305601"));
+
+    REQUIRE(a.to_string() == "1247533526716445485782266925260597631535924");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("1247533526716445485782266925260597631535924");
+    Field max("1919890974810995253773798015208745225720079");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("231727960987233666960852319027230762046224825855771799 _ 493656568478984940817804119237906729189396780438505857 (mod 2^179 - 49 == 766247770432944429179173513575154591809369561091801039)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<179, 49> Field;
+
+    Field a("231727960987233666960852319027230762046224825855771799");
+    Field b("493656568478984940817804119237906729189396780438505857");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("725384529466218607778656438265137491235621606294277656"));
+    REQUIRE(a - b == Field("504319162941193155322221713364478624666197606509066981"));
+    REQUIRE(b - a == Field("261928607491751273856951800210675967143171954582734058"));
+    REQUIRE(a * b == Field("305649779435482080742553502096132612330896897019942100"));
+    REQUIRE(a / b == Field("385473547714535220485071880432318288675947893226864839"));
+
+    Field mut("116736973721956639941445066113853673787258250499652208");
+    mut += Field("714119201769972785574838641918222496918842111112500014");
+    REQUIRE(mut == Field("64608405058984996337110194456921578896730800520351183"));
+    mut -= Field("252572058287066304873187796171558222327283346154769994");
+    REQUIRE(mut == Field("578284117204863120643095911860517948378817015457382228"));
+    mut *= Field("160552486520909275316715539717590511810795181049758536");
+    REQUIRE(mut == Field("376272814991710068406750252653184239069298771300775845"));
+    mut /= Field("277828179705835561978469705744261419840963971530963397");
+    REQUIRE(mut == Field("237065368560900073009570392030119384084259792327578245"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("292116509448273453489521144221612287232654125911299430"));
+
+    REQUIRE(a.to_string() == "231727960987233666960852319027230762046224825855771799");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("231727960987233666960852319027230762046224825855771799");
+    Field max("493656568478984940817804119237906729189396780438505857");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("36440583446580796660159906 _ 47881332511475364044024953 (mod 2^86 - 35 == 77371252455336267181195229)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<86, 35> Field;
+
+    Field a("36440583446580796660159906");
+    Field b("47881332511475364044024953");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("6950663502719893522989630"));
+    REQUIRE(a - b == Field("65930503390441699797330182"));
+    REQUIRE(b - a == Field("11440749064894567383865047"));
+    REQUIRE(a * b == Field("41283582784035530677267858"));
+    REQUIRE(a / b == Field("72252485860841218767373860"));
+
+    Field mut("22369657872527258032669561");
+    mut += Field("63154852186024506489350905");
+    REQUIRE(mut == Field("8153257603215497340825237"));
+    mut -= Field("68417606176949829882822183");
+    REQUIRE(mut == Field("17106903881601934639198283"));
+    mut *= Field("9716858219750856987087126");
+    REQUIRE(mut == Field("34653926742144227950603330"));
+    mut /= Field("18306527644544730135906099");
+    REQUIRE(mut == Field("37193636239832421097554902"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("5784757953716379281968721"));
+
+    REQUIRE(a.to_string() == "36440583446580796660159906");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("36440583446580796660159906");
+    Field max("47881332511475364044024953");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("57199672121626429 _ 40629537152437173 (mod 2^57 - 13 == 144115188075855859)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<57, 13> Field;
+
+    Field a("57199672121626429");
+    Field b("40629537152437173");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("97829209274063602"));
+    REQUIRE(a - b == Field("16570134969189256"));
+    REQUIRE(b - a == Field("127545053106666603"));
+    REQUIRE(a * b == Field("54935770478515200"));
+    REQUIRE(a / b == Field("76354553087532120"));
+
+    Field mut("74418008579836773");
+    mut += Field("114508308236536289");
+    REQUIRE(mut == Field("44811128740517203"));
+    mut -= Field("17314201631831599");
+    REQUIRE(mut == Field("27496927108685604"));
+    mut *= Field("135545410197300593");
+    REQUIRE(mut == Field("19588053236781391"));
+    mut /= Field("17150935668881407");
+    REQUIRE(mut == Field("57673468727220929"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("46072832718406621"));
+
+    REQUIRE(a.to_string() == "57199672121626429");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("40629537152437173");
+    Field max("57199672121626429");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("1379613417567 _ 949072849012 (mod 2^41 - 21 == 2199023255531)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<41, 21> Field;
+
+    Field a("1379613417567");
+    Field b("949072849012");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("129663011048"));
+    REQUIRE(a - b == Field("430540568555"));
+    REQUIRE(b - a == Field("1768482686976"));
+    REQUIRE(a * b == Field("566214825945"));
+    REQUIRE(a / b == Field("1726370368383"));
+
+    Field mut("1897449179156");
+    mut += Field("578411235440");
+    REQUIRE(mut == Field("276837159065"));
+    mut -= Field("1101249684921");
+    REQUIRE(mut == Field("1374610729675"));
+    mut *= Field("438759249389");
+    REQUIRE(mut == Field("141165674158"));
+    mut /= Field("257033843930");
+    REQUIRE(mut == Field("249085967815"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("1131661074097"));
+
+    REQUIRE(a.to_string() == "1379613417567");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("0949072849012");
+    Field max("1379613417567");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("114818871754618352617332072148318473006332414989197005322 _ 6679602225067223802814622764534745496162324158483474103457 (mod 2^193 - 31 == 12554203470773361527671578846415332832204710888928069025761)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<193, 31> Field;
+
+    Field a("114818871754618352617332072148318473006332414989197005322");
+    Field b("6679602225067223802814622764534745496162324158483474103457");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("6794421096821842155431954836683063969168656573472671108779"));
+    REQUIRE(a - b == Field("5989420117460756077474288154028905809048719145433791927626"));
+    REQUIRE(b - a == Field("6564783353312605450197290692386427023155991743494277098135"));
+    REQUIRE(a * b == Field("9644355159357339219502515259797414642242085161179563190959"));
+    REQUIRE(a / b == Field("7159877388037660570744995936535943617660061204051009835019"));
+
+    Field mut("9610779113109573975644268680656439356794934600464825050309");
+    mut += Field("3470004185384607869289091332076190384587635945725678597173");
+    REQUIRE(mut == Field("526579827720820317261781166317296909177859657262434621721"));
+    mut -= Field("10984593354917943206645511783824686258890338392876858935574");
+    REQUIRE(mut == Field("2096189943576238638287848228907943482492232153313644711908"));
+    mut *= Field("2455781672011659741624019671802330631633704883856504462332");
+    REQUIRE(mut == Field("7753875746762341772163533600766736725986355676920257709205"));
+    mut /= Field("93522898852054094838178904594499839473187033653614900325");
+    REQUIRE(mut == Field("11505268990907015797583994988794801178019186728366623880036"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("10461749726842366174663756708116202878230012204143618716399"));
+
+    REQUIRE(a.to_string() == "114818871754618352617332072148318473006332414989197005322");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("0114818871754618352617332072148318473006332414989197005322");
+    Field max("6679602225067223802814622764534745496162324158483474103457");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("3252787289414997036072499285 _ 368303715331630910051382256 (mod 2^93 - 25 == 9903520314283042199192993767)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<93, 25> Field;
+
+    Field a("3252787289414997036072499285");
+    Field b("368303715331630910051382256");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("3621091004746627946123881541"));
+    REQUIRE(a - b == Field("2884483574083366126021117029"));
+    REQUIRE(b - a == Field("7019036740199676073171876738"));
+    REQUIRE(a * b == Field("5653326674803994489797021630"));
+    REQUIRE(a / b == Field("5476132374295725110945002610"));
+
+    Field mut("7002399009614664045936484998");
+    mut += Field("2353100367430429943752435742");
+    REQUIRE(mut == Field("9355499377045093989688920740"));
+    mut -= Field("2515225738566885026103703827");
+    REQUIRE(mut == Field("6840273638478208963585216913"));
+    mut *= Field("5517661554717962876510683099");
+    REQUIRE(mut == Field("504811576892979683233721851"));
+    mut /= Field("3765232051100397217106321265");
+    REQUIRE(mut == Field("594921912393700740101341396"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("4502687753487657703989553436"));
+
+    REQUIRE(a.to_string() == "3252787289414997036072499285");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("0368303715331630910051382256");
+    Field max("3252787289414997036072499285");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("4207653252107331766649 _ 15531271273751948368588 (mod 2^74 - 35 == 18889465931478580854749)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<74, 35> Field;
+
+    Field a("4207653252107331766649");
+    Field b("15531271273751948368588");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("849458594380699280488"));
+    REQUIRE(a - b == Field("7565847909833964252810"));
+    REQUIRE(b - a == Field("11323618021644616601939"));
+    REQUIRE(a * b == Field("1742597613600678631824"));
+    REQUIRE(a / b == Field("18516280886455934794048"));
+
+    Field mut("16787975273158391689361");
+    mut += Field("2849259045411056819461");
+    REQUIRE(mut == Field("747768387090867654073"));
+    mut -= Field("1009757880153290427110");
+    REQUIRE(mut == Field("18627476438416158081712"));
+    mut *= Field("6343909792017710619261");
+    REQUIRE(mut == Field("8033181791298715752309"));
+    mut /= Field("8361470969988778283204");
+    REQUIRE(mut == Field("469130330884630221508"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("2446682066560593907151"));
+
+    REQUIRE(a.to_string() == "4207653252107331766649");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("04207653252107331766649");
+    Field max("15531271273751948368588");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("28208817850784639562973896489980695603591813334099313675 _ 610473771007383308791115745134050351141133724549657889885 (mod 2^190 - 11 == 1569275433846670190958947355801916604025588861116008628213)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<190, 11> Field;
+
+    Field a("28208817850784639562973896489980695603591813334099313675");
+    Field b("610473771007383308791115745134050351141133724549657889885");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("638682588858167948354089641624031046744725537883757203560"));
+    REQUIRE(a - b == Field("987010480690071521730805507157846948488046949900450052003"));
+    REQUIRE(b - a == Field("582264953156598669228141848644069655537541911215558576210"));
+    REQUIRE(a * b == Field("131911751839772016647443612806181783549643219854747230894"));
+    REQUIRE(a / b == Field("972806653259193856298536428907474304658184578320599883295"));
+
+    Field mut("1411435521252852176415129057008760952418013464384378275455");
+    mut += Field("1379980987206333439807881215113082395986412321358728353295");
+    REQUIRE(mut == Field("1222141074612515425264062916319926744378836924627098000537"));
+    mut -= Field("1418521228410784137061939516447423202177244997906077268634");
+    REQUIRE(mut == Field("1372895280048401479161070755674420146227180787837029360116"));
+    mut *= Field("589271493575072855132182334516047593174051325599141816834");
+    REQUIRE(mut == Field("380145601941264755998892595179263282009521513008379214093"));
+    mut /= Field("775729558749946738059282225225676293167286763374546665702");
+    REQUIRE(mut == Field("837694170783729344197799617384432519095726870685441322213"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("140519091396105155190613393835752128340341599280468902209"));
+
+    REQUIRE(a.to_string() == "28208817850784639562973896489980695603591813334099313675");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("028208817850784639562973896489980695603591813334099313675");
+    Field max("610473771007383308791115745134050351141133724549657889885");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("10145119157876259278288 _ 12022459293767200084544 (mod 2^74 - 35 == 18889465931478580854749)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<74, 35> Field;
+
+    Field a("10145119157876259278288");
+    Field b("12022459293767200084544");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("3278112520164878508083"));
+    REQUIRE(a - b == Field("17012125795587640048493"));
+    REQUIRE(b - a == Field("1877340135890940806256"));
+    REQUIRE(a * b == Field("11720839102371433682703"));
+    REQUIRE(a / b == Field("3644218139387383524037"));
+
+    Field mut("510985485213457726830");
+    mut += Field("11624361893905214673784");
+    REQUIRE(mut == Field("12135347379118672400614"));
+    mut -= Field("11489652990698882560842");
+    REQUIRE(mut == Field("645694388419789839772"));
+    mut *= Field("4374579965215605809591");
+    REQUIRE(mut == Field("12036815358728608194029"));
+    mut /= Field("522648389857720956334");
+    REQUIRE(mut == Field("2958814014456499404420"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("10190124581587189943202"));
+
+    REQUIRE(a.to_string() == "10145119157876259278288");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("10145119157876259278288");
+    Field max("12022459293767200084544");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("1077613708872748882082429770126 _ 427766321612723647100816898837 (mod 2^100 - 15 == 1267650600228229401496703205361)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<100, 15> Field;
+
+    Field a("1077613708872748882082429770126");
+    Field b("427766321612723647100816898837");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("237729430257243127686543463602"));
+    REQUIRE(a - b == Field("649847387260025234981612871289"));
+    REQUIRE(b - a == Field("617803212968204166515090334072"));
+    REQUIRE(a * b == Field("78669952254302040766825800235"));
+    REQUIRE(a / b == Field("590186451559778494799445613331"));
+
+    Field mut("760027230778481900909258189650");
+    mut += Field("412666082895606640687071164343");
+    REQUIRE(mut == Field("1172693313674088541596329353993"));
+    mut -= Field("646312905849947761962664327174");
+    REQUIRE(mut == Field("526380407824140779633665026819"));
+    mut *= Field("463341123364615948568993616350");
+    REQUIRE(mut == Field("494428812366741823743534881798"));
+    mut /= Field("542783035707769477009891402968");
+    REQUIRE(mut == Field("739491756571302906709113219728"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("972692614350860753011412478854"));
+
+    REQUIRE(a.to_string() == "1077613708872748882082429770126");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("0427766321612723647100816898837");
+    Field max("1077613708872748882082429770126");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("5326179053069141132762068401 _ 352425190886242027600484390 (mod 2^93 - 25 == 9903520314283042199192993767)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<93, 25> Field;
+
+    Field a("5326179053069141132762068401");
+    Field b("352425190886242027600484390");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("5678604243955383160362552791"));
+    REQUIRE(a - b == Field("4973753862182899105161584011"));
+    REQUIRE(b - a == Field("4929766452100143094031409756"));
+    REQUIRE(a * b == Field("6902444467933884051141024639"));
+    REQUIRE(a / b == Field("4437726903893791547617688251"));
+
+    Field mut("101158688117149205614828827");
+    mut += Field("530703833187859744024427061");
+    REQUIRE(mut == Field("631862521305008949639255888"));
+    mut -= Field("279755965663105747459681430");
+    REQUIRE(mut == Field("352106555641903202179574458"));
+    mut *= Field("9427314223905541050480217883");
+    REQUIRE(mut == Field("6344695354377304717112504806"));
+    mut /= Field("3287338861916295377789730209");
+    REQUIRE(mut == Field("4550853860751580145954229956"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("8813521463021056090778246659"));
+
+    REQUIRE(a.to_string() == "5326179053069141132762068401");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("0352425190886242027600484390");
+    Field max("5326179053069141132762068401");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("11008617911048749972876458239183212627896972 _ 8998088957964924729094927088317900598014147 (mod 2^143 - 69 == 11150372599265311570767859136324180752990139)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<143, 69> Field;
+
+    Field a("11008617911048749972876458239183212627896972");
+    Field b("8998088957964924729094927088317900598014147");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("8856334269748363131203526191176932472920980"));
+    REQUIRE(a - b == Field("2010528953083825243781531150865312029882825"));
+    REQUIRE(b - a == Field("9139843646181486326986327985458868723107314"));
+    REQUIRE(a * b == Field("3078813466053515423131495669352882014117626"));
+    REQUIRE(a / b == Field("4377237929027169449106649974358810272323869"));
+
+    Field mut("8831303382849056298177214557082519263058115");
+    mut += Field("4930667905744764774631734559336404958330191");
+    REQUIRE(mut == Field("2611598689328509502041089980094743468398167"));
+    mut -= Field("4055716477991923230598144341546429813809338");
+    REQUIRE(mut == Field("9706254810601897842210804774872494407578968"));
+    mut *= Field("7820152241958104980905223600532857285773344");
+    REQUIRE(mut == Field("6030418580537957010170962672944692747619481"));
+    mut /= Field("6545446757718761966035550555206659605510630");
+    REQUIRE(mut == Field("976399442081780099691947742924817361285226"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("6825243148817820239452160462220667296155343"));
+
+    REQUIRE(a.to_string() == "11008617911048749972876458239183212627896972");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("08998088957964924729094927088317900598014147");
+    Field max("11008617911048749972876458239183212627896972");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("302236844119514660142885471798 _ 338665274271048773993753615617 (mod 2^99 - 115 == 633825300114114700748351602573)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<99, 115> Field;
+
+    Field a("302236844119514660142885471798");
+    Field b("338665274271048773993753615617");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("7076818276448733388287484842"));
+    REQUIRE(a - b == Field("597396869962580586897483458754"));
+    REQUIRE(b - a == Field("36428430151534113850868143819"));
+    REQUIRE(a * b == Field("538789169583799138977954099503"));
+    REQUIRE(a / b == Field("379266263564926083577929393638"));
+
+    Field mut("93721026948793144358231847465");
+    mut += Field("360974597302363849680509328799");
+    REQUIRE(mut == Field("454695624251156994038741176264"));
+    mut -= Field("630235940924282915865106776193");
+    REQUIRE(mut == Field("458284983440988778921986002644"));
+    mut *= Field("163857429962873706887919498146");
+    REQUIRE(mut == Field("385680495274058658427145099993"));
+    mut /= Field("9722915582305668504124668982");
+    REQUIRE(mut == Field("420020515238954061923891946275"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("279537230266188884226497084994"));
+
+    REQUIRE(a.to_string() == "302236844119514660142885471798");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("302236844119514660142885471798");
+    Field max("338665274271048773993753615617");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("369685681652580208384675997787386286562309196528214746 _ 71203417280208915174557424342236155182507146785449442 (mod 2^179 - 49 == 766247770432944429179173513575154591809369561091801039)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<179, 49> Field;
+
+    Field a("369685681652580208384675997787386286562309196528214746");
+    Field b("71203417280208915174557424342236155182507146785449442");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("440889098932789123559233422129622441744816343313664188"));
+    REQUIRE(a - b == Field("298482264372371293210118573445150131379802049742765304"));
+    REQUIRE(b - a == Field("467765506060573135969054940130004460429567511349035735"));
+    REQUIRE(a * b == Field("80792670412127148320393660592017650794631045337578430"));
+    REQUIRE(a / b == Field("168165262773131903032569500814182935621755877004633999"));
+
+    Field mut("739095999603957158098145647313406324341667734726010521");
+    mut += Field("241295519522066763871310437643396982613076461148799272");
+    REQUIRE(mut == Field("214143748693079492790282571381648715145374634783008754"));
+    mut -= Field("635500702799361553784738265922810303398505414433135454");
+    REQUIRE(mut == Field("344890816326662368184717819033993003556238781441674339"));
+    mut *= Field("86401387833327000585723993489265427214988620411454377");
+    REQUIRE(mut == Field("426076593869989191449436169771553759459745628934589478"));
+    mut /= Field("602554123077249565548868668539738414933258647491088975");
+    REQUIRE(mut == Field("12583611242511674875324456236661510299230280428780883"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("690111999200232175592368017807445125122686977288409652"));
+
+    REQUIRE(a.to_string() == "369685681652580208384675997787386286562309196528214746");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("071203417280208915174557424342236155182507146785449442");
+    Field max("369685681652580208384675997787386286562309196528214746");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("347536039857963114 _ 117071604526311346 (mod 2^59 - 55 == 576460752303423433)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<59, 55> Field;
+
+    Field a("347536039857963114");
+    Field b("117071604526311346");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("464607644384274460"));
+    REQUIRE(a - b == Field("230464435331651768"));
+    REQUIRE(b - a == Field("345996316971771665"));
+    REQUIRE(a * b == Field("280356424266247239"));
+    REQUIRE(a / b == Field("388881968039891996"));
+
+    Field mut("284244555933303608");
+    mut += Field("469601275199563443");
+    REQUIRE(mut == Field("177385078829443618"));
+    mut -= Field("32870657385294156");
+    REQUIRE(mut == Field("144514421444149462"));
+    mut *= Field("56679471327060035");
+    REQUIRE(mut == Field("298595977271919810"));
+    mut /= Field("571421337018411761");
+    REQUIRE(mut == Field("13640502598650996"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("220311835851713319"));
+
+    REQUIRE(a.to_string() == "347536039857963114");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("117071604526311346");
+    Field max("347536039857963114");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("11274768969182245387779426697250115682597710418807486702 _ 19709238266411975292066464322399493150205124988265309872 (mod 2^184 - 33 == 24519928653854221733733552434404946937899825954937634783)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<184, 33> Field;
+
+    Field a("11274768969182245387779426697250115682597710418807486702");
+    Field b("19709238266411975292066464322399493150205124988265309872");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("6464078581739998946112338585244661894903009452135161791"));
+    REQUIRE(a - b == Field("16085459356624491829446514809255569470292411385479811613"));
+    REQUIRE(b - a == Field("8434469297229729904287037625149377467607414569457823170"));
+    REQUIRE(a * b == Field("16377648044998210784442201921513429062235085776752075230"));
+    REQUIRE(a / b == Field("22796005864219448324031889846476723025300144517113597833"));
+
+    Field mut("16930326823198756558648718279454409718146472433842342398");
+    mut += Field("8687254561206474947895089083318268336902216098219371893");
+    REQUIRE(mut == Field("1097652730551009772810254928367731117148862577124079508"));
+    mut -= Field("14870330213666243819686220158130211797725774763589316423");
+    REQUIRE(mut == Field("10747251170738987686857587204642466257322913768472397868"));
+    mut *= Field("12043150778190676581882339141093490243536268508991239266");
+    REQUIRE(mut == Field("2378368951399251200918147798423759497693513035330180505"));
+    mut /= Field("18386826889018905752213040855354797529759627350680157206");
+    REQUIRE(mut == Field("9952428084451393006982306524943235665507755756515233004"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("1226749779547589523135860385702390291492519722365139660"));
+
+    REQUIRE(a.to_string() == "11274768969182245387779426697250115682597710418807486702");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("11274768969182245387779426697250115682597710418807486702");
+    Field max("19709238266411975292066464322399493150205124988265309872");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("208022899590179558463742615523706023031306846957 _ 726879209958185041060740636932556651140056237679 (mod 2^159 - 91 == 730750818665451459101842416358141509827966271397)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<159, 91> Field;
+
+    Field a("208022899590179558463742615523706023031306846957");
+    Field b("726879209958185041060740636932556651140056237679");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("204151290882913140422640836098121164343396813239"));
+    REQUIRE(a - b == Field("211894508297445976504844394949290881719216880675"));
+    REQUIRE(b - a == Field("518856310368005482596998021408850628108749390722"));
+    REQUIRE(a * b == Field("200908848863958777598542180042299992582877548433"));
+    REQUIRE(a / b == Field("154700585392269786039330185132075821369203402587"));
+
+    Field mut("529645426348211625427907833537048520529032608813");
+    mut += Field("671010356224305573471328796943968668736095374308");
+    REQUIRE(mut == Field("469904963907065739797394214122875679437161711724"));
+    mut -= Field("58567897069106190163967596191750445129936959439");
+    REQUIRE(mut == Field("411337066837959549633426617931125234307224752285"));
+    mut *= Field("523077946884359376906318771502936952547909823925");
+    REQUIRE(mut == Field("424379297604916173360301867081533583502924946322"));
+    mut /= Field("516470791971988728340408114231880683568640044565");
+    REQUIRE(mut == Field("354493340610184190490602380057969391945755133629"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("401714744882327330736653210600740117557784604242"));
+
+    REQUIRE(a.to_string() == "208022899590179558463742615523706023031306846957");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("208022899590179558463742615523706023031306846957");
+    Field max("726879209958185041060740636932556651140056237679");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("1445145250124977425647000638572734072569 _ 3282424396585365615704332522815526488447 (mod 2^133 - 99 == 10889035741470030830827987437816582766493)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<133, 99> Field;
+
+    Field a("1445145250124977425647000638572734072569");
+    Field b("3282424396585365615704332522815526488447");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("4727569646710343041351333161388260561016"));
+    REQUIRE(a - b == Field("9051756595009642640770655553573790350615"));
+    REQUIRE(b - a == Field("1837279146460388190057331884242792415878"));
+    REQUIRE(a * b == Field("4269851490069337456800822437736943067642"));
+    REQUIRE(a / b == Field("9832872874881506482188300977540977566589"));
+
+    Field mut("9788631720144128681999219949798871007321");
+    mut += Field("2524017608054298904900664401952378366660");
+    REQUIRE(mut == Field("1423613586728396756071896913934666607488"));
+    mut -= Field("4446836407677973025255411711261683970389");
+    REQUIRE(mut == Field("7865812920520454561644472640489565403592"));
+    mut *= Field("9776422156045741408318582453549637758188");
+    REQUIRE(mut == Field("9401780039967940289054980832669506674443"));
+    mut /= Field("7207165103380083680196615988082098746858");
+    REQUIRE(mut == Field("10428143289019153057766240476652291256829"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("7411190101397628049573978241018703956976"));
+
+    REQUIRE(a.to_string() == "1445145250124977425647000638572734072569");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("1445145250124977425647000638572734072569");
+    Field max("3282424396585365615704332522815526488447");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("383965213678418785772 _ 302380059626764264718 (mod 2^69 - 19 == 590295810358705651693)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<69, 19> Field;
+
+    Field a("383965213678418785772");
+    Field b("302380059626764264718");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("96049462946477398797"));
+    REQUIRE(a - b == Field("81585154051654521054"));
+    REQUIRE(b - a == Field("508710656307051130639"));
+    REQUIRE(a * b == Field("528017767497374858428"));
+    REQUIRE(a / b == Field("304659675055680876594"));
+
+    Field mut("220518444022938332981");
+    mut += Field("8753838043771051499");
+    REQUIRE(mut == Field("229272282066709384480"));
+    mut -= Field("236110728159132472028");
+    REQUIRE(mut == Field("583457364266282564145"));
+    mut *= Field("179049881606315780579");
+    REQUIRE(mut == Field("447607666172713486731"));
+    mut /= Field("400679526949286617674");
+    REQUIRE(mut == Field("181718510309311428973"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("200855153949480934068"));
+
+    REQUIRE(a.to_string() == "383965213678418785772");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("302380059626764264718");
+    Field max("383965213678418785772");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("4652858524 _ 1723716502 (mod 2^34 - 41 == 17179869143)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<34, 41> Field;
+
+    Field a("4652858524");
+    Field b("1723716502");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("6376575026"));
+    REQUIRE(a - b == Field("2929142022"));
+    REQUIRE(b - a == Field("14250727121"));
+    REQUIRE(a * b == Field("2819033104"));
+    REQUIRE(a / b == Field("12240991195"));
+
+    Field mut("3779178125");
+    mut += Field("4998003055");
+    REQUIRE(mut == Field("8777181180"));
+    mut -= Field("15321622752");
+    REQUIRE(mut == Field("10635427571"));
+    mut *= Field("6092477186");
+    REQUIRE(mut == Field("16903384718"));
+    mut /= Field("13937642623");
+    REQUIRE(mut == Field("3500359824"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("506012240"));
+
+    REQUIRE(a.to_string() == "4652858524");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("1723716502");
+    Field max("4652858524");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("329071820371987543826026164598368848703445919953375 _ 380403464499333323432061726691053494397927092585645 (mod 2^169 - 643 == 748288838313422294120286634350736906063837462003069)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<169, 643> Field;
+
+    Field a("329071820371987543826026164598368848703445919953375");
+    Field b("380403464499333323432061726691053494397927092585645");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("709475284871320867258087891289422343101373012539020"));
+    REQUIRE(a - b == Field("696957194186076514514251072258052260369356289370799"));
+    REQUIRE(b - a == Field("51331644127345779606035562092684645694481172632270"));
+    REQUIRE(a * b == Field("490657952203495472216283137688395543506395844896888"));
+    REQUIRE(a / b == Field("623784418385262053963624130964922567781056298379835"));
+
+    Field mut("104738875539351870397384161808572269447052324670330");
+    mut += Field("663927592888033364794921780231575569554265426141023");
+    REQUIRE(mut == Field("20377630113962941072019307689410932937480288808284"));
+    mut -= Field("462206855767634145869710651659394021932037964516273");
+    REQUIRE(mut == Field("306459612659751089322595290380753817069279786295080"));
+    mut *= Field("377177600073084819585723601611712189733557660702564");
+    REQUIRE(mut == Field("91100814177624575811474670876142183822198555169402"));
+    mut /= Field("307759566379273026417732004256401499142824801000546");
+    REQUIRE(mut == Field("203441144306877695360543619617693878912483662260427"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("719850455371997399692830209425615311212416018956919"));
+
+    REQUIRE(a.to_string() == "329071820371987543826026164598368848703445919953375");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("329071820371987543826026164598368848703445919953375");
+    Field max("380403464499333323432061726691053494397927092585645");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("755 _ 212 (mod 2^10 - 3 == 1021)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<10, 3> Field;
+
+    Field a("755");
+    Field b("212");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("967"));
+    REQUIRE(a - b == Field("543"));
+    REQUIRE(b - a == Field("478"));
+    REQUIRE(a * b == Field("784"));
+    REQUIRE(a / b == Field("856"));
+
+    Field mut("589");
+    mut += Field("941");
+    REQUIRE(mut == Field("509"));
+    mut -= Field("549");
+    REQUIRE(mut == Field("981"));
+    mut *= Field("770");
+    REQUIRE(mut == Field("851"));
+    mut /= Field("325");
+    REQUIRE(mut == Field("455"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("641"));
+
+    REQUIRE(a.to_string() == "755");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("212");
+    Field max("755");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("15453483097 _ 9639520547 (mod 2^34 - 41 == 17179869143)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<34, 41> Field;
+
+    Field a("15453483097");
+    Field b("9639520547");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("7913134501"));
+    REQUIRE(a - b == Field("5813962550"));
+    REQUIRE(b - a == Field("11365906593"));
+    REQUIRE(a * b == Field("6224806089"));
+    REQUIRE(a / b == Field("15326391607"));
+
+    Field mut("16314657724");
+    mut += Field("4487177523");
+    REQUIRE(mut == Field("3621966104"));
+    mut -= Field("4098605498");
+    REQUIRE(mut == Field("16703229749"));
+    mut *= Field("7000479220");
+    REQUIRE(mut == Field("7874590998"));
+    mut /= Field("8849751178");
+    REQUIRE(mut == Field("14819279689"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("4125683439"));
+
+    REQUIRE(a.to_string() == "15453483097");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("09639520547");
+    Field max("15453483097");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("79439763055456965461673519763666024344060601944 _ 4673974197116372637352352716423242219890221915661 (mod 2^162 - 101 == 5846006549323611672814739330865132078623730171803)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<162, 101> Field;
+
+    Field a("79439763055456965461673519763666024344060601944");
+    Field b("4673974197116372637352352716423242219890221915661");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("4753413960171829602814026236186908244234282517605"));
+    REQUIRE(a - b == Field("1251472115262696000924060134205555883077568858086"));
+    REQUIRE(b - a == Field("4594534434060915671890679196659576195546161313717"));
+    REQUIRE(a * b == Field("2870186150823971058096966167074206559849881461285"));
+    REQUIRE(a / b == Field("5244364849193379343781967470698220618969501458976"));
+
+    Field mut("879932285254686495015519004487852020320810212775");
+    mut += Field("5386914555270840997077761196290577408121090024160");
+    REQUIRE(mut == Field("420840291201915819278540869913297349818170065132"));
+    mut -= Field("1576172234990792450063794320615567750140869184520");
+    REQUIRE(mut == Field("4690674605534735042029485880162861678301031052415"));
+    mut *= Field("4396299125447864994006154559579960429839616400206");
+    REQUIRE(mut == Field("2027211766314851860176321868621976414974628469338"));
+    mut /= Field("1264916305360902476078034601815830033516961576574");
+    REQUIRE(mut == Field("3150794203144990553451139963934224531043092865347"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("5149185639311101775892402712742472144315874971411"));
+
+    REQUIRE(a.to_string() == "79439763055456965461673519763666024344060601944");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("0079439763055456965461673519763666024344060601944");
+    Field max("4673974197116372637352352716423242219890221915661");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("23 _ 24 (mod 2^5 - 1 == 31)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<5, 1> Field;
+
+    Field a("23");
+    Field b("24");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("16"));
+    REQUIRE(a - b == Field("30"));
+    REQUIRE(b - a == Field("1"));
+    REQUIRE(a * b == Field("25"));
+    REQUIRE(a / b == Field("10"));
+
+    Field mut("11");
+    mut += Field("2");
+    REQUIRE(mut == Field("13"));
+    mut -= Field("22");
+    REQUIRE(mut == Field("22"));
+    mut *= Field("11");
+    REQUIRE(mut == Field("25"));
+    mut /= Field("3");
+    REQUIRE(mut == Field("29"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("27"));
+
+    REQUIRE(a.to_string() == "23");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("23");
+    Field max("24");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("487684683784060526184899855729497 _ 640681265840195300776476099116891 (mod 2^109 - 31 == 649037107316853453566312041152481)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<109, 31> Field;
+
+    Field a("487684683784060526184899855729497");
+    Field b("640681265840195300776476099116891");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("479328842307402373395063913693907"));
+    REQUIRE(a - b == Field("496040525260718678974735797765087"));
+    REQUIRE(b - a == Field("152996582056134774591576243387394"));
+    REQUIRE(a * b == Field("568184781455500622067265311104526"));
+    REQUIRE(a / b == Field("112547801511433550221639219110008"));
+
+    Field mut("460650139639212911238592022942531");
+    mut += Field("429964573474690572421960611484287");
+    REQUIRE(mut == Field("241577605797050030094240593274337"));
+    mut -= Field("483414853489005756171183307886942");
+    REQUIRE(mut == Field("407199859624897727489369326539876"));
+    mut *= Field("589964562709003330579794233378482");
+    REQUIRE(mut == Field("460349083980065792958347248511703"));
+    mut /= Field("265340868266354552896352966042230");
+    REQUIRE(mut == Field("257912276256119601315299252557933"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("37245478715988623300738181855638"));
+
+    REQUIRE(a.to_string() == "487684683784060526184899855729497");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("487684683784060526184899855729497");
+    Field max("640681265840195300776476099116891");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("7238137107079187050811 _ 6547833021144319031339 (mod 2^74 - 35 == 18889465931478580854749)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<74, 35> Field;
+
+    Field a("7238137107079187050811");
+    Field b("6547833021144319031339");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("13785970128223506082150"));
+    REQUIRE(a - b == Field("690304085934868019472"));
+    REQUIRE(b - a == Field("18199161845543712835277"));
+    REQUIRE(a * b == Field("12128528092136071254054"));
+    REQUIRE(a / b == Field("16043545826686027909372"));
+
+    Field mut("1359518830755312782026");
+    mut += Field("3812379300264658112875");
+    REQUIRE(mut == Field("5171898131019970894901"));
+    mut -= Field("2165336149112469101955");
+    REQUIRE(mut == Field("3006561981907501792946"));
+    mut *= Field("16046257882127784581662");
+    REQUIRE(mut == Field("7073510005736054858941"));
+    mut /= Field("9074712664066493735756");
+    REQUIRE(mut == Field("17767450720279722656070"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("13952040930635848663639"));
+
+    REQUIRE(a.to_string() == "7238137107079187050811");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("6547833021144319031339");
+    Field max("7238137107079187050811");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("34479004592757780422934 _ 41651959680329599887883 (mod 2^79 - 67 == 604462909807314587353021)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<79, 67> Field;
+
+    Field a("34479004592757780422934");
+    Field b("41651959680329599887883");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("76130964273087380310817"));
+    REQUIRE(a - b == Field("597289954719742767888072"));
+    REQUIRE(b - a == Field("7172955087571819464949"));
+    REQUIRE(a * b == Field("14850519180779054514981"));
+    REQUIRE(a / b == Field("228942873378278389448445"));
+
+    Field mut("201964584239410227859089");
+    mut += Field("396749429491317128061572");
+    REQUIRE(mut == Field("598714013730727355920661"));
+    mut -= Field("453072573222033871030");
+    REQUIRE(mut == Field("598260941157505322049631"));
+    mut *= Field("443096944336579921709001");
+    REQUIRE(mut == Field("243489665994378515463963"));
+    mut /= Field("515437400769547246182205");
+    REQUIRE(mut == Field("150174643043246291334838"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("475552390466509363422012"));
+
+    REQUIRE(a.to_string() == "34479004592757780422934");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("34479004592757780422934");
+    Field max("41651959680329599887883");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("35939182658137442283898500 _ 10995522874385717179351517 (mod 2^87 - 67 == 154742504910672534362390461)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<87, 67> Field;
+
+    Field a("35939182658137442283898500");
+    Field b("10995522874385717179351517");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("46934705532523159463250017"));
+    REQUIRE(a - b == Field("24943659783751725104546983"));
+    REQUIRE(b - a == Field("129798845126920809257843478"));
+    REQUIRE(a * b == Field("5317217617384190451301317"));
+    REQUIRE(a / b == Field("56609348593927739324312475"));
+
+    Field mut("37166706023098928526187145");
+    mut += Field("63615220409437386142976541");
+    REQUIRE(mut == Field("100781926432536314669163686"));
+    mut -= Field("103031688699421874766187092");
+    REQUIRE(mut == Field("152492742643786974265367055"));
+    mut *= Field("71767390771583402900213469");
+    REQUIRE(mut == Field("15089129485878546649309196"));
+    mut /= Field("99214877169353036710835729");
+    REQUIRE(mut == Field("154015564304015513072972377"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("6303960789504733729342598"));
+
+    REQUIRE(a.to_string() == "35939182658137442283898500");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("10995522874385717179351517");
+    Field max("35939182658137442283898500");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("576369403603416427610839762847797868107610025 _ 471677192847747197038706047811973432719135314 (mod 2^151 - 195 == 2854495385411919762116571938898990272765493053)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<151, 195> Field;
+
+    Field a("576369403603416427610839762847797868107610025");
+    Field b("471677192847747197038706047811973432719135314");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("1048046596451163624649545810659771300826745339"));
+    REQUIRE(a - b == Field("104692210755669230572133715035824435388474711"));
+    REQUIRE(b - a == Field("2749803174656250531544438223863165837377018342"));
+    REQUIRE(a * b == Field("736913746109237523087054583463409393364746147"));
+    REQUIRE(a / b == Field("2130411606245218917975371915357969082333753866"));
+
+    Field mut("995833329527022435567805273996084270124571870");
+    mut += Field("927822989487113587988814138365057200483976666");
+    REQUIRE(mut == Field("1923656319014136023556619412361141470608548536"));
+    mut -= Field("546401907197831758489031996827743501411333515");
+    REQUIRE(mut == Field("1377254411816304265067587415533397969197215021"));
+    mut *= Field("2318713925406317651579423104135577804048873675");
+    REQUIRE(mut == Field("1121065363460807505649632048308491036662120000"));
+    mut /= Field("1729498358634169202213169751784702462817596334");
+    REQUIRE(mut == Field("961629603546569699323591956716111324083310038"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("1717530355461621729100047561599879856792363342"));
+
+    REQUIRE(a.to_string() == "576369403603416427610839762847797868107610025");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("471677192847747197038706047811973432719135314");
+    Field max("576369403603416427610839762847797868107610025");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("79767543252691770381109319486047414170313488030631735360530 _ 107084615242422472515424226684033561086138916003515984013184 (mod 2^199 - 49 == 803469022129495137770981046170581301261101496891396417650639)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<199, 49> Field;
+
+    Field a("79767543252691770381109319486047414170313488030631735360530");
+    Field b("107084615242422472515424226684033561086138916003515984013184");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("186852158495114242896533546170080975256452404034147719373714"));
+    REQUIRE(a - b == Field("776151950139764435636666138972595154345276068918512168997985"));
+    REQUIRE(b - a == Field("27317071989730702134314907197986146915825427972884248652654"));
+    REQUIRE(a * b == Field("343892423700748066032457539423169665100399388704775847465321"));
+    REQUIRE(a / b == Field("452330141860711351094163176480994176187098833887027474177210"));
+
+    Field mut("642901258332108661106288780976923963784330907304864565618516");
+    mut += Field("100835544131147133233306130733162355897582019879112616770816");
+    REQUIRE(mut == Field("743736802463255794339594911710086319681912927183977182389332"));
+    mut -= Field("207290325676440274007891634130780853582277167412398247873572");
+    REQUIRE(mut == Field("536446476786815520331703277579305466099635759771578934515760"));
+    mut *= Field("24490083196388357980783642936400020063376021452511362516318");
+    REQUIRE(mut == Field("415416961944265446187389794406968681294726258491247641959022"));
+    mut /= Field("56846239737118136514722852549868584806294650396015953151926");
+    REQUIRE(mut == Field("106789191244003197308872379627574782360808727203263172416672"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("769787866986920065955185009288104519842683786282496421382996"));
+
+    REQUIRE(a.to_string() == "79767543252691770381109319486047414170313488030631735360530");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("079767543252691770381109319486047414170313488030631735360530");
+    Field max("107084615242422472515424226684033561086138916003515984013184");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("556031908746881042048248319344 _ 6657473648087693492970556271 (mod 2^100 - 15 == 1267650600228229401496703205361)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<100, 15> Field;
+
+    Field a("556031908746881042048248319344");
+    Field b("6657473648087693492970556271");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("562689382394968735541218875615"));
+    REQUIRE(a - b == Field("549374435098793348555277763073"));
+    REQUIRE(b - a == Field("718276165129436052941425442288"));
+    REQUIRE(a * b == Field("817943357939473940191326778979"));
+    REQUIRE(a / b == Field("350161905081681371069640719956"));
+
+    Field mut("34906124066348936936859977607");
+    mut += Field("786299767992539225355410557768");
+    REQUIRE(mut == Field("821205892058888162292270535375"));
+    mut -= Field("874294734132048220291171460533");
+    REQUIRE(mut == Field("1214561758155069343497802280203"));
+    mut *= Field("930428690227139583439535379678");
+    REQUIRE(mut == Field("221619223095085927807316733136"));
+    mut /= Field("888504716052125000224065950887");
+    REQUIRE(mut == Field("97430089690390853060694571804"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("329111171221818544155486037863"));
+
+    REQUIRE(a.to_string() == "556031908746881042048248319344");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("006657473648087693492970556271");
+    Field max("556031908746881042048248319344");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("4465 _ 2871 (mod 2^13 - 1 == 8191)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<13, 1> Field;
+
+    Field a("4465");
+    Field b("2871");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("7336"));
+    REQUIRE(a - b == Field("1594"));
+    REQUIRE(b - a == Field("6597"));
+    REQUIRE(a * b == Field("100"));
+    REQUIRE(a / b == Field("4826"));
+
+    Field mut("1633");
+    mut += Field("72");
+    REQUIRE(mut == Field("1705"));
+    mut -= Field("4316");
+    REQUIRE(mut == Field("5580"));
+    mut *= Field("2260");
+    REQUIRE(mut == Field("4851"));
+    mut /= Field("4914");
+    REQUIRE(mut == Field("106"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("1585"));
+
+    REQUIRE(a.to_string() == "4465");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("2871");
+    Field max("4465");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("90247405348 _ 239192086476 (mod 2^40 - 87 == 1099511627689)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<40, 87> Field;
+
+    Field a("90247405348");
+    Field b("239192086476");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("329439491824"));
+    REQUIRE(a - b == Field("950566946561"));
+    REQUIRE(b - a == Field("148944681128"));
+    REQUIRE(a * b == Field("681208473324"));
+    REQUIRE(a / b == Field("381767244716"));
+
+    Field mut("793306727952");
+    mut += Field("649472857576");
+    REQUIRE(mut == Field("343267957839"));
+    mut -= Field("310773967971");
+    REQUIRE(mut == Field("32493989868"));
+    mut *= Field("392495222978");
+    REQUIRE(mut == Field("697130298511"));
+    mut /= Field("425542921085");
+    REQUIRE(mut == Field("1019356777503"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("624958103735"));
+
+    REQUIRE(a.to_string() == "90247405348");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("090247405348");
+    Field max("239192086476");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("9076550372642437446248997264992537459213097593448213957 _ 11614576574699636490145618794174240896008567693220386996 (mod 2^183 - 147 == 12259964326927110866866776217202473468949912977468817261)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<183, 147> Field;
+
+    Field a("9076550372642437446248997264992537459213097593448213957");
+    Field b("11614576574699636490145618794174240896008567693220386996");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("8431162620414963069527839841964304886271752309199783692"));
+    REQUIRE(a - b == Field("9721938124869911822970154688020770032154442877696644222"));
+    REQUIRE(b - a == Field("2538026202057199043896621529181703436795470099772173039"));
+    REQUIRE(a * b == Field("4568204775070674452813475723607603509951388390817348596"));
+    REQUIRE(a / b == Field("8707299371679025023505134136577425317876857781041811587"));
+
+    Field mut("10112663524289214374028169042564022655214094761474748517");
+    mut += Field("4470701572270968885251359241813365068054169472146915265");
+    REQUIRE(mut == Field("2323400769633072392412752067174914254318351256152846521"));
+    mut -= Field("6154111160836780986136242378907740969681178013210698375");
+    REQUIRE(mut == Field("8429253935723402273143285905469646753587086220410965407"));
+    mut *= Field("2057672208600016402753647286757430289872355886098825781");
+    REQUIRE(mut == Field("8376968561033654112006548072658285912000873134727159497"));
+    mut /= Field("10614190858770127942549618342731299242256854651610948237");
+    REQUIRE(mut == Field("5987220009541529713023766707549266507298628663959670216"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("6161143793889839245403247476310264909502685507183319748"));
+
+    REQUIRE(a.to_string() == "9076550372642437446248997264992537459213097593448213957");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("09076550372642437446248997264992537459213097593448213957");
+    Field max("11614576574699636490145618794174240896008567693220386996");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("14935022805686676055951855640374717 _ 8612867075623958962428976252151185 (mod 2^115 - 67 == 41538374868278621028243970633760701)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<115, 67> Field;
+
+    Field a("14935022805686676055951855640374717");
+    Field b("8612867075623958962428976252151185");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("23547889881310635018380831892525902"));
+    REQUIRE(a - b == Field("6322155730062717093522879388223532"));
+    REQUIRE(b - a == Field("35216219138215903934721091245537169"));
+    REQUIRE(a * b == Field("19939187133339836217043536648503161"));
+    REQUIRE(a / b == Field("11328765358006279159229548453941412"));
+
+    Field mut("23484368031929036401579424998105409");
+    mut += Field("3096467382838579018140987272562707");
+    REQUIRE(mut == Field("26580835414767615419720412270668116"));
+    mut -= Field("11358346423422507376026531587376490");
+    REQUIRE(mut == Field("15222488991345108043693880683291626"));
+    mut *= Field("30150987973629030597858431037024696");
+    REQUIRE(mut == Field("13507454080253256135374697553800741"));
+    mut /= Field("23232271244542248531296612562461871");
+    REQUIRE(mut == Field("10780606298162955674521293952664722"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("28434169655129986907864393163688260"));
+
+    REQUIRE(a.to_string() == "14935022805686676055951855640374717");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("08612867075623958962428976252151185");
+    Field max("14935022805686676055951855640374717");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("34973223338385672336411423780377492366280525378 _ 12554345435884802077033662672483852071787459030 (mod 2^157 - 19 == 182687704666362864775460604089535377456991567853)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<157, 19> Field;
+
+    Field a("34973223338385672336411423780377492366280525378");
+    Field b("12554345435884802077033662672483852071787459030");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("47527568774270474413445086452861344438067984408"));
+    REQUIRE(a - b == Field("22418877902500870259377761107893640294493066348"));
+    REQUIRE(b - a == Field("160268826763861994516082842981641737162498501505"));
+    REQUIRE(a * b == Field("138166140705783416902203380891960845475171147789"));
+    REQUIRE(a / b == Field("37457304318359241695819138803402872157074045688"));
+
+    Field mut("23122881713620357110369412491497686069816532381");
+    mut += Field("62814179282364655375300441114270019424559180632");
+    REQUIRE(mut == Field("85937060995985012485669853605767705494375713013"));
+    mut -= Field("44293002639915829807635340797267005068815838931");
+    REQUIRE(mut == Field("41644058356069182678034512808500700425559874082"));
+    mut *= Field("8068239626512298844032445205038014276340891619");
+    REQUIRE(mut == Field("72076679881398053273051454995900440974204407678"));
+    mut /= Field("67808852543234852332837006630721427317222769559");
+    REQUIRE(mut == Field("165027705023722053916879673228697878258807211903"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("139079026644304704470109429864027531474944753775"));
+
+    REQUIRE(a.to_string() == "34973223338385672336411423780377492366280525378");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("12554345435884802077033662672483852071787459030");
+    Field max("34973223338385672336411423780377492366280525378");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("21098696577456144839153637 _ 11439324575742830192608864 (mod 2^85 - 19 == 38685626227668133590597613)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<85, 19> Field;
+
+    Field a("21098696577456144839153637");
+    Field b("11439324575742830192608864");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("32538021153198975031762501"));
+    REQUIRE(a - b == Field("9659372001713314646544773"));
+    REQUIRE(b - a == Field("29026254225954818944052840"));
+    REQUIRE(a * b == Field("4935178510339071146436967"));
+    REQUIRE(a / b == Field("30797775795148091748569301"));
+
+    Field mut("4400141426713473148618348");
+    mut += Field("9027178956890321251487853");
+    REQUIRE(mut == Field("13427320383603794400106201"));
+    mut -= Field("35487508382889415531494285");
+    REQUIRE(mut == Field("16625438228382512459209529"));
+    mut *= Field("32135391284586071779219667");
+    REQUIRE(mut == Field("35932658660907668088183459"));
+    mut /= Field("1714033578796274078694070");
+    REQUIRE(mut == Field("38443386800543582644136470"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("19631073574711970125185302"));
+
+    REQUIRE(a.to_string() == "21098696577456144839153637");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("11439324575742830192608864");
+    Field max("21098696577456144839153637");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("5782 _ 5154 (mod 2^13 - 1 == 8191)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<13, 1> Field;
+
+    Field a("5782");
+    Field b("5154");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("2745"));
+    REQUIRE(a - b == Field("628"));
+    REQUIRE(b - a == Field("7563"));
+    REQUIRE(a * b == Field("1570"));
+    REQUIRE(a / b == Field("3952"));
+
+    Field mut("3786");
+    mut += Field("2658");
+    REQUIRE(mut == Field("6444"));
+    mut -= Field("8020");
+    REQUIRE(mut == Field("6615"));
+    mut *= Field("4048");
+    REQUIRE(mut == Field("1141"));
+    mut /= Field("6602");
+    REQUIRE(mut == Field("5051"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("4104"));
+
+    REQUIRE(a.to_string() == "5782");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("5154");
+    Field max("5782");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("561616442865617016638324616713829806102871780 _ 557099652323959370802211598686752332552437343 (mod 2^150 - 3 == 1427247692705959881058285969449495136382746621)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<150, 3> Field;
+
+    Field a("561616442865617016638324616713829806102871780");
+    Field b("557099652323959370802211598686752332552437343");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("1118716095189576387440536215400582138655309123"));
+    REQUIRE(a - b == Field("4516790541657645836113018027077473550434437"));
+    REQUIRE(b - a == Field("1422730902164302235222172951422417662832312184"));
+    REQUIRE(a * b == Field("431202555793167791998479573728862860504095258"));
+    REQUIRE(a / b == Field("912838915158682884470645420984081010953121218"));
+
+    Field mut("1423856589595878726299133429255466546506445452");
+    mut += Field("560118835683835370708896519302792755212859790");
+    REQUIRE(mut == Field("556727732573754215949743979108764165336558621"));
+    mut -= Field("355921097171768605913679837508096079317511392");
+    REQUIRE(mut == Field("200806635401985610036064141600668086019047229"));
+    mut *= Field("1107556898559072911462473834617425280578601351");
+    REQUIRE(mut == Field("325695718241915592473216034747712153120072836"));
+    mut /= Field("713102659822021106352146015367268166019593731");
+    REQUIRE(mut == Field("391823161858242762988531772727157651835474763"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("565083249471449517513650060778416077623142878"));
+
+    REQUIRE(a.to_string() == "561616442865617016638324616713829806102871780");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("557099652323959370802211598686752332552437343");
+    Field max("561616442865617016638324616713829806102871780");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("14614509091327711758465765580462812542949674 _ 6184404930865255321598072640725931933591678 (mod 2^144 - 83 == 22300745198530623141535718272648361505980333)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<144, 83> Field;
+
+    Field a("14614509091327711758465765580462812542949674");
+    Field b("6184404930865255321598072640725931933591678");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("20798914022192967080063838221188744476541352"));
+    REQUIRE(a - b == Field("8430104160462456436867692939736880609357996"));
+    REQUIRE(b - a == Field("13870641038068166704668025332911480896622337"));
+    REQUIRE(a * b == Field("19343699036073178704880804591949949589235751"));
+    REQUIRE(a / b == Field("2036990856097010675526051213369509449112927"));
+
+    Field mut("2860864924964396966707062908868000446426001");
+    mut += Field("13490097217287349939169906275378043154948899");
+    REQUIRE(mut == Field("16350962142251746905876969184246043601374900"));
+    mut -= Field("10755856186026058136934652831533110245709326");
+    REQUIRE(mut == Field("5595105956225688768942316352712933355665574"));
+    mut *= Field("17612989841807546863271004076917623849212094");
+    REQUIRE(mut == Field("13467208960593768935921950934230926079561219"));
+    mut /= Field("9044699083138444636087067212412630719430216");
+    REQUIRE(mut == Field("14092685693528623300454702485013999725060653"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("20060259299420560800665151323191044411376578"));
+
+    REQUIRE(a.to_string() == "14614509091327711758465765580462812542949674");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("06184404930865255321598072640725931933591678");
+    Field max("14614509091327711758465765580462812542949674");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("8743 _ 14986 (mod 2^14 - 3 == 16381)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<14, 3> Field;
+
+    Field a("8743");
+    Field b("14986");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("7348"));
+    REQUIRE(a - b == Field("10138"));
+    REQUIRE(b - a == Field("6243"));
+    REQUIRE(a * b == Field("7360"));
+    REQUIRE(a / b == Field("5959"));
+
+    Field mut("10538");
+    mut += Field("8803");
+    REQUIRE(mut == Field("2960"));
+    mut -= Field("15438");
+    REQUIRE(mut == Field("3903"));
+    mut *= Field("843");
+    REQUIRE(mut == Field("14029"));
+    mut /= Field("13976");
+    REQUIRE(mut == Field("5232"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("12497"));
+
+    REQUIRE(a.to_string() == "8743");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("08743");
+    Field max("14986");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("3712938776905483565058843879752660535900886682 _ 9401532559833662925328813205724355583693699595 (mod 2^153 - 69 == 11417981541647679048466287755595961091061972923)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<153, 69> Field;
+
+    Field a("3712938776905483565058843879752660535900886682");
+    Field b("9401532559833662925328813205724355583693699595");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("1696489795091467441921369329881055028532613354"));
+    REQUIRE(a - b == Field("5729387758719499688196318429624266043269160010"));
+    REQUIRE(b - a == Field("5688593782928179360269969325971695047792812913"));
+    REQUIRE(a * b == Field("5005279973097692452571251439181847594568384609"));
+    REQUIRE(a / b == Field("6516547211408684223085321963308034229639475672"));
+
+    Field mut("3107211463308870411988923526515183091641209506");
+    mut += Field("3515670733589995106658458825255394372656715438");
+    REQUIRE(mut == Field("6622882196898865518647382351770577464297924944"));
+    mut -= Field("282675148663028929674230518542469760553161869");
+    REQUIRE(mut == Field("6340207048235836588973151833228107703744763075"));
+    mut *= Field("1830237858288680680085000352475607479208911537");
+    REQUIRE(mut == Field("3142199359619793618170996066802079433949935241"));
+    mut /= Field("1156178050156387910627837390292389070581203089");
+    REQUIRE(mut == Field("7139872160459763948145293098360545472938613563"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("7660607613964726279672718520802100667060225701"));
+
+    REQUIRE(a.to_string() == "3712938776905483565058843879752660535900886682");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("3712938776905483565058843879752660535900886682");
+    Field max("9401532559833662925328813205724355583693699595");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("252045468112954086710162354328103424194067690698986909974057 _ 149508644195741538981915878173535210383788208958675304587750 (mod 2^198 - 17 == 401734511064747568885490523085290650630550748445698208825327)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<198, 17> Field;
+
+    Field a("252045468112954086710162354328103424194067690698986909974057");
+    Field b("149508644195741538981915878173535210383788208958675304587750");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("401554112308695625692078232501638634577855899657662214561807"));
+    REQUIRE(a - b == Field("102536823917212547728246476154568213810279481740311605386307"));
+    REQUIRE(b - a == Field("299197687147535021157244046930722436820271266705386603439020"));
+    REQUIRE(a * b == Field("176828726638956898488158124015970981095897242550517742390429"));
+    REQUIRE(a / b == Field("142394880418034593260179363173186100117497886921088993209964"));
+
+    Field mut("380077346410946108738287451151556668232853353961170749126013");
+    mut += Field("371096567814719658815476029208281569380986420563026651823639");
+    REQUIRE(mut == Field("349439403160918198668272957274547586983289026078499192124325"));
+    mut -= Field("17253986964232889879764961598237217454646925358721174384793");
+    REQUIRE(mut == Field("332185416196685308788507995676310369528642100719778017739532"));
+    mut *= Field("330826525221132141804022609498052163822309614014374783186454");
+    REQUIRE(mut == Field("322874116297029719722252638953413100042827362851806719410486"));
+    mut /= Field("289788674282652042305253991865576323137098350885389752375852");
+    REQUIRE(mut == Field("76017187961481058910289564071950024860453521553623545644827"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("210923290848952039258457131005485511932987605198168826364572"));
+
+    REQUIRE(a.to_string() == "252045468112954086710162354328103424194067690698986909974057");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("149508644195741538981915878173535210383788208958675304587750");
+    Field max("252045468112954086710162354328103424194067690698986909974057");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("164676860306428113377024077537354914425589088709865829704400 _ 120203230854400706270582145479378316462715821981488527317366 (mod 2^197 - 75 == 200867255532373784442745261542645325315275374222849104412597)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<197, 75> Field;
+
+    Field a("164676860306428113377024077537354914425589088709865829704400");
+    Field b("120203230854400706270582145479378316462715821981488527317366");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("84012835628455035204860961474087905573029536468505252609169"));
+    REQUIRE(a - b == Field("44473629452027407106441932057976597962873266728377302387034"));
+    REQUIRE(b - a == Field("156393626080346377336303329484668727352402107494471802025563"));
+    REQUIRE(a * b == Field("165591050892743601980830781492061132253423562084407781440591"));
+    REQUIRE(a / b == Field("18347180679292308736198001961399541840081050657115353166502"));
+
+    Field mut("57845546732211146653079230879780790014670303696609127270812");
+    mut += Field("117253066087346009174015916347083090727777387674033848415723");
+    REQUIRE(mut == Field("175098612819557155827095147226863880742447691370642975686535"));
+    mut -= Field("176808073982316849200002377997743073835394962393059440887289");
+    REQUIRE(mut == Field("199157794369614091069838030771766132222328103200432639211843"));
+    mut *= Field("104166903068113297655346501479923337886853778716325886685903");
+    REQUIRE(mut == Field("61647530942401968631361264890050808819740893521511818798895"));
+    mut /= Field("200769658973243127267123562110059768995697639885323913168154");
+    REQUIRE(mut == Field("39674992063329772534224431558025444519427627652444007696208"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("142837542783562373563571749013288099464154048730190408472573"));
+
+    REQUIRE(a.to_string() == "164676860306428113377024077537354914425589088709865829704400");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("120203230854400706270582145479378316462715821981488527317366");
+    Field max("164676860306428113377024077537354914425589088709865829704400");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("10072695276959609105565465869585902831332538463934280593 _ 30903998046347367620274541922247385429909934159680366062 (mod 2^187 - 85 == 196159429230833773869868419475239575503198607639501078443)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<187, 85> Field;
+
+    Field a("10072695276959609105565465869585902831332538463934280593");
+    Field b("30903998046347367620274541922247385429909934159680366062");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("40976693323306976725840007791833288261242472623614646655"));
+    REQUIRE(a - b == Field("175328126461446015355159343422578092904621211943754992974"));
+    REQUIRE(b - a == Field("20831302769387758514709076052661482598577395695746085469"));
+    REQUIRE(a * b == Field("182684729421306476390670015783776240841719339215448414259"));
+    REQUIRE(a / b == Field("159041170160188851291000272589288896616666308817602658985"));
+
+    Field mut("62495020011018582714604969838878687728386730238757756425");
+    mut += Field("113050596968039104130359331900283418788191149780491992053");
+    REQUIRE(mut == Field("175545616979057686844964301739162106516577880019249748478"));
+    mut -= Field("118619094226937939803073794443191603935325412874595322046");
+    REQUIRE(mut == Field("56926522752119747041890507295970502581252467144654426432"));
+    mut *= Field("39886472832009463636022199592008447614625738168466638108");
+    REQUIRE(mut == Field("95943123877575696295901185960500828216705391437281322320"));
+    mut /= Field("110148413719127288745931217652186634861568592117770170966");
+    REQUIRE(mut == Field("111428440112091648587289596777891597538044873307399113608"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("19107093086551672130002912281083158805281401519423660632"));
+
+    REQUIRE(a.to_string() == "10072695276959609105565465869585902831332538463934280593");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("10072695276959609105565465869585902831332538463934280593");
+    Field max("30903998046347367620274541922247385429909934159680366062");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("43365022656031055295670501527986731724032688036891507 _ 36707243776158389267042186723895163895967917874432919 (mod 2^175 - 229 == 47890485652059026823698344598447161988085597568237339)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<175, 229> Field;
+
+    Field a("43365022656031055295670501527986731724032688036891507");
+    Field b("36707243776158389267042186723895163895967917874432919");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("32181780780130417739014343653434733631915008343087087"));
+    REQUIRE(a - b == Field("6657778879872666028628314804091567828064770162458588"));
+    REQUIRE(b - a == Field("41232706772186360795070029794355594160020827405778751"));
+    REQUIRE(a * b == Field("19145653586318825992834700327385345835958433857041953"));
+    REQUIRE(a / b == Field("39301095796319336993786340945666373715502590670216573"));
+
+    Field mut("24076247247160773381657706440156470161016167131649362");
+    mut += Field("18685418658602070524429762780034528124268391097409024");
+    REQUIRE(mut == Field("42761665905762843906087469220190998285284558229058386"));
+    mut -= Field("16444394019203638139036033456020415811308037038918132");
+    REQUIRE(mut == Field("26317271886559205767051435764170582473976521190140254"));
+    mut *= Field("44564028039537862390046181688552724629236276664636173");
+    REQUIRE(mut == Field("3412797996763534308002279130445466607274456565443428"));
+    mut /= Field("24829013733256195764514035495293186269488412736183923");
+    REQUIRE(mut == Field("7071639918455186975966318893766063867097002641811105"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("43325351202972003506402678445869592225647448825529476"));
+
+    REQUIRE(a.to_string() == "43365022656031055295670501527986731724032688036891507");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("36707243776158389267042186723895163895967917874432919");
+    Field max("43365022656031055295670501527986731724032688036891507");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("207931496447621 _ 142968575362307 (mod 2^48 - 59 == 281474976710597)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<48, 59> Field;
+
+    Field a("207931496447621");
+    Field b("142968575362307");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("69425095099331"));
+    REQUIRE(a - b == Field("64962921085314"));
+    REQUIRE(b - a == Field("216512055625283"));
+    REQUIRE(a * b == Field("1415060999985"));
+    REQUIRE(a / b == Field("61667340645889"));
+
+    Field mut("274207145304042");
+    mut += Field("218629825504087");
+    REQUIRE(mut == Field("211361994097532"));
+    mut -= Field("66500207589347");
+    REQUIRE(mut == Field("144861786508185"));
+    mut *= Field("240693244160512");
+    REQUIRE(mut == Field("88367872173364"));
+    mut /= Field("233804164078957");
+    REQUIRE(mut == Field("64933544889631"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("112913073285742"));
+
+    REQUIRE(a.to_string() == "207931496447621");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("142968575362307");
+    Field max("207931496447621");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("539208123294256899 _ 156770135792930112 (mod 2^59 - 55 == 576460752303423433)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<59, 55> Field;
+
+    Field a("539208123294256899");
+    Field b("156770135792930112");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("119517506783763578"));
+    REQUIRE(a - b == Field("382437987501326787"));
+    REQUIRE(b - a == Field("194022764802096646"));
+    REQUIRE(a * b == Field("508861066024922051"));
+    REQUIRE(a / b == Field("281734865407988303"));
+
+    Field mut("11663408867857502");
+    mut += Field("292701662275939291");
+    REQUIRE(mut == Field("304365071143796793"));
+    mut -= Field("418428936067416340");
+    REQUIRE(mut == Field("462396887379803886"));
+    mut *= Field("18073626604497602");
+    REQUIRE(mut == Field("270708593149782071"));
+    mut /= Field("410256573793108463");
+    REQUIRE(mut == Field("491568416588715514"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("518830910869680534"));
+
+    REQUIRE(a.to_string() == "539208123294256899");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("156770135792930112");
+    Field max("539208123294256899");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}
+
+TEST_CASE("5166470036359865266288778191809151 _ 15674976489048280580784921041122070 (mod 2^115 - 67 == 41538374868278621028243970633760701)", "")
+{
+    typedef sonic_socket::IntModuloMersenne<115, 67> Field;
+
+    Field a("5166470036359865266288778191809151");
+    Field b("15674976489048280580784921041122070");
+
+    Field copy(a);
+    REQUIRE(copy == a);
+
+    Field set;
+    set = b;
+    REQUIRE(set == b);
+
+    REQUIRE(a + b == Field("20841446525408145847073699232931221"));
+    REQUIRE(a - b == Field("31029868415590205713747827784447782"));
+    REQUIRE(b - a == Field("10508506452688415314496142849312919"));
+    REQUIRE(a * b == Field("2614716259417099223595711143611025"));
+    REQUIRE(a / b == Field("12613609145639523696907288305479538"));
+
+    Field mut("20476567242873240835694759092096638");
+    mut += Field("25897429792218405957165747848448883");
+    REQUIRE(mut == Field("4835622166813025764616536306784820"));
+    mut -= Field("41030392902836249564360035821539277");
+    REQUIRE(mut == Field("5343604132255397228500471119006244"));
+    mut *= Field("27598988378681057058389571233651469");
+    REQUIRE(mut == Field("14282282865842652864115903230728865"));
+    mut /= Field("14032598271288230908638372823406139");
+    REQUIRE(mut == Field("32008886427947567553090252679714"));
+
+    Field *inv = a.inverse();
+    REQUIRE(*inv == Field("30748068562814268746141421122019372"));
+
+    REQUIRE(a.to_string() == "5166470036359865266288778191809151");
+
+    REQUIRE(a == a);
+    REQUIRE_FALSE(a == b);
+
+    REQUIRE(a != b);
+    REQUIRE_FALSE(a != a);
+
+    Field min("05166470036359865266288778191809151");
+    Field max("15674976489048280580784921041122070");
+
+    REQUIRE(min < max);
+    REQUIRE_FALSE(min < min);
+    REQUIRE_FALSE(max < min);
+
+    REQUIRE(min <= max);
+    REQUIRE(min <= min);
+    REQUIRE_FALSE(max <= min);
+
+    REQUIRE(max > min);
+    REQUIRE_FALSE(min > min);
+    REQUIRE_FALSE(min > max);
+
+    REQUIRE(max >= min);
+    REQUIRE(min >= min);
+    REQUIRE_FALSE(min >= max);
+}

@@ -23,6 +23,8 @@ namespace sonic_socket
 template <unsigned int modular_exponent_, unsigned int modular_decrement_>
 class IntModuloMersenne
 {
+    static_assert(modular_decrement_ != 0, "modular_decrement must be positive");
+
 public:
     static constexpr unsigned int modular_exponent = modular_exponent_;
     static constexpr unsigned int modular_decrement = modular_decrement_;
@@ -31,13 +33,14 @@ protected:
     typedef IntModuloMersenne<modular_exponent, modular_decrement> ThisType;
 
     // The number of data elements needed
-    static constexpr unsigned int size = (modular_exponent / GMP_NUMB_BITS) + (modular_exponent % GMP_NUMB_BITS != 0);
+    static constexpr unsigned int size = jw_util::FastMath::div_ceil<unsigned int>(modular_exponent, GMP_NUMB_BITS);
 
     // Head refers to the most significant data element
     static constexpr unsigned int head_bits = ((modular_exponent - 1) % GMP_NUMB_BITS) + 1;
+    static constexpr unsigned int unused_bits = GMP_NUMB_BITS - head_bits;
     static constexpr mp_limb_t head_mask = (~static_cast<mp_limb_t>(0)) >> (GMP_LIMB_BITS - head_bits);
 
-    static_assert(size * GMP_NUMB_BITS - (GMP_NUMB_BITS - head_bits) == modular_exponent, "Unexpected number of bits somewhere");
+    static_assert(size * GMP_NUMB_BITS - unused_bits == modular_exponent, "Unexpected number of bits somewhere");
     static_assert((head_mask & ~GMP_NUMB_MASK) == 0, "Unexpected head_mask");
 
 public:
@@ -157,6 +160,7 @@ public:
         }
     }
 
+
     bool operator==(const ThisType &other) const
     {
         return cmp(*this, other) == 0;
@@ -180,6 +184,51 @@ public:
     bool operator>=(const ThisType &other) const
     {
         return cmp(*this, other) >= 0;
+    }
+
+
+    bool is_ambig_low() const
+    {
+        if (data[0] >= modular_decrement) {return false;}
+        for (unsigned int i = 1; i < size; i++)
+        {
+            if (data[i] != 0) {return false;}
+        }
+        return true;
+    }
+
+    bool is_ambig_high() const
+    {
+        if (modular_decrement == 0) {return false;}
+
+        if (size == 1)
+        {
+            return data[0] > head_mask - modular_decrement;
+        }
+        else
+        {
+            if (data[0] < -static_cast<mp_limb_t>(modular_decrement)) {return false;}
+            for (unsigned int i = 1; i < size - 1; i++)
+            {
+                if (data[i] != ~static_cast<mp_limb_t>(0)) {return false;}
+            }
+            if (data[size - 1] != head_mask) {return false;}
+            return true;
+        }
+    }
+
+    void flip_ambiguity_low()
+    {
+        assert(is_ambig_high());
+        set_ambiguity<0>(data, data[0] + modular_decrement);
+        assert(is_ambig_low());
+    }
+
+    void flip_ambiguity_high()
+    {
+        assert(is_ambig_low());
+        set_ambiguity<~static_cast<mp_limb_t>(0)>(data, data[0] - modular_decrement);
+        assert(is_ambig_high());
     }
 
 
@@ -309,12 +358,15 @@ private:
         if (head_bits != GMP_NUMB_BITS)
         {
             assert(carry == 0);
-            carry = res.data[size - 1] >> head_bits;
+            carry = res.data[size - 1] >> (head_bits % GMP_LIMB_BITS);
             res.data[size - 1] &= head_mask;
         }
 
         assert(carry == 0 || carry == 1);
-        mpn_add_1(res.data, res.data, size, carry * modular_decrement);
+        if (carry)
+        {
+            mpn_add_1(res.data, res.data, size, modular_decrement);
+        }
     }
 
     static void sub(ThisType &res, const ThisType &a, const ThisType &b)
@@ -323,58 +375,136 @@ private:
 
         if (head_bits != GMP_NUMB_BITS)
         {
-            assert(borrow == ((res.data[size - 1] >> head_bits) & 1));
+            assert(borrow == ((res.data[size - 1] >> (head_bits % GMP_LIMB_BITS)) & 1));
             res.data[size - 1] &= head_mask;
         }
 
         assert(borrow == 0 || borrow == 1);
-        mpn_sub_1(res.data, res.data, size, borrow * modular_decrement);
+        if (borrow)
+        {
+            mpn_sub_1(res.data, res.data, size, modular_decrement);
+        }
     }
 
     static void mul(ThisType &res, const ThisType &a, const ThisType &b)
     {
-        static_assert(modular_decrement != 0, "Multiplication optimizations when modular_decrement == 0 are not implemented yet");
-
         mp_limb_t mul_res[size * 2];
         mpn_mul_n(mul_res, a.data, b.data, size);
 
-        mp_limb_t carry = mpn_lshift(mul_res + size - 1, mul_res + size - 1, size + 1, GMP_NUMB_BITS - head_bits);
-        assert(carry == 0);
+#ifndef NDEBUG
+        static constexpr unsigned int mul_size = jw_util::FastMath::div_ceil<unsigned int>(modular_exponent * 2, GMP_NUMB_BITS);
+        for (unsigned int i = mul_size; i < size * 2; i++)
+        {
+            assert(mul_res[i] == 0);
+        }
+#endif
 
-        mul_res[size - 1] >>= GMP_NUMB_BITS - head_bits;
+        if (unused_bits != 0)
+        {
+            mp_limb_t carry = mpn_lshift(mul_res + size - 1, mul_res + size - 1, size + 1, unused_bits);
+            assert(carry == 0);
+        }
+
+        mul_res[size - 1] >>= unused_bits;
+        assert((mul_res[size - 1] & ~head_mask) == 0);
         assert((mul_res[size * 2 - 1] & ~head_mask) == 0);
+
+        static constexpr unsigned int modular_decrement_bits = jw_util::FastMath::log2_constexpr(modular_decrement) + !jw_util::FastMath::is_pow2(modular_decrement);
+        static constexpr unsigned int high_head_bits = head_bits + modular_decrement_bits;
 
         if (modular_decrement != 1)
         {
-            mp_limb_t carry2 = mpn_mul_1(mul_res + size, mul_res + size, size, modular_decrement);
-            assert(carry2 == 0);
+            mp_limb_t carry = mpn_mul_1(mul_res + size, mul_res + size, size, modular_decrement);
+
+            if (high_head_bits > GMP_NUMB_BITS)
+            {
+                // Multiplication could have overflown
+                mul_res[size] += (carry << unused_bits) * modular_decrement;
+            }
+            else
+            {
+                assert(carry == 0);
+            }
         }
-
-        carry = mpn_add_n(res.data, mul_res, mul_res + size, size);
-
-        if (head_bits != GMP_NUMB_BITS)
+        else
         {
-            carry = (carry << (GMP_NUMB_BITS - head_bits)) | (res.data[size - 1] >> head_bits);
-            res.data[size - 1] &= head_mask;
+            assert(high_head_bits <= GMP_NUMB_BITS);
         }
 
-        mpn_add_1(res.data, res.data, size, carry * modular_decrement);
+        mp_limb_t carry = mpn_add_n(res.data, mul_res, mul_res + size, size);
+
+        if (high_head_bits >= GMP_NUMB_BITS)
+        {
+            // Multiplication could have overflown
+            carry <<= unused_bits;
+
+            if (head_bits < GMP_NUMB_BITS)
+            {
+                carry |= res.data[size - 1] >> (head_bits % GMP_LIMB_BITS);
+                res.data[size - 1] &= head_mask;
+            }
+
+            mpn_add_1(res.data, res.data, size, carry * modular_decrement);
+        }
+        else
+        {
+            assert(carry == 0);
+            assert(head_bits < GMP_NUMB_BITS);
+
+            carry = res.data[size - 1] >> (head_bits % GMP_LIMB_BITS);
+            res.data[size - 1] &= head_mask;
+            mpn_add_1(res.data, res.data, size, carry * modular_decrement);
+        }
+
+        assert((res.data[size - 1] & ~head_mask) == 0);
     }
 
     static int cmp(const ThisType &a, const ThisType &b)
     {
-        return mpn_cmp(a.data, b.data, size);
+        bool a_high = a.is_ambig_high();
+        bool b_high = b.is_ambig_high();
+        if (a_high && !b_high)
+        {
+            mp_limb_t a_mut[size];
+            set_ambiguity<0>(a_mut, a.data[0] + modular_decrement);
+            return mpn_cmp(a_mut, b.data, size);
+        }
+        else if (b_high && !a_high)
+        {
+            mp_limb_t b_mut[size];
+            set_ambiguity<0>(b_mut, b.data[0] + modular_decrement);
+            return mpn_cmp(a.data, b_mut, size);
+        }
+        else
+        {
+            return mpn_cmp(a.data, b.data, size);
+        }
+    }
+
+    template <mp_limb_t fill>
+    static void set_ambiguity(mp_limb_t *dst, mp_limb_t lsw)
+    {
+        dst[0] = lsw;
+        if (size == 1)
+        {
+            dst[0] &= head_mask;
+        }
+        else
+        {
+            std::fill(dst + 1, dst + size - 1, fill);
+            dst[size - 1] = fill & head_mask;
+        }
     }
 
     static void set_mod(mp_limb_t *arr)
     {
         if (size == 1)
         {
-            arr[0] = static_cast<mp_limb_t>(-modular_decrement) & head_mask;
+            arr[0] = static_cast<mp_limb_t>(-static_cast<mp_limb_t>(modular_decrement)) & head_mask;
         }
         else
         {
-            arr[0] = static_cast<mp_limb_t>(-modular_decrement);
+            arr[0] = -static_cast<mp_limb_t>(modular_decrement);
             std::fill(arr + 1, arr + size - 1, GMP_NUMB_MASK);
             arr[size - 1] = head_mask;
         }
@@ -388,16 +518,20 @@ private:
         mp_limb_t mod[size];
         set_mod(mod);
 
+        assert(num != 0);
+        assert(!std::equal(num.data, num.data + size, mod));
+
         mp_limb_t gcd[size];
         mp_limb_t x[size + 1];
         mp_size_t xn;
-        mpn_gcdext(gcd, x, &xn, num_data, size, mod, size);
+        mp_size_t limbs = mpn_gcdext(gcd, x, &xn, num_data, size, mod, size);
 
+        assert(limbs == 1);
         assert(gcd[0] == 1);
 
         if (xn < 0)
         {
-            assert(-xn == size);
+            std::fill(x - xn, x + size, 0);
 
             for (unsigned int i = 0; i < size - 1; i++)
             {
@@ -412,9 +546,8 @@ private:
         }
         else
         {
-            assert(xn == size);
-
             std::copy(x, x + xn, res.data);
+            std::fill(res.data + xn, res.data + size, 0);
         }
     }
 };
@@ -424,6 +557,18 @@ IntModuloMersenne<modular_exponent, modular_decrement> &abs(IntModuloMersenne<mo
 
 template <unsigned int modular_exponent, unsigned int modular_decrement>
 const IntModuloMersenne<modular_exponent, modular_decrement> &abs(const IntModuloMersenne<modular_exponent, modular_decrement> &x) {return x;}
+
+}
+
+
+namespace Catch
+{
+
+template <unsigned int modular_exponent, unsigned modular_decrement>
+std::string toString(const sonic_socket::IntModuloMersenne<modular_exponent, modular_decrement> &x)
+{
+    return x.to_string();
+}
 
 }
 

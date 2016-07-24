@@ -28,5 +28,5 @@ LDFLAGS += -lgmp `pkg-config --static --libs yaml-cpp protobuf`
 
 !protoc = | *.proto |> protoc --cpp_out=. %f |> %B.pb.h %B.pb.cc $(ROOT)/<protobufs>
 !cpp = | *.h |> g++ -c %f -o %o $(CFLAGS) $(CFLAGS_%f) |>
-!archive = |> ar rvs %o |>
+!archive = |> ar rs %o |>
 !link = | $(ARCHIVE_TARGET) |> g++ $(LDFLAGS) $(LDFLAGS_%o) -o %o $(CFLAGS) $(CFLAGS_%o) $(ARCHIVE_TARGET) |>
