@@ -16,9 +16,13 @@ char *MessageEncoder::alloc_message(MessageMetaCompressor::Meta meta)
     unsigned int send_size = meta_length + meta.size;
     send_symbols = jw_util::FastMath::div_ceil<unsigned int>(send_size * CHAR_BIT, FountainBase::SymbolType::modular_exponent);
 
-    unsigned int limbs = jw_util::FastMath::div_ceil<unsigned int>(send_size, sizeof(mp_limb_t)) + FountainBase::SymbolType::size;
+    unsigned int limbs = jw_util::FastMath::div_ceil<unsigned int>(send_symbols * FountainBase::SymbolType::modular_exponent, sizeof(mp_limb_t) * CHAR_BIT);
     send_buffer.resize(limbs);
-    std::fill(send_buffer.begin(), send_buffer.end(), static_cast<mp_limb_t>(0));
+
+    for (unsigned int i = send_size / sizeof(mp_limb_t); i < limbs; i++)
+    {
+        send_buffer.begin()[i] = 0x4A4A4A4A4A4A4A4A;
+    }
 
     unsigned char *data = reinterpret_cast<unsigned char *>(send_buffer.begin());
     send_meta_compressor.encoder_write_to(encoder, data);
@@ -47,17 +51,30 @@ void MessageEncoder::send_message(FountainCoder &coder)
 
         bool ambig_low = symbol.is_ambig_low();
         bool ambig_high = symbol.is_ambig_high();
-        if (ambig_low || ambig_high)
+        if (ambig_high)
         {
-            // TODO: Make sure works
-            assert(false);
+            symbol.flip_ambiguity_low();
+        }
 
-            assert(ambig_low ^ ambig_high);
+        bool needs_escape = FountainBase::SymbolType::cmp<false>(symbol, 2) < 0;
+        {
+            unsigned int lsw = symbol.get_data_as<unsigned int>()[0];
+            assert(lsw == 0 || lsw == 1);
+            ambiguity_resolution = lsw ? AmbiguityResolution::FlipHigh : AmbiguityResolution::FlipLow;
+            goto next_symbol;
+        }
+        else if (symbol.is_ambig_low())
+        {
+            recv_state = RecvState::ErrorUnresolvableAmbiguity;
+            return false;
+        }
 
+        if (ambig_low || ambig_high || needs_escape)
+        {
             FountainBase::SymbolType &next_symbol = coder.alloc_symbol();
             next_symbol = symbol;
             
-            symbol = FountainBase::SymbolType(FountainBase::SymbolType::modular_decrement + ambig_low);
+            symbol = ambig_high;
             assert(!symbol.is_ambig_low());
             assert(!symbol.is_ambig_high());
         }

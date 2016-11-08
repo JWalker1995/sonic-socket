@@ -29,7 +29,8 @@ public:
     std::string get_error_string() const;
 
 private:
-    enum class RecvState {Init, Meta, Message, Pending, ErrorInvalidMeta, ErrorPaddingNonzero, ErrorUnresolvableAmbiguity, ErrorInvalidAmbiguitySymbol};
+    enum class RecvState {Init, Meta, Message, Pending, ErrorInvalidMeta, ErrorPaddingNotJ, ErrorUnresolvableAmbiguity, ErrorExpectedAmbiguity};
+    enum class AmbiguityResolution {None, FlipLow, FlipHigh, IgnoreNext};
 
     MessageMetaCompressor recv_meta_compressor;
 
@@ -43,6 +44,8 @@ private:
 
     MessageMetaCompressor::Meta recv_meta;
     const unsigned char *recv_data;
+
+    AmbiguityResolution ambiguity_resolution = AmbiguityResolution::None;
 };
 
 }

@@ -14,50 +14,83 @@ bool MessageDecoder::extract_message(FountainCoder::DecodedPacket &decode)
     while (decode.has_symbol())
     {
         FountainBase::SymbolType &symbol = decode.get_symbol();
+        decode.next_symbol();
 
-        bool ambig_low = symbol.is_ambig_low();
-        bool ambig_high = symbol.is_ambig_high();
-        if (ambig_low || ambig_high)
+        switch (ambiguity_resolution)
         {
-            assert(ambig_low ^ ambig_high);
-
-            unsigned int max_decrement = recv_ptr - recv_buffer.begin();
-            unsigned int actual_decrement = FountainBase::SymbolType::modular_exponent / GMP_LIMB_BITS;
-            if (actual_decrement > max_decrement)
+        case AmbiguityResolution::None:
+            if (symbol.is_ambig_high())
             {
-                recv_state = RecvState::ErrorUnresolvableAmbiguity;
-                return false;
+                symbol.flip_ambiguity_low();
             }
 
-            FountainBase::SymbolType::seek<true, -1>(recv_ptr, recv_bit_offset);
-            assert(recv_ptr >= recv_buffer.begin());
-
-            const mp_limb_t *prev_ptr = recv_ptr;
-            unsigned int prev_bit_offset = recv_bit_offset;
-            FountainBase::SymbolType prev_symbol;
-            prev_symbol.read_from<true>(prev_ptr, prev_bit_offset);
-
-            FountainBase::SymbolType low_val(FountainBase::SymbolType::modular_decrement);
-            FountainBase::SymbolType high_val(FountainBase::SymbolType::modular_decrement + 1);
-            if (prev_symbol == low_val)
+            if (FountainBase::SymbolType::modular_decrement < 2)
             {
-                if (ambig_high) {symbol.flip_ambiguity_low();}
-            }
-            else if (prev_symbol == high_val)
-            {
-                if (ambig_low) {symbol.flip_ambiguity_high();}
+                if (FountainBase::SymbolType::cmp<false>(symbol, 2) < 0)
+                {
+                    unsigned int lsw = symbol.get_data_as<unsigned int>()[0];
+                    assert(lsw == 0 || lsw == 1);
+                    ambiguity_resolution = lsw ? AmbiguityResolution::FlipHigh : AmbiguityResolution::FlipLow;
+                    goto next_symbol;
+                }
+                else if (symbol.is_ambig_low())
+                {
+                    recv_state = RecvState::ErrorUnresolvableAmbiguity;
+                    return false;
+                }
             }
             else
             {
-                recv_state = RecvState::ErrorInvalidAmbiguitySymbol;
+                if (symbol.is_ambig_low())
+                {
+                    if (FountainBase::SymbolType::cmp<false>(symbol, 2) < 0)
+                    {
+                        unsigned int lsw = symbol.get_data_as<unsigned int>()[0];
+                        assert(lsw == 0 || lsw == 1);
+                        ambiguity_resolution = lsw ? AmbiguityResolution::FlipHigh : AmbiguityResolution::FlipLow;
+                        goto next_symbol;
+                    }
+                    else
+                    {
+                        recv_state = RecvState::ErrorUnresolvableAmbiguity;
+                        return false;
+                    }
+                }
+            }
+            break;
+
+        case AmbiguityResolution::FlipLow:
+            if (symbol.is_ambig_high())
+            {
+                symbol.flip_ambiguity_low();
+            }
+            else if (!symbol.is_ambig_low())
+            {
+                recv_state = RecvState::ErrorExpectedAmbiguity;
                 return false;
             }
+            ambiguity_resolution = AmbiguityResolution::None;
+            break;
 
-            FountainBase::SymbolType::clear<true>(recv_ptr, recv_bit_offset);
+        case AmbiguityResolution::FlipHigh:
+            if (symbol.is_ambig_low())
+            {
+                symbol.flip_ambiguity_high();
+            }
+            else if (!symbol.is_ambig_high())
+            {
+                recv_state = RecvState::ErrorExpectedAmbiguity;
+                return false;
+            }
+            ambiguity_resolution = AmbiguityResolution::None;
+            break;
+
+        case AmbiguityResolution::IgnoreNext:
+            ambiguity_resolution = AmbiguityResolution::None;
+            break;
         }
 
         symbol.write_to<true>(recv_ptr, recv_bit_offset);
-        decode.next_symbol();
 
         const unsigned char *data = reinterpret_cast<const unsigned char *>(recv_buffer.begin());
         unsigned int length = (recv_ptr - recv_buffer.begin()) * sizeof(mp_limb_t) + (recv_bit_offset / CHAR_BIT);
@@ -114,9 +147,9 @@ bool MessageDecoder::extract_message(FountainCoder::DecodedPacket &decode)
 
                 for (unsigned int i = recv_expecting; i <= length; i++)
                 {
-                    if (data[i] != 0)
+                    if (data[i] != 0x4A)
                     {
-                        recv_state = RecvState::ErrorPaddingNonzero;
+                        recv_state = RecvState::ErrorPaddingNotJ;
                         return false;
                     }
                 }
@@ -127,9 +160,9 @@ bool MessageDecoder::extract_message(FountainCoder::DecodedPacket &decode)
 
         case RecvState::Pending:
         case RecvState::ErrorInvalidMeta:
-        case RecvState::ErrorPaddingNonzero:
+        case RecvState::ErrorPaddingNotJ:
         case RecvState::ErrorUnresolvableAmbiguity:
-        case RecvState::ErrorInvalidAmbiguitySymbol:
+        case RecvState::ErrorExpectedAmbiguity:
             // Should never get here
             assert(false);
             break;
@@ -137,6 +170,8 @@ bool MessageDecoder::extract_message(FountainCoder::DecodedPacket &decode)
 
         unsigned int recv_buffer_new_size = recv_ptr - recv_buffer.begin() + FountainBase::SymbolType::size + 1;
         recv_buffer.resize(recv_buffer_new_size, recv_ptr, recv_data);
+
+        next_symbol:
     }
 
     return false;
@@ -152,9 +187,9 @@ bool MessageDecoder::has_error() const
     switch (recv_state)
     {
     case RecvState::ErrorInvalidMeta:
-    case RecvState::ErrorPaddingNonzero:
+    case RecvState::ErrorPaddingNotJ:
     case RecvState::ErrorUnresolvableAmbiguity:
-    case RecvState::ErrorInvalidAmbiguitySymbol:
+    case RecvState::ErrorExpectedAmbiguity:
         return true;
     default:
         return false;
@@ -181,12 +216,12 @@ std::string MessageDecoder::get_error_string() const
     {
     case RecvState::ErrorInvalidMeta:
         return "Invalid message meta data";
-    case RecvState::ErrorPaddingNonzero:
-        return "Padding after message is not zero";
+    case RecvState::ErrorPaddingNotJ:
+        return "Padding after message is not Js (0x4A)";
     case RecvState::ErrorUnresolvableAmbiguity:
         return "Unresolvable ambiguous symbol";
-    case RecvState::ErrorInvalidAmbiguitySymbol:
-        return "Invalid ambiguity resolution symbol";
+    case RecvState::ErrorExpectedAmbiguity:
+        return "Expected an ambiguity, but symbol was unambiguous";
     default:
         assert(false);
         return "";

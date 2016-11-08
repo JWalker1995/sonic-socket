@@ -163,32 +163,6 @@ public:
     }
 
 
-    bool operator==(const ThisType &other) const
-    {
-        return cmp(*this, other) == 0;
-    }
-    bool operator!=(const ThisType &other) const
-    {
-        return cmp(*this, other) != 0;
-    }
-    bool operator<(const ThisType &other) const
-    {
-        return cmp(*this, other) < 0;
-    }
-    bool operator<=(const ThisType &other) const
-    {
-        return cmp(*this, other) <= 0;
-    }
-    bool operator>(const ThisType &other) const
-    {
-        return cmp(*this, other) > 0;
-    }
-    bool operator>=(const ThisType &other) const
-    {
-        return cmp(*this, other) >= 0;
-    }
-
-
     bool is_ambig_low() const
     {
         if (data[0] >= modular_decrement) {return false;}
@@ -231,6 +205,62 @@ public:
         assert(is_ambig_low());
         set_ambiguity<~static_cast<mp_limb_t>(0)>(data, data[0] - modular_decrement);
         assert(is_ambig_high());
+    }
+
+
+    template <bool resolve_ambiguities>
+    static int cmp(const ThisType &a, const ThisType &b)
+    {
+        if (resolve_ambiguities)
+        {
+            bool a_high = a.is_ambig_high();
+            bool b_high = b.is_ambig_high();
+            if (a_high && !b_high)
+            {
+                mp_limb_t a_mut[size];
+                set_ambiguity<0>(a_mut, a.data[0] + modular_decrement);
+                return mpn_cmp(a_mut, b.data, size);
+            }
+            else if (b_high && !a_high)
+            {
+                mp_limb_t b_mut[size];
+                set_ambiguity<0>(b_mut, b.data[0] + modular_decrement);
+                return mpn_cmp(a.data, b_mut, size);
+            }
+            else
+            {
+                return mpn_cmp(a.data, b.data, size);
+            }
+        }
+        else
+        {
+            return mpn_cmp(a.data, b.data, size);
+        }
+    }
+
+    bool operator==(const ThisType &other) const
+    {
+        return cmp<true>(*this, other) == 0;
+    }
+    bool operator!=(const ThisType &other) const
+    {
+        return cmp<true>(*this, other) != 0;
+    }
+    bool operator<(const ThisType &other) const
+    {
+        return cmp<true>(*this, other) < 0;
+    }
+    bool operator<=(const ThisType &other) const
+    {
+        return cmp<true>(*this, other) <= 0;
+    }
+    bool operator>(const ThisType &other) const
+    {
+        return cmp<true>(*this, other) > 0;
+    }
+    bool operator>=(const ThisType &other) const
+    {
+        return cmp<true>(*this, other) >= 0;
     }
 
 
@@ -459,28 +489,6 @@ private:
         }
 
         assert((res.data[size - 1] & ~head_mask) == 0);
-    }
-
-    static int cmp(const ThisType &a, const ThisType &b)
-    {
-        bool a_high = a.is_ambig_high();
-        bool b_high = b.is_ambig_high();
-        if (a_high && !b_high)
-        {
-            mp_limb_t a_mut[size];
-            set_ambiguity<0>(a_mut, a.data[0] + modular_decrement);
-            return mpn_cmp(a_mut, b.data, size);
-        }
-        else if (b_high && !a_high)
-        {
-            mp_limb_t b_mut[size];
-            set_ambiguity<0>(b_mut, b.data[0] + modular_decrement);
-            return mpn_cmp(a.data, b_mut, size);
-        }
-        else
-        {
-            return mpn_cmp(a.data, b.data, size);
-        }
     }
 
     template <mp_limb_t fill>
