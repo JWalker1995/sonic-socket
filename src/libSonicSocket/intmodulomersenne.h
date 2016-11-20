@@ -163,9 +163,10 @@ public:
     }
 
 
+    template <unsigned int ambig_values = modular_decrement>
     bool is_ambig_low() const
     {
-        if (data[0] >= modular_decrement) {return false;}
+        if (data[0] >= ambig_values) {return false;}
         for (unsigned int i = 1; i < size; i++)
         {
             if (data[i] != 0) {return false;}
@@ -173,17 +174,18 @@ public:
         return true;
     }
 
+    template <unsigned int ambig_values = modular_decrement>
     bool is_ambig_high() const
     {
-        if (modular_decrement == 0) {return false;}
+        if (ambig_values == 0) {return false;}
 
         if (size == 1)
         {
-            return data[0] > head_mask - modular_decrement;
+            return data[0] > head_mask - ambig_values;
         }
         else
         {
-            if (data[0] < -static_cast<mp_limb_t>(modular_decrement)) {return false;}
+            if (data[0] < -static_cast<mp_limb_t>(ambig_values)) {return false;}
             for (unsigned int i = 1; i < size - 1; i++)
             {
                 if (data[i] != ~static_cast<mp_limb_t>(0)) {return false;}
@@ -193,18 +195,20 @@ public:
         }
     }
 
+    template <unsigned int ambig_values = modular_decrement>
     void flip_ambiguity_low()
     {
-        assert(is_ambig_high());
-        set_ambiguity<0>(data, data[0] + modular_decrement);
-        assert(is_ambig_low());
+        assert(is_ambig_high<ambig_values>());
+        set_ambiguity<0>(data, data[0] + ambig_values);
+        assert(is_ambig_low<ambig_values>());
     }
 
+    template <unsigned int ambig_values = modular_decrement>
     void flip_ambiguity_high()
     {
-        assert(is_ambig_low());
-        set_ambiguity<~static_cast<mp_limb_t>(0)>(data, data[0] - modular_decrement);
-        assert(is_ambig_high());
+        assert(is_ambig_low<ambig_values>());
+        set_ambiguity<~static_cast<mp_limb_t>(0)>(data, data[0] - ambig_values);
+        assert(is_ambig_high<ambig_values>());
     }
 
 
@@ -352,17 +356,7 @@ public:
         }
     }
 
-    template <typename DataType>
-    DataType *get_data_as()
-    {
-        return static_cast<DataType*>(data);
-    }
-
-    template <typename DataType>
-    static constexpr unsigned int get_data_size()
-    {
-        return jw_util::FastMath::div_ceil<unsigned int>(modular_exponent, sizeof(DataType) * CHAR_BIT);
-    }
+    mp_limb_t *get_data() {return data;}
 
     struct Hasher
     {

@@ -157,6 +157,8 @@ void MessageRouter::receive_packet(FountainCoder::Packet &packet)
         }
 
         parsed_messages.push_back(message);
+
+        message_decoder.clear_message();
     }
 
     if (message_decoder.has_error())

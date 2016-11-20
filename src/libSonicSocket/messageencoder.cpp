@@ -1,5 +1,7 @@
 #include "messageencoder.h"
 
+#include "messageambigresolver.h"
+
 namespace sonic_socket
 {
 
@@ -49,34 +51,14 @@ void MessageEncoder::send_message(FountainCoder &coder)
         FountainBase::SymbolType &symbol = coder.alloc_symbol();
         symbol.read_from<true>(data, bit_offset);
 
-        bool ambig_low = symbol.is_ambig_low();
-        bool ambig_high = symbol.is_ambig_high();
-        if (ambig_high)
-        {
-            symbol.flip_ambiguity_low();
-        }
-
-        bool needs_escape = FountainBase::SymbolType::cmp<false>(symbol, 2) < 0;
-        {
-            unsigned int lsw = symbol.get_data_as<unsigned int>()[0];
-            assert(lsw == 0 || lsw == 1);
-            ambiguity_resolution = lsw ? AmbiguityResolution::FlipHigh : AmbiguityResolution::FlipLow;
-            goto next_symbol;
-        }
-        else if (symbol.is_ambig_low())
-        {
-            recv_state = RecvState::ErrorUnresolvableAmbiguity;
-            return false;
-        }
-
-        if (ambig_low || ambig_high || needs_escape)
-        {
+        bool ambig_low = symbol.is_ambig_low<MessageAmbigResolver::ambig_bits>();
+        bool ambig_high = symbol.is_ambig_high<MessageAmbigResolver::ambig_bits>();
+        if (ambig_low || ambig_high) {
             FountainBase::SymbolType &next_symbol = coder.alloc_symbol();
             next_symbol = symbol;
-            
-            symbol = ambig_high;
-            assert(!symbol.is_ambig_low());
-            assert(!symbol.is_ambig_high());
+
+            symbol = FountainBase::SymbolType(ambig_high);
+            assert(symbol.is_ambig_low<MessageAmbigResolver::ambig_bits>());
         }
     }
 }

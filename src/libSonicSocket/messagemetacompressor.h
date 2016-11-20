@@ -96,12 +96,12 @@ public:
             data++;
 
             res.inbox_id = 0;
-            res.inbox_id |= *data++ >> 0;
-            res.inbox_id |= *data++ >> 8;
+            res.inbox_id |= static_cast<unsigned int>(*data++) << 0;
+            res.inbox_id |= static_cast<unsigned int>(*data++) << 8;
 
             res.size = 0;
-            res.size |= *data++ >> 0;
-            res.size |= *data++ >> 8;
+            res.size |= static_cast<unsigned int>(*data++) << 0;
+            res.size |= static_cast<unsigned int>(*data++) << 8;
         }
         else
         {

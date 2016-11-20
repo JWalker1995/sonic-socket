@@ -34,6 +34,13 @@ public:
         friend class FountainSink;
 
     public:
+        DecodedPacket() {}
+
+        DecodedPacket(std::deque<SymbolType>::iterator decode_i, std::deque<SymbolType>::iterator decode_end)
+            : decode_i(decode_i)
+            , decode_end(decode_end)
+        {}
+
         bool has_symbol() const
         {
             return decode_i != decode_end;

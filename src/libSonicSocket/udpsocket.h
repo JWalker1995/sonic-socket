@@ -7,6 +7,7 @@
 #include "libSonicSocket/config/SS_UDPSOCKET_DROP_ENABLE.h"
 #ifdef NDEBUG
 #undef SS_UDPSOCKET_DROP_ENABLE
+#define SS_UDPSOCKET_DROP_ENABLE 0
 #endif
 
 #if SS_UDPSOCKET_DROP_ENABLE
@@ -129,7 +130,7 @@ public:
 private:
     int file_desc;
 
-#ifdef SS_UDPSOCKET_DROP_ENABLE
+#if SS_UDPSOCKET_DROP_ENABLE
     std::default_random_engine drop_gen;
 #endif
 };

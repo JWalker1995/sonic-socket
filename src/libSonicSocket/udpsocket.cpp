@@ -23,7 +23,7 @@ namespace sonic_socket
 
 UdpSocket::UdpSocket()
     : file_desc(-1)
-#ifdef SS_UDPSOCKET_DROP_ENABLE
+#if SS_UDPSOCKET_DROP_ENABLE
     , drop_gen(SS_UDPSOCKET_DROP_SEED)
 #endif
 {
@@ -64,7 +64,7 @@ void UdpSocket::send(const Remote &remote, const char *data, unsigned int data_l
 {
     if (file_desc < 0) {return;}
 
-#ifdef SS_UDPSOCKET_DROP_ENABLE
+#if SS_UDPSOCKET_DROP_ENABLE
     if (std::generate_canonical<float, std::numeric_limits<float>::digits>(drop_gen) < static_cast<float>(SS_UDPSOCKET_DROP_PROBABILITY))
     {
         throw DropException();

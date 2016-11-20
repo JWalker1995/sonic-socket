@@ -17,9 +17,12 @@ public:
     MessageDecoder()
         : recv_buffer(FountainBase::SymbolType::size + 1)
         , recv_ptr(recv_buffer.begin())
+        , recv_bit_offset(0)
+        , recv_state(RecvState::Init)
     {}
 
     bool extract_message(FountainCoder::DecodedPacket &decode);
+    void clear_message();
 
     bool has_message() const;
     bool has_error() const;
@@ -29,8 +32,8 @@ public:
     std::string get_error_string() const;
 
 private:
-    enum class RecvState {Init, Meta, Message, Pending, ErrorInvalidMeta, ErrorPaddingNotJ, ErrorUnresolvableAmbiguity, ErrorExpectedAmbiguity};
-    enum class AmbiguityResolution {None, FlipLow, FlipHigh, IgnoreNext};
+    enum class RecvState {Init, Pending, Meta, Message, ErrorInvalidMeta, ErrorPaddingNotJ, ErrorUnresolvableAmbiguity, ErrorExpectedAmbiguity};
+    enum class AmbiguityResolution {None, FlipLow, FlipHigh};
 
     MessageMetaCompressor recv_meta_compressor;
 

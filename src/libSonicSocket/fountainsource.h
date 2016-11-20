@@ -180,6 +180,8 @@ public:
 
     bool has_data_to_send() const {return symbols.size() || needs_encode_start_update;}
 
+    std::deque<SymbolType> &get_unsent_symbols() {return symbols;}
+
 protected:
     unsigned int encode_start = 0;
     unsigned int cauchy_element = 0;
