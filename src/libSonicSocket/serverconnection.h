@@ -33,25 +33,22 @@ public:
         pending_mailboxes.push_back(mailbox.make_mailbox_init_receiver());
 
         MailboxInit &mailbox_init = get_message_allocator().alloc_message<MailboxInit>();
-        mailbox_init.set_signature(signature, sizeof(signature) / sizeof(*signature));
+        mailbox_init.set_signature(signature);
         mailbox.set_final_message_router(this, mailbox_init);
         send_message(MessageRouter::mailbox_init_inbox_id, mailbox_init);
     }
 
 private:
-    static constexpr auto signature = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0spatula pickle peach bear";
+    static const std::string signature;
 
     static bool parse_mailbox_init(const MailboxInit &message, std::string &error_str)
     {
-        if (message.signature() != signature)
-        {
+        if (message.signature() != signature) {
             error_str = "Incorrect message signature";
             return false;
         }
-        else
-        {
-            return true;
-        }
+
+        return true;
     }
 
     void process_mailbox_init(const MailboxInit &message)
@@ -72,8 +69,48 @@ private:
         push_log_event<LogProxy::LogLevel::Warning>("Received MailboxInit that didn't match any un-initialized mailboxes");
     }
 
+    static bool parse_error_report(const ErrorReport &message, std::string &error_str) {
+        if (message.level() == ErrorReport_Level_DEBUG) {
+            error_str = "Error report level is unknown";
+            return false;
+        }
+
+        if (message.text().empty()) {
+            error_str = "Error report text is empty";
+            return false;
+        }
+
+        return true;
+    }
+
+    void process_error_report(const ErrorReport &message) {
+        switch (message.level()) {
+        case ErrorReport_Level_UNKNOWN:
+            assert(false);
+            break;
+        case ErrorReport_Level_DEBUG:
+            push_log_event<LogProxy::LogLevel::Debug>(message.text());
+            break;
+        case ErrorReport_Level_NOTICE:
+            push_log_event<LogProxy::LogLevel::Notice>(message.text());
+            break;
+        case ErrorReport_Level_WARNING:
+            push_log_event<LogProxy::LogLevel::Warning>(message.text());
+            break;
+        case ErrorReport_Level_ERROR:
+            push_log_event<LogProxy::LogLevel::Error>(message.text());
+            break;
+        case ErrorReport_Level_FATAL:
+            push_log_event<LogProxy::LogLevel::Fatal>(message.text());
+            break;
+        default:
+            assert(false);
+        }
+    }
+
     typedef InboxAsynchronous<MailboxInit, ServerConnection, &parse_mailbox_init, &ServerConnection::process_mailbox_init> MailboxInitInbox;
-    Mailbox<MailboxInitInbox> mailbox;
+    typedef InboxAsynchronous<ErrorReport, ServerConnection, &parse_error_report, &ServerConnection::process_error_report> ErrorReportInbox;
+    Mailbox<MailboxInitInbox, ErrorReportInbox> mailbox;
 
     std::vector<jw_util::MethodCallback<const MailboxInit &, bool &>> pending_mailboxes;
 

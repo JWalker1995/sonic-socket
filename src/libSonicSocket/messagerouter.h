@@ -36,8 +36,7 @@ public:
     };
 
     static constexpr InboxId mailbox_init_inbox_id = 0;
-    static constexpr InboxId module_registration_inbox_id = 1;
-    static constexpr InboxId module_registration_complete_inbox_id = 2;
+    static constexpr InboxId error_report_inbox_id = 1;
 
     MessageRouter(Manager &manager);
     MessageRouter(Manager &manager, const Remote &remote);

@@ -25,6 +25,33 @@ message InitialPacket
     uint32 version = 1;
 }
 
+message MailboxInit
+{
+    //repeated string keys_string = 1;
+    //repeated uint64 keys_int = 2;
+
+    string signature = 1;
+    repeated OutboxInit boxes = 2;
+}
+
+message ErrorReport
+{
+    enum Level
+    {
+        UNKNOWN = 0;
+        DEBUG = 1;
+        NOTICE = 2;
+        WARNING = 3;
+        ERROR = 4;
+        FATAL = 5;
+    }
+
+    Level level = 1;
+    string text = 2;
+}
+
+
+
 message BaseMessage
 {
     uint32 message_id = 1;
@@ -49,15 +76,6 @@ message ModuleConnectionRequest
 {
     uint32 module_id = 1;
     repeated ModuleSpaceCoordinate coords = 3;
-}
-
-message MailboxInit
-{
-    //repeated string keys_string = 1;
-    //repeated uint64 keys_int = 2;
-
-    string signature = 1;
-    repeated OutboxInit boxes = 2;
 }
 
 message OutboxInit

@@ -11,8 +11,12 @@ namespace sonic_socket
 void ServerConnection::init_handlers()
 {
     mailbox.get_box<MailboxInitInbox>().set_class_pointer(this);
-    InboxId inbox_id = register_inbox(mailbox.generate_inbox_registration<MailboxInitInbox>());
-    assert(inbox_id == mailbox_init_inbox_id);
+    InboxId inbox_id_1 = register_inbox(mailbox.generate_inbox_registration<MailboxInitInbox>());
+    assert(inbox_id_1 == mailbox_init_inbox_id);
+
+    mailbox.get_box<ErrorReportInbox>().set_class_pointer(this);
+    InboxId inbox_id_2 = register_inbox(mailbox.generate_inbox_registration<ErrorReportInbox>());
+    assert(inbox_id_2 == error_report_inbox_id);
 
     /*
     {
@@ -59,5 +63,7 @@ void ServerConnection::register_module(const ModuleRegistration &message)
     manager.register_module(*this, message);
 }
 */
+
+const std::string ServerConnection::signature = "spatula pickle peach bear";
 
 }
