@@ -271,7 +271,11 @@ public:
     template <unsigned int base = 10>
     std::string to_string() const
     {
-        static constexpr unsigned int max_digits = std::log(2) * GMP_NUMB_BITS * size / std::log(base) + 2;
+        static_assert(base >= 2, "Base is too low");
+        static_assert(base <= 256, "Base is too high");
+
+#include "log2s.h"
+        static constexpr unsigned int max_digits = GMP_NUMB_BITS * size * log2s[base] + 2;
 
         mp_limb_t tmp[size];
         std::copy(data, data + size, tmp);
@@ -321,6 +325,9 @@ public:
     template <unsigned int base = 10>
     void from_string(const std::string &str)
     {
+        static_assert(base >= 2, "Base is too low");
+        static_assert(base <= 256, "Base is too high");
+
         if (str.empty())
         {
             std::fill_n(data, size, 0);

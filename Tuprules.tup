@@ -8,7 +8,7 @@ TEST_TARGET = $(ROOT)/test
 
 CFLAGS += -Wall -Wfatal-errors -Wno-missing-braces -Wno-unused
 CFLAGS += -Iinclude/ -I$(SRC_PATH) -I$(THIRD_PARTH_PATH)
-CFLAGS += `pkg-config --cflags glew glfw3 yaml-cpp protobuf`
+CFLAGS += `pkg-config --cflags yaml-cpp protobuf`
 
 ifeq (@(BUILD_TYPE),debug)
 	CFLAGS += -O0 -g
