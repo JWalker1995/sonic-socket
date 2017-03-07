@@ -1,2 +1,4 @@
 src/
 build-debug/src/
+3rd_party/
+tests

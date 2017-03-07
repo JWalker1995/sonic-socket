@@ -3,4 +3,4 @@ include_rules
 # Create config/*.h files from defines.cfg
 run awk '/^[^#]/ { print ": |> echo \"#define "$0"\" > %o |> include/libSonicSocket/config/"$1".h" }' $(DEFINES_CONFIG_FILE)
 
-: foreach *.cpp | include/libSonicSocket/config/*.h |> !cpp |> %B.o $(ROOT)/<test_objects>
+: foreach *.cpp | $(SRC_PATH)/libSonicSocket/*.h include/libSonicSocket/config/*.h |> !cpp |> %B.o $(ROOT)/<test_objects>

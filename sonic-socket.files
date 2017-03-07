@@ -1,3 +1,4 @@
+tests/workerrequest.cpp
 Tupfile
 Tuprules.tup
 defines.cfg

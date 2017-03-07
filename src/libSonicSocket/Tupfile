@@ -4,4 +4,4 @@ include_rules
 run awk '/^[^#]/ { print ": |> echo \"#define "$0"\" > %o |> config/"$1".h" }' $(DEFINES_CONFIG_FILE)
 
 : foreach *.proto |> !protoc |>
-: foreach *.cpp *.pb.cc | config/*.h |> !cpp |> %B.o $(ROOT)/<src_objects>
+: foreach *.cpp *.pb.cc | *.h config/*.h |> !cpp |> %B.o $(ROOT)/<src_objects>
