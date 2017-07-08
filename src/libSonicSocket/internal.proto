@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option cc_enable_arenas = true;
+
+package sonic_socket.internal;
+
+message ServiceQuery
+{
+    string interface = 1;
+
+    repeated ServiceQueryCoordinate coords = 2;
+}
+
+message ServiceQueryCoordinate
+{
+    string key = 1;
+    float weight = 2;
+    string string_value = 3;
+    float float_value = 4;
+}

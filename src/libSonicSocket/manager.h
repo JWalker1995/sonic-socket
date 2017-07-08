@@ -31,6 +31,7 @@
 #include "libSonicSocket/udpsocket.h"
 #include "libSonicSocket/remote.h"
 #include "libSonicSocket/serverconnection.h"
+#include "libSonicSocket/mailboxinitializer.h"
 #include "libSonicSocket/messageallocator.h"
 #include "libSonicSocket/messagebuffer.h"
 #include "libSonicSocket/modulelookup.h"
@@ -131,7 +132,7 @@ private:
 
     LogProxy logger;
 
-    MessageRouter dummy_message_router;
+    MailboxInitializer mailbox_initializer;
 
     static Manager *instance;
 

@@ -14,7 +14,7 @@ Manager *Manager::instance = 0;
 Manager::Manager(Type type, Remote::Port port)
     : type(type)
     , workers(jw_util::MethodCallback<WorkerRequest>::create<Manager, &Manager::worker_func>(this), jw_util::WorkQueueInsomniac<1, WorkerRequest>::construct_paused)
-    , dummy_message_router(*this)
+    , mailbox_initializer(*this)
 {
     assert(!instance);
     instance = this;

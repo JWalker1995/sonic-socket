@@ -5,6 +5,7 @@
 
 #include "libSonicSocket/jw_util/methodcallback.h"
 
+#include "libSonicSocket/mailboxinitializer.h"
 #include "libSonicSocket/messagerouter.h"
 #include "libSonicSocket/messageallocator.h"
 #include "libSonicSocket/box.h"

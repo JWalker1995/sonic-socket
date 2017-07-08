@@ -6,6 +6,7 @@ package sonic_socket;
 
 import "google/protobuf/descriptor.proto";
 
+// Used
 extend google.protobuf.MessageOptions
 {
     repeated string alias = 53142;
@@ -52,6 +53,9 @@ message ErrorReport
 
 
 
+
+
+
 message BaseMessage
 {
     uint32 message_id = 1;
@@ -90,7 +94,7 @@ message ModuleSpaceCoordinate
     float weight = 2;
     string string_value = 3;
     float scalar_value = 4;
-};
+}
 
 message ModuleRegistration
 {
@@ -126,3 +130,9 @@ message ModuleLookupResponse
 {
     string connection = 1;
 }
+
+
+/*
+Lookup module using path
+Connect
+*/
