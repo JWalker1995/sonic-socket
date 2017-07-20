@@ -31,9 +31,21 @@ public:
     bool is_decode() const {return inbox_id == coder_request_decode;}
     bool is_encode() const {return inbox_id != coder_request_resolve && inbox_id != coder_request_decode;}
 
-    const WorkerResolveRequest &to_resolve() const;
-    WorkerDecodeRequest &to_decode(); // Cannot be const because the packet is eventually de-mangled in FountainSink
-    const WorkerEncodeRequest &to_encode() const;
+    const WorkerResolveRequest &to_resolve() const {
+        assert(is_resolve());
+        return *static_cast<const WorkerResolveRequest*>(this);
+    }
+
+    WorkerDecodeRequest &to_decode() {
+        // Cannot be const because the packet is eventually de-mangled in FountainSink
+        assert(is_decode());
+        return *static_cast<WorkerDecodeRequest*>(this);
+    }
+
+    const WorkerEncodeRequest &to_encode() const {
+        assert(is_encode());
+        return *static_cast<const WorkerEncodeRequest*>(this);
+    }
 
 protected:
     struct DecodePacketData

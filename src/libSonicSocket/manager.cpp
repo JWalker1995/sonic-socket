@@ -19,7 +19,7 @@ Manager::Manager(Type type, Remote::Port port)
     assert(!instance);
     instance = this;
 
-    assert(dummy_message_router.is_dummy());
+    //assert(dummy_message_router.is_dummy());
 
     jw_util::Thread::set_main_thread();
 

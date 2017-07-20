@@ -95,7 +95,7 @@ public:
     template <typename... BoxTypes>
     void init_mailbox(Mailbox<BoxTypes...> &mailbox)
     {
-        mailbox.set_dummy_message_router(&dummy_message_router);
+        //mailbox.set_dummy_message_router(&dummy_message_router);
     }
 
     void queue_message(MessageRouter &message_router, MessageRouter::InboxId inbox_id, const google::protobuf::Message &message);
